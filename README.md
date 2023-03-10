@@ -1,3 +1,3 @@
-# final-project
+# Production-Sheet
 
-A full stack JavaScript solo project.
+A full stack solution for a small business.
