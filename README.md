@@ -7,7 +7,6 @@ A full stack solution for a small business.
 - React.js
 - Express.js
 - Node.js
-- Google Maps API
 - Webpack
 - Bootstrap 5
 - PostgreSQL
