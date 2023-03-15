@@ -2,10 +2,10 @@ body {
   font-family: Lato, sans-serif;
 }
 
-.navbar {
-  background-color: #212529;
+i {
+  font-size: 30px;
 }
 
-.navlink {
-  color: aliceblue;
+.navbar {
+  background-color: #212529;
 }
