@@ -42,6 +42,16 @@ export default class ProductionSheet extends React.Component {
             <h4 className="fw-light"> Weekly Totals: 424,100</h4>
           </div>
         </div>
+        <div className="d-flex m-3 ">
+          <div className="order-details col-12">
+            <div className="d-flex">
+              <h4 className="order-number m-1">ASH23-01-001</h4>
+              <h4 className="order-status m-1 text-info">Approved</h4>
+              <h4 className="payment-status m-1 text-success">Paid</h4>
+              <h4 className="shipping-status m-1">Shipped</h4>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
