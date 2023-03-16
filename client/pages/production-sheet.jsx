@@ -63,6 +63,7 @@ export default class ProductionSheet extends React.Component {
               </div>
               <div id="job-details-1" className="d-flex job-details p-1">
                 <p id="company-name" className="overflow-x m-1 fw-light border border-primary w-100 h-100 overflow-x">Furniture Connection - Clarksville</p>
+                {/* will need to figure out how to allow "quotation marks" */}
                 <p id="paper-size" className="m-1 fw-light border border-primary w-100">10.75 x 11.875 Full Bleed</p>
                 <p id="paper-weight" className="m-1 fw-light border border-primary w-100">43#</p>
                 <p id="ship-date" className="m-1 fw-light border border-primary w-100">12/15/22</p>
