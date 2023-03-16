@@ -43,12 +43,28 @@ export default class ProductionSheet extends React.Component {
           </div>
         </div>
         <div className="d-flex m-3 ">
-          <div className="order-details col-12">
-            <div className="d-flex">
+          <div className="job-container col-12">
+            <div className="d-flex job-statuses m-3">
               <h4 className="order-number m-1">ASH23-01-001</h4>
               <h4 className="order-status m-1 text-info">Approved</h4>
               <h4 className="payment-status m-1 text-success">Paid</h4>
               <h4 className="shipping-status m-1">Shipped</h4>
+            </div>
+            <div className="d-flex job-details-header p-1">
+              <p className="m-1 ">Company Name</p>
+              <p className="m-1">Paper Size</p>
+              <p className="m-1">Paper Weight</p>
+              <p className="m-1">Ship Date</p>
+              <p className="m-1">Due Date</p>
+              <p className="m-1">In Home Date</p>
+            </div>
+            <div className="d-flex job-details p-1">
+              <p className="m-1 ">Company Name</p>
+              <p className="m-1">Paper Size</p>
+              <p className="m-1">Paper Weight</p>
+              <p className="m-1">Ship Date</p>
+              <p className="m-1">Due Date</p>
+              <p className="m-1">In Home Date</p>
             </div>
           </div>
         </div>
