@@ -39,8 +39,8 @@ export default class ProductionSheet extends React.Component {
             </div>
           </div>
         </div>
-        <div className="d-flex m-3 justify-content-center">
-          <div className=" col-11">
+        <div className="d-flex justify-content-center m-3 border border-danger">
+          <div className="col-11 border border-primary">
             <h4 className="fw-light"> Weekly Totals: 424,100</h4>
           </div>
         </div>
