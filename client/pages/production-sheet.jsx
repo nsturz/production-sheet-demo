@@ -4,37 +4,32 @@ import NavBar from '../components/navbar';
 export default class ProductionSheet extends React.Component {
   render() {
     return (
-      <div>
-        <NavBar className="navbar" />
-        <div className="container col-12">
-          <div className="row">
-            <div className="m-3 d-flex justify-content-center">
-              <div className="col-4 ">
-                <div className=" d-flex">
-                  <h3 className="main-title m-1">
-                    Production Sheet |  Week 1
-                    <i className="fa-solid fa-clipboard-list ms-3  text-success" />
-                  </h3>
-                </div>
+      <div className="m-auto">
+        <div>
+          <NavBar className="navbar" />
+        </div>
+        <div className="container">
+          <div className="m-3 d-flex row wrap">
+            <div className="col-lg-4 col-12 p-0 ">
+              <div className=" d-flex">
+                <h2 className="main-title m-1">Production Sheet |  Week 1</h2>
               </div>
-              <div className="col ">
-                <div className="d-flex">
-                  <select className="form-select fw-light m-1" aria-label="Default select example">
-                    <option selected>Year</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                  <select className=" form-select fw-light m-1" aria-label="Default select example">
-                    <option selected>Week</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div>
-              </div>
-              <div className="">
-                <div className="d-flex m-1">
+            </div>
+            <div className="col-lg-8 col-12 p-0">
+              <div className="d-flex">
+                <select className="form-select fw-light m-1" aria-label="Default select example">
+                  <option selected>Year</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+                <select className=" form-select fw-light m-1" aria-label="Default select example">
+                  <option selected>Week</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+                <div className="m-1">
                   <button type="button" className="btn btn-success ">Search</button>
                 </div>
               </div>
@@ -124,8 +119,8 @@ export default class ProductionSheet extends React.Component {
             </li>
           </ul>
         </div>
-
       </div>
+
     );
   }
 }
