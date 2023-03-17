@@ -6,6 +6,10 @@ body {
   font-family: Lato, sans-serif;
 }
 
+.edit-icon {
+  color: #808080;
+}
+
 i {
   font-size: 30px;
 }
@@ -16,7 +20,10 @@ i {
 
 .job-details-header {
   background-color: #d9d9d9;
-  justify-content: space-between;
+}
+
+li {
+  margin: 0%;
 }
 
 .navbar {
@@ -31,15 +38,17 @@ i {
   overflow-y: scroll;
 }
 
-.row {
-  flex-direction: row;
-}
-
 ul {
   padding: 0;
   list-style-type: none;
 }
 
-.wrap {
-  flex-wrap: wrap;
+@media screen and (max-width: 768px) {
+  h4 {
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 10px;
+  }
 }

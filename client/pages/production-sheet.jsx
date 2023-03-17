@@ -4,12 +4,12 @@ import NavBar from '../components/navbar';
 export default class ProductionSheet extends React.Component {
   render() {
     return (
-      <div className="m-auto">
+      <div>
         <div>
           <NavBar className="navbar" />
         </div>
         <div className="container">
-          <div className="m-3 d-flex row wrap">
+          <div className="m-3 d-flex flex-row flex-wrap">
             <div className="col-lg-4 col-12 p-0 ">
               <div className=" d-flex">
                 <h2 className="main-title m-1">Production Sheet |  Week 1</h2>
@@ -41,80 +41,86 @@ export default class ProductionSheet extends React.Component {
             </div>
           </div>
           <ul id="job-list">
-            <li className="d-flex justify-content-center m-3">
-              <div className="job-container col-12 shadow m-3">
-                <div className="d-flex job-statuses mt-1 mb-1">
-                  <h4 id="order-number" className=" m-1">ASH23-01-001</h4>
-                  <h4 id="order-status" className=" m-1 text-info">Approved</h4>
-                  <h4 id="payment-status " className="m-1 text-success">Paid</h4>
-                  <h4 id="shipping-status " className="m-1">Shipped</h4>
+            <li className="mt-5 mb-5 col-12 job-container shadow">
+              <div className="d-flex">
+                <div className="col">
+                  <div className="d-flex mt-1 mb-1">
+                    <h4 id="order-number" className="job-status m-1">ASH23-01-001</h4>
+                    <h4 id="order-status" className="job-status m-1 text-info">Approved</h4>
+                    <h4 id="payment-status " className="job-status m-1 text-success">Paid</h4>
+                    <h4 id="shipping-status " className="job-status m-1">Shipped</h4>
+                  </div>
                 </div>
-                <div id="job-details-header-1" className="d-flex job-details-header p-1 col-12">
-                  <p className=" col-2 ">Company Name</p>
-                  <p className=" col-2">Paper Size</p>
-                  <p className=" col-2">Paper Weight</p>
-                  <p className="col-2">Ship Date</p>
-                  <p className=" col-2">Due Date</p>
-                  <p className=" col-2">In Home Date</p>
+                <div className="col">
+                  <div className="d-flex justify-content-end">
+                    <a href=""><i className="fa-solid fa-pen-to-square m-1 edit-icon" /></a>
+                  </div>
                 </div>
-                <div id="job-details-1" className="d-flex job-details p-1">
-                  <p id="company-name" className="overflow-x overflow-y fw-light col-2">Furniture Connection - Clarksville</p>
-                  {/* will need to figure out how to allow "quotation marks" */}
-                  <p id="paper-size" className="overflow-x m-1 fw-light col-2">10.75 x 11.875 Full Bleed</p>
-                  <p id="paper-weight" className="m-1 fw-light col-2">43#</p>
-                  <p id="ship-date" className="m-1 fw-light col-2">12/15/22</p>
-                  <p id="due-date" className="m-1 fw-light col-2">12/22/22</p>
-                  <p id="in-home-date" className="m-1 fw-light col-2">1/2/23</p>
-                </div>
-                <div id="job-details-header-2" className="d-flex job-details-header p-1">
-                  <p className="m-1 w-100 ">Instructions</p>
-                  <p className="m-1 w-100">Headline</p>
-                  <p className="m-1 w-100">Store Copies</p>
-                  <p className="m-1 w-100">Valassis Atlanta</p>
-                  <p className="m-1 w-100">Office Copies</p>
-                  <p className="m-1 w-100">Total Copies</p>
-                </div>
-                <div id="job-details-2 " className="d-flex job-details p-1">
-                  <p className="m-1 fw-light w-100 ">N/A</p>
-                  <p className="m-1 fw-light w-100">NEW YEAR, NEW BRANDS, NEW...</p>
-                  <p className="m-1 fw-light w-100">200</p>
-                  <p className="m-1 fw-light w-100">345,000</p>
-                  <p className="m-1 fw-light w-100">100</p>
-                  <p className="m-1 fw-light w-100">345,3000</p>
-                </div>
-                <div id="job-details-header-3 " className="d-flex job-details-header p-1">
-                  <p className="m-1 w-100 ">Destination</p>
-                  <p className="m-1 w-100">Address</p>
-                  <p className="m-1 w-100" />
-
-                  <p className="m-1 w-100">City</p>
-                  <p className="m-1 w-100">State</p>
-                  <p className="m-1 w-100">Zip</p>
-                </div>
-                <div id="job-details-3 " className="d-flex job-details p-1">
-                  <p className="m-1 fw-light w-100 h-100 ">VALASSIS ATLANTA</p>
-                  <p className="m-1 fw-light w-100 h-100">7924 Troon Circle, S.W.</p>
-                  <p className="m-1 fw-light w-100 h-100" />
-                  <p className="m-1 fw-light w-100 h-100">Austell</p>
-                  <p className="m-1 fw-light w-100 h-100">GA</p>
-                  <p className="m-1 fw-light w-100 h-100">30168</p>
-                </div>
-                <div id="job-details-3 " className="d-flex job-details p-1">
-                  <p className="m-1 fw-light w-100 h-100 ">FURNITURE CONNECTION</p>
-                  <p className="m-1 fw-light w-100 h-100">2125 INTERNATIONAL BLVD</p>
-                  <p className="m-1 fw-light w-100 h-100" />
-                  <p className="m-1 fw-light w-100 h-100">CLARKSVILLE</p>
-                  <p className="m-1 fw-light w-100 h-100">TN</p>
-                  <p className="m-1 fw-light w-100 h-100">37040</p>
-                </div>
-                <div id="job-details-3 " className="d-flex job-details p-1">
-                  <p className="m-1 fw-light w-100 h-100 ">Color Ad</p>
-                  <p className="m-1 fw-light w-100 h-100">N/A</p>
-                  <p className="m-1 fw-light w-100 h-100" />
-                  <p className="m-1 fw-light w-100 h-100">N/A</p>
-                  <p className="m-1 fw-light w-100 h-100">N/A</p>
-                  <p className="m-1 fw-light w-100 h-100">N/A</p>
-                </div>
+              </div>
+              <div id="job-details-header-1" className="d-flex job-details-header p-1 col-12">
+                <p className="col fw-bold ">Company Name</p>
+                <p className=" col fw-bold">Paper Size</p>
+                <p className=" col fw-bold">Paper Weight</p>
+                <p className="col fw-bold">Ship Date</p>
+                <p className=" col fw-bold">Due Date</p>
+                <p className=" col fw-bold">In Home Date</p>
+              </div>
+              <div id="job-details-1" className="d-flex job-details p-1">
+                <p id="company-name" className="m-1 col">Furniture Connection - Clarksville</p>
+                {/* will need to figure out how to allow "quotation marks" */}
+                <p id="paper-size" className="overflow-x m-1 col">10.75 x 11.875 Full Bleed</p>
+                <p id="paper-weight" className="m-1 col">43#</p>
+                <p id="ship-date" className="text-danger m-1 col">12/15/22</p>
+                <p id="due-date" className="text-danger m-1 col">12/22/22</p>
+                <p id="in-home-date" className="text-danger m-1 col">1/2/23</p>
+              </div>
+              <div id="job-details-header-2" className="d-flex job-details-header p-1">
+                <p className="m-1 col fw-bold ">Instructions</p>
+                <p className="m-1 col fw-bold">Headline</p>
+                <p className="m-1 col fw-bold">Store Copies</p>
+                <p className="m-1 col fw-bold">Valassis Atlanta</p>
+                <p className="m-1 col fw-bold">Office Copies</p>
+                <p className="m-1 col fw-bold">Total Copies</p>
+              </div>
+              <div id="job-details-2 " className="d-flex job-details p-1">
+                <p className="m-1 col ">N/A</p>
+                <p className="m-1 col">NEW YEAR, NEW BRANDS, NEW...</p>
+                <p className="m-1 col">200</p>
+                <p className="m-1 col">345,000</p>
+                <p className="m-1 col">100</p>
+                <p className="m-1 col">345,3000</p>
+              </div>
+              <div id="job-details-header-3 " className="d-flex job-details-header p-1">
+                <p className="m-1 col fw-bold ">Destination</p>
+                <p className="m-1 col fw-bold">Address</p>
+                <p className="m-1 col fw-bold">City</p>
+                <p className="m-1 col fw-bold">State</p>
+                <p className="m-1 col fw-bold">Zip</p>
+                <p className="m-1 col fw-bold" />
+              </div>
+              <div id="job-details-3 " className="d-flex job-details p-1">
+                <p className="m-1 col ">Valassis Atlanta</p>
+                <p className="m-1 col">7924 Troon Circle, S.W.</p>
+                <p className="m-1 col">Austell</p>
+                <p className="m-1 col">GA</p>
+                <p className="m-1 col">30168</p>
+                <p className="m-1 col fw-bold" />
+              </div>
+              <div id="job-details-3 " className="d-flex job-details p-1">
+                <p className="m-1 col ">Furniture Connection</p>
+                <p className="m-1 col">2125 International Blvd.</p>
+                <p className="m-1 col">Clarksville</p>
+                <p className="m-1 col">TN</p>
+                <p className="m-1 col">37040</p>
+                <p className="m-1 col fw-bold" />
+              </div>
+              <div id="job-details-3 " className="d-flex job-details p-1">
+                <p className="m-1 col ">Color Ad</p>
+                <p className="m-1 col">N/A</p>
+                <p className="m-1 col">N/A</p>
+                <p className="m-1 col">N/A</p>
+                <p className="m-1 col">N/A</p>
+                <p className="m-1 col fw-bold" />
               </div>
             </li>
           </ul>
