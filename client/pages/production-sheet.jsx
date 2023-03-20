@@ -12,7 +12,7 @@ export default class ProductionSheet extends React.Component {
           <div className="m-3 d-flex flex-row flex-wrap">
             <div className="col-lg-4 col-12 p-0 ">
               <div className=" d-flex">
-                <h2 className="main-title m-1">Production Sheet |  Week 1</h2>
+                <h3 className="main-title m-1">Production Sheet |  Week 1</h3>
               </div>
             </div>
             <div className="col-lg-8 col-12 p-0">
