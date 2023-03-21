@@ -1,13 +1,22 @@
 import React from 'react';
 import NavBar from '../components/navbar';
+import Counter from '../components/test-button';
 
 export default class ProductionSheet extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: {}
+    };
+  }
+
   render() {
     return (
       <div>
         <div>
           <NavBar className="navbar" />
         </div>
+        <Counter />
         <div className="container">
           <div className="m-3 d-flex flex-row flex-wrap">
             <div className="col-lg-4 col-12 p-0 ">
@@ -126,7 +135,6 @@ export default class ProductionSheet extends React.Component {
           </ul>
         </div>
       </div>
-
     );
   }
 }
