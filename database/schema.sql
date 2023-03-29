@@ -6,17 +6,20 @@ drop schema "public" cascade;
 
 create schema "public";
 
+
 CREATE TABLE "jobs" (
 	"jobId" serial NOT NULL,
 	"yearId" integer NOT NULL,
 	"weekId" integer NOT NULL,
 	"companyId" integer NOT NULL,
 	"distributorId" integer NOT NULL,
+	"companyAddressId" integer NOT NULL,
+	"distributorAddressId" integer NOT NULL,
 	"jobNumber" TEXT NOT NULL,
 	"paperSize" TEXT NOT NULL,
 	"paperWeight" TEXT NOT NULL,
 	"shipDate" DATE NOT NULL,
-	"dueDate" DATE NOT NULL,
+	"duedate" DATE NOT NULL,
 	"inHomeDate" DATE NOT NULL,
 	"instructions" TEXT NOT NULL,
 	"headline" TEXT NOT NULL,
@@ -36,7 +39,7 @@ CREATE TABLE "jobs" (
 CREATE TABLE "companies" (
 	"companyName" TEXT NOT NULL,
 	"companyId" serial NOT NULL,
-	"addressId" integer NOT NULL,
+	"companyAddressId" integer NOT NULL,
 	CONSTRAINT "companies_pk" PRIMARY KEY ("companyId")
 ) WITH (
   OIDS=FALSE
@@ -47,7 +50,7 @@ CREATE TABLE "companies" (
 CREATE TABLE "distributors" (
 	"distributorName" TEXT NOT NULL,
 	"distributorId" serial NOT NULL,
-	"addressId" integer NOT NULL,
+	"distributorAddressId" integer NOT NULL,
 	CONSTRAINT "distributors_pk" PRIMARY KEY ("distributorId")
 ) WITH (
   OIDS=FALSE
@@ -55,13 +58,13 @@ CREATE TABLE "distributors" (
 
 
 
-CREATE TABLE "addresses" (
-  "addressId" serial NOT NULL,
+CREATE TABLE "companyAddresses" (
 	"address" TEXT NOT NULL,
+	"companyAddressId" integer NOT NULL,
 	"city" TEXT NOT NULL,
 	"state" TEXT NOT NULL,
 	"zip" integer NOT NULL,
-	CONSTRAINT "addresses_pk" PRIMARY KEY ("addressId")
+	CONSTRAINT "companyAddresses_pk" PRIMARY KEY ("companyAddressId")
 ) WITH (
   OIDS=FALSE
 );
@@ -89,14 +92,29 @@ CREATE TABLE "years" (
 
 
 
+CREATE TABLE "distributorAddresses" (
+	"distributorAddressId" serial NOT NULL,
+	"address" TEXT NOT NULL,
+	"city" TEXT NOT NULL,
+	"state" TEXT NOT NULL,
+	"zip" integer NOT NULL,
+	CONSTRAINT "distributorAddresses_pk" PRIMARY KEY ("distributorAddressId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk0" FOREIGN KEY ("yearId") REFERENCES "years"("yearId");
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk1" FOREIGN KEY ("weekId") REFERENCES "weeks"("weekId");
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk2" FOREIGN KEY ("companyId") REFERENCES "companies"("companyId");
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk3" FOREIGN KEY ("distributorId") REFERENCES "distributors"("distributorId");
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk4" FOREIGN KEY ("companyAddressId") REFERENCES "companyAddresses"("companyAddressId");
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk5" FOREIGN KEY ("distributorAddressId") REFERENCES "distributorAddresses"("distributorAddressId");
 
-ALTER TABLE "companies" ADD CONSTRAINT "companies_fk0" FOREIGN KEY ("addressId") REFERENCES "addresses"("addressId");
+ALTER TABLE "companies" ADD CONSTRAINT "companies_fk0" FOREIGN KEY ("companyAddressId") REFERENCES "companyAddresses"("companyAddressId");
 
-ALTER TABLE "distributors" ADD CONSTRAINT "distributors_fk0" FOREIGN KEY ("addressId") REFERENCES "addresses"("addressId");
+ALTER TABLE "distributors" ADD CONSTRAINT "distributors_fk0" FOREIGN KEY ("distributorAddressId") REFERENCES "distributorAddresses"("distributorAddressId");
 
 
 ALTER TABLE "weeks" ADD CONSTRAINT "weeks_fk0" FOREIGN KEY ("yearId") REFERENCES "years"("yearId");

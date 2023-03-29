@@ -4,18 +4,22 @@ values      ('2023');
 insert into "weeks" ("week", "yearId")
 values      ('1', 1);
 
-insert into "addresses" ("address", "city", "state", "zip")
-values       ('2125 International Blvd.', 'Clarksville', 'TN', 37040),
-             ('7924 Troon Circle, S.W.', 'Austell', 'GA', 30168);
+insert into "companyAddresses" ("address", "city", "state", "zip")
+values       ('2125 International Blvd.', 'Clarksville', 'TN', 37040);
 
-insert into "companies" ("companyName", "addressId")
+insert into "distributorAddresses" ("address", "city", "state", "zip")
+values       ('7924 Troon Circle, S.W.', 'Austell', 'GA', 30168);
+
+insert into "companies" ("companyName", "companyAddressId")
 values      ('Furniture Connection - Clarksville', 1);
 
-insert into "distributors" ("distributorName", "addressId")
-values      ('Valassis Atlanta', 2);
+insert into "distributors" ("distributorName", "distributorAddressId")
+values      ('Valassis Atlanta', 1);
 
-insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
+insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "companyAddressId", "distributorAddressId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
 values (
+  1,
+  1,
   1,
   1,
   1,
