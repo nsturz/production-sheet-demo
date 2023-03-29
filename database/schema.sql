@@ -19,7 +19,7 @@ CREATE TABLE "jobs" (
 	"paperSize" TEXT NOT NULL,
 	"paperWeight" TEXT NOT NULL,
 	"shipDate" DATE NOT NULL,
-	"duedate" DATE NOT NULL,
+	"dueDate" DATE NOT NULL,
 	"inHomeDate" DATE NOT NULL,
 	"instructions" TEXT NOT NULL,
 	"headline" TEXT NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE "distributors" (
 
 CREATE TABLE "companyAddresses" (
 	"address" TEXT NOT NULL,
-	"companyAddressId" integer NOT NULL,
+	"companyAddressId" serial NOT NULL,
 	"city" TEXT NOT NULL,
 	"state" TEXT NOT NULL,
 	"zip" integer NOT NULL,
