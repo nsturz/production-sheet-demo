@@ -4,17 +4,11 @@ import Counter from '../components/test-button';
 
 export default function ProductionSheet() {
   const [job, setJob] = useState('');
-  const [address, setAddress] = useState('');
   useEffect(() => {
     fetch('/api/jobs/1')
       .then(res => res.json())
       .then(job => {
         setJob(job);
-      });
-    fetch('/api/addresses/1')
-      .then(res => res.json())
-      .then(address => {
-        setAddress(address);
       });
   }, []);
 
@@ -118,18 +112,18 @@ export default function ProductionSheet() {
             </div>
             <div id="job-details-3 " className="d-flex job-details p-1">
               <p className="m-1 col ">{job.distributorName}</p>
-              <p className="m-1 col text-primary">7924 Troon Circle, S.W.</p>
-              <p className="m-1 col text-primary">Austell</p>
-              <p className="m-1 col text-primary">GA</p>
-              <p className="m-1 col text-primary">30168</p>
-              <p className="m-1 col text-primary fw-bold" />
+              <p className="m-1 col">{job.distributorAddress}</p>
+              <p className="m-1 col">{job.distributorCity}</p>
+              <p className="m-1 col">{job.distributorState}</p>
+              <p className="m-1 col">{job.distributorZip}</p>
+              <p className="m-1 col fw-bold" />
             </div>
             <div id="job-details-3 " className="d-flex job-details p-1">
               <p className="m-1 col ">{job.companyName}</p>
-              <p className="m-1 col">{address.address}</p>
-              <p className="m-1 col">{address.city}</p>
-              <p className="m-1 col">{address.state}</p>
-              <p className="m-1 col">{address.zip}</p>
+              <p className="m-1 col">{job.companyAddress}</p>
+              <p className="m-1 col">{job.companyCity}</p>
+              <p className="m-1 col">{job.companyState}</p>
+              <p className="m-1 col">{job.companyZip}</p>
               <p className="m-1 col fw-bold" />
             </div>
             <div id="job-details-3 " className="d-flex job-details p-1">

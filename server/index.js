@@ -15,25 +15,25 @@ app.get('/api/hello', (req, res, next) => {
 });
 
 // GET Addresses 👇🏼
-app.get('/api/addresses/:addressId', (req, res, next) => {
-  const addressId = Number(req.params.addressId);
-  if (!addressId) {
-    throw new ClientError(400, 'addressId must be a positive integer');
-  }
-  const sql = `
-  select "address",
-         "city",
-         "state",
-         "zip"
-  from "addresses"
-  where "addressId" = $1`;
-  const params = [addressId];
-  db.query(sql, params)
-    .then(result => {
-      res.json(result.rows[0]);
-    })
-    .catch(err => next(err));
-});
+// app.get('/api/addresses/:addressId', (req, res, next) => {
+//   const addressId = Number(req.params.addressId);
+//   if (!addressId) {
+//     throw new ClientError(400, 'addressId must be a positive integer');
+//   }
+//   const sql = `
+//   select "address",
+//          "city",
+//          "state",
+//          "zip"
+//   from "addresses"
+//   where "addressId" = $1`;
+//   const params = [addressId];
+//   db.query(sql, params)
+//     .then(result => {
+//       res.json(result.rows[0]);
+//     })
+//     .catch(err => next(err));
+// });
 
 // GET all job info about one job 👇🏼
 app.get('/api/jobs/:jobId', (req, res, next) => {
@@ -62,8 +62,18 @@ app.get('/api/jobs/:jobId', (req, res, next) => {
           "paymentStatus",
           "shippingStatus",
           "companyName",
-          "distributorName"
+          "distributorName",
+          "companyAddresses"."address" as "companyAddress",
+          "companyAddresses"."city" as "companyCity",
+          "companyAddresses"."state" as "companyState",
+          "companyAddresses"."zip" as "companyZip",
+          "distributorAddresses"."address" as "distributorAddress",
+          "distributorAddresses"."city" as "distributorCity",
+          "distributorAddresses"."state" as "distributorState",
+          "distributorAddresses"."zip" as "distributorZip"
    from "jobs"
+   join "companyAddresses" using ("companyAddressId")
+   join "distributorAddresses" using ("distributorAddressId")
    join "companies" using ("companyId")
    join "distributors" using ("distributorId")
    where "jobId" = $1`;

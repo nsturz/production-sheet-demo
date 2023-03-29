@@ -59,8 +59,8 @@ CREATE TABLE "distributors" (
 
 
 CREATE TABLE "companyAddresses" (
-	"address" TEXT NOT NULL,
 	"companyAddressId" serial NOT NULL,
+	"address" TEXT NOT NULL,
 	"city" TEXT NOT NULL,
 	"state" TEXT NOT NULL,
 	"zip" integer NOT NULL,
