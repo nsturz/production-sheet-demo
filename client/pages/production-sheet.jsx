@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/navbar';
 import Counter from '../components/test-button';
+import NewJobModal from '../components/new-job-form-modal';
 
 export default function ProductionSheet() {
   const [job, setJob] = useState('');
@@ -12,8 +13,6 @@ export default function ProductionSheet() {
       });
   }, []);
 
-  // console.log('job:', job)`
-  // console.log('address:', address)
   return (
     <div>
       <div>
@@ -50,6 +49,7 @@ export default function ProductionSheet() {
         <div className="d-flex justify-content-center m-3">
           <div className="col-12">
             <h4 className="fw-light"> Weekly Totals: 424,100</h4>
+            <NewJobModal />
           </div>
         </div>
         <ul id="job-list">
@@ -100,7 +100,7 @@ export default function ProductionSheet() {
               <p className="m-1 col">{job.storeCopies}</p>
               <p className="m-1 col">{job.distributorCopies}</p>
               <p className="m-1 col">{job.officeCopies}</p>
-              <p className="m-1 col text-primary">345,3000</p>
+              <p className="m-1 col">{job.distributorCopies + job.storeCopies + job.officeCopies}</p>
             </div>
             <div id="job-details-header-3 " className="d-flex job-details-header p-1">
               <p className="m-1 col fw-bold ">Destination</p>
