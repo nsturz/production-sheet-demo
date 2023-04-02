@@ -44,22 +44,22 @@ export default function NewJobModal() {
                   <label htmlFor="paperDetailsInput">Paper Details</label>
                   <input type="text" className="form-control" id="paperDetailsInput" />
                 </div>
-                <div className="d-flex mb-2 mt-2">
-                  <div className="col">
+                <div className="d-flex mb-3 mt-3 justify-content-between">
+                  <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Shipping Status</label>
                     <select name="" id="shippingStatusSelect" className="form-select fw-light">
                       <option value="1">Shipped</option>
                       <option value="2">Not Shipped</option>
                     </select>
                   </div>
-                  <div className="col">
+                  <div className="col-3">
                     <label htmlFor="paymentStatusSelect">Payment Status</label>
                     <select name="" id="paymentStatusSelect" className="form-select fw-light">
                       <option value="1">WOP</option>
                       <option value="2">Paid</option>
                     </select>
                   </div>
-                  <div className="col">
+                  <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Other Status</label>
                     <select name="" id="shippingStatusSelect" className="form-select fw-light">
                       <option value="1">WOO</option>
@@ -69,6 +69,60 @@ export default function NewJobModal() {
                       <option value="5">NR</option>
                       <option value="6">WOZ</option>
                     </select>
+                  </div>
+                </div>
+                <div className="d-flex mb-3 mt-3 justify-content-between">
+                  <div className="col-3">
+                    <label htmlFor="distributorCopies">Distributor Copies</label>
+                    <input type="text" id="distributorCopies" className="form-control"/>
+                  </div>
+                  <div className="col-3">
+                    <label htmlFor="storeCopies">Store Copies</label>
+                    <input type="text" id="storeCopies" className="form-control" />
+                  </div>
+                  <div className="col-3">
+                    <label htmlFor="officeCopies">Office Copies</label>
+                    <input type="text" id="officeCopies" className="form-control" />
+                  </div>
+                </div>
+                <div className="mb-2 mt-2">
+                  <label htmlFor="instructions">Instructions</label>
+                  <textarea name="" id="instructions" className="form-control" />
+                </div>
+                <div className="d-flex mb-3 mt-3 justify-content-between">
+                  <div className="col-3">
+                    <label htmlFor="shipDate">Ship Date</label>
+                    <input type="date" id="shipDate" className="form-control" />
+                  </div>
+                  <div className="col-3">
+                    <label htmlFor="storeCopies">Due Date</label>
+                    <input type="date" id="dueDate" className="form-control" />
+                  </div>
+                  <div className="col-3">
+                    <label htmlFor="officeCopies">In Home Date</label>
+                    <input type="date" id="inHomeDate" className="form-control" />
+                  </div>
+                </div>
+                <div className="mb-2 mt-2">
+                  <label htmlFor="headline">Headline</label>
+                  <input type="text" id="headline" className="form-control" />
+                </div>
+                <div className="mb-2 mt-2">
+                  <label htmlFor="address">Address</label>
+                  <input type="text" id="address" className="form-control" />
+                </div>
+                <div className="d-flex mb-3 mt-3 justify-content-between">
+                  <div className="col-3">
+                    <label htmlFor="city">City</label>
+                    <input type="text" id="city" className="form-control" />
+                  </div>
+                  <div className="col-3">
+                    <label htmlFor="state">State</label>
+                    <input type="text" id="state" className="form-control" />
+                  </div>
+                  <div className="col-3">
+                    <label htmlFor="zip">Zip</label>
+                    <input type="text" id="zip" className="form-control" />
                   </div>
                 </div>
               </form>
