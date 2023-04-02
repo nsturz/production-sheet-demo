@@ -1,6 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function NewJobModal() {
+  const [values, setValues] = useState({
+    year: '',
+    week: '',
+    companyName: '',
+    jobNumber: '',
+    paperDetails: '',
+    shippingStatus: '',
+    paymentStatus: '',
+    otherStatus: '',
+    distributorCopies: '',
+    storeCopies: '',
+    officeCopies: '',
+    instructions: '',
+    shipDate: '',
+    dueDate: '',
+    inHomeDate: '',
+    headline: '',
+    address: '',
+    city: '',
+    state: '',
+    zip: ''
+  });
+
+  const handleCompanyNameChange = event => {
+    event.persist();
+    setValues(values => ({
+      ...values,
+      companyName: event.target.value
+    }));
+  };
+
   return (
     <div>
       <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -17,24 +48,24 @@ export default function NewJobModal() {
               <form action="">
                 <div className="mb-2 mt-2">
                   <label htmlFor="yearSelect" >Year</label>
-                  <select name="" id="yearSelect" className='form-select fw-light '>
-                    <option value="">2022</option>
-                    <option selected>2023</option>
-                    <option value="">2024</option>
+                  <select name="" id="yearSelect" className='form-select fw-light'>
+                    {/* <option value="">2022</option>
+                    <option>2023</option>
+                    <option value="">2024</option> */}
                   </select>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="weekSelect" >Week</label>
                   <select name="" id="weekSelect" className='form-select fw-light '>
-                    <option value="1" selected>1</option>
+                    {/* <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
-                    <option value="4">4</option>
+                    <option value="4">4</option> */}
                   </select>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="companyNameInput" >Company Name</label>
-                  <input type="text" className="form-control" id="companyNameInput" />
+                  <input type="text" className="form-control" id="companyNameInput" value={values.companyName} onChange={handleCompanyNameChange} />
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="jobNumberInput" >Job Number</label>
@@ -99,7 +130,7 @@ export default function NewJobModal() {
                     <input type="date" id="dueDate" className="form-control fw-light" />
                   </div>
                   <div className="col-3">
-                    <label htmlFor="officeCopies">In Home Date</label>
+                    <label htmlFor="officeCopies">In Home</label>
                     <input type="date" id="inHomeDate" className="form-control fw-light" />
                   </div>
                 </div>
@@ -135,6 +166,5 @@ export default function NewJobModal() {
         </div>
       </div>
     </div>
-
   );
 }
