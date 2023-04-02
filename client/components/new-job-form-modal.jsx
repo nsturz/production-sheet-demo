@@ -92,15 +92,15 @@ export default function NewJobModal() {
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="shipDate">Ship Date</label>
-                    <input type="date" id="shipDate" className="form-control" />
+                    <input type="date" id="shipDate" className="form-control fw-light" />
                   </div>
                   <div className="col-3">
                     <label htmlFor="storeCopies">Due Date</label>
-                    <input type="date" id="dueDate" className="form-control" />
+                    <input type="date" id="dueDate" className="form-control fw-light" />
                   </div>
                   <div className="col-3">
                     <label htmlFor="officeCopies">In Home Date</label>
-                    <input type="date" id="inHomeDate" className="form-control" />
+                    <input type="date" id="inHomeDate" className="form-control fw-light" />
                   </div>
                 </div>
                 <div className="mb-2 mt-2">
