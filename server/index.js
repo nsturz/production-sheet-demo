@@ -14,27 +14,6 @@ app.get('/api/hello', (req, res, next) => {
   res.json({ hello: 'world' });
 });
 
-// GET Addresses 👇🏼
-// app.get('/api/addresses/:addressId', (req, res, next) => {
-//   const addressId = Number(req.params.addressId);
-//   if (!addressId) {
-//     throw new ClientError(400, 'addressId must be a positive integer');
-//   }
-//   const sql = `
-//   select "address",
-//          "city",
-//          "state",
-//          "zip"
-//   from "addresses"
-//   where "addressId" = $1`;
-//   const params = [addressId];
-//   db.query(sql, params)
-//     .then(result => {
-//       res.json(result.rows[0]);
-//     })
-//     .catch(err => next(err));
-// });
-
 // GET all job info about one job 👇🏼
 app.get('/api/jobs/:jobId', (req, res, next) => {
   const jobId = Number(req.params.jobId);
@@ -149,4 +128,3 @@ app.use(errorMiddleware);
 app.listen(process.env.PORT, () => {
   process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
 });
-// http POST:3000/api/new-year year=2024 week1=1 week2=2 week3=3 week4=4 week5=5 week6=6 week7=7 week8=8 week9=9 week10=10 week21=21 week22=22 week23=23 week24=24 week25=25 week26=26 week27=27 week28=28 week29=29 week30=30 week31=31 week32=32 week33=33 week34=34 week35=35 week36=36 week37=37 week38=38 week39=39 week40=40 week41=41 week42=42 week43=43 week44=44 week45=45 week46=46 week47=47 week48=48 week49=49 week50=50 week51=51 week52=52
