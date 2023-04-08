@@ -95,8 +95,8 @@ app.post('/api/new-year', (req, res) => {
 // POST a new JOB to the database 👇🏼
 app.post('/api/new-job', (req, res) => {
   const {
-    // yearId,
-    // weekId,
+    yearId,
+    weekId,
     companyAddress,
     companyCity,
     companyState,
@@ -108,23 +108,23 @@ app.post('/api/new-job', (req, res) => {
     distributorZip,
     // distributorAddressId,
     companyName,
-    distributorName
+    distributorName,
     // companyId,
     // distributorId,
-    // jobNumber,
-    // paperSize,
-    // paperWeight,
-    // shipDate,
-    // dueDate,
-    // inHomeDate,
-    // instructions,
-    // headline,
-    // storeCopies,
-    // distributorCopies,
-    // officeCopies,
-    // orderStatus,
-    // shippingStatus,
-    // paymentStatus
+    jobNumber,
+    paperSize,
+    paperWeight,
+    shipDate,
+    dueDate,
+    inHomeDate,
+    instructions,
+    headline,
+    storeCopies,
+    distributorCopies,
+    officeCopies,
+    orderStatus,
+    shippingStatus,
+    paymentStatus
   } = req.body;
   // if(!yearId ||!weekId ||!companyId ||!distributorId ||!jobNumber ||!paperSize ||!paperWeight ||!shipDate ||
   //   !dueDate ||!inHomeDate ||!instructions ||!headline ||!storeCopies ||!distributorCopies ||!officeCopies ||
@@ -154,21 +154,30 @@ app.post('/api/new-job', (req, res) => {
       returning *`;
           const insertCompanyParams = [companyName, newCompanyAddress.companyAddressId];
           db.query(insertCompanySql, insertCompanyParams)
-            .then(() => {
-              // we don't need to grab the result
+            .then(companyResult => {
+              const [newCompany] = companyResult.rows;
               const insertDistributorSql = `
-        insert into "distributors" ("distributorName", "distributorAddressId")
-        values      ($1, $2)
-        returning *`;
+                insert into "distributors" ("distributorName", "distributorAddressId")
+                values      ($1, $2)
+                returning *`;
               const insertDistributorParams = [distributorName, newDistributorAddress.distributorAddressId];
               db.query(insertDistributorSql, insertDistributorParams)
-                .then(result => {
-                  const [newJob] = result.rows;
-                  res.status(201).json(newJob);
-                })
-                .catch(err => {
-                  console.error(err);
-                  res.status(501).json({ error: 'sad day. error. ' });
+                .then(distributorResult => {
+                  const [newDistributor] = distributorResult.rows;
+                  const insertJobSql = `
+                insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "companyAddressId", "distributorAddressId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
+                values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+                returning *`;
+                  const insertJobParams = [yearId, weekId, newCompany.companyId, newDistributor.distributorId, newCompanyAddress.companyAddressId, newDistributorAddress.distributorAddressId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, orderStatus, shippingStatus, paymentStatus];
+                  db.query(insertJobSql, insertJobParams)
+                    .then(result => {
+                      const [newJob] = result.rows;
+                      res.status(201).json(newJob);
+                    })
+                    .catch(err => {
+                      console.error(err);
+                      res.status(501).json({ error: 'sad day. error. ' });
+                    });
                 });
             });
         });
