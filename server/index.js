@@ -92,6 +92,74 @@ app.post('/api/new-year', (req, res) => {
     });
 });
 
+// POST new Company information 👇🏼
+app.post('/api/new-company', (req, res) => {
+  const {
+    companyAddress,
+    companyCity,
+    companyState,
+    companyZip,
+    companyName
+  } = req.body;
+  const insertCompanyAddressSql = `
+  insert into "companyAddresses" ("address", "city", "state", "zip")
+  values      ($1, $2, $3, $4)
+  returning *`;
+  const insertCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip];
+  db.query(insertCompanyAddressSql, insertCompanyAddressParams)
+    .then(companyAddressResult => {
+      const [newCompanyAddress] = companyAddressResult.rows;
+      const insertCompanySql = `
+      insert into "companies" ("companyName", "companyAddressId")
+      values      ($1, $2)
+      returning *`;
+      const insertCompanyParams = [companyName, newCompanyAddress.companyAddressId];
+      db.query(insertCompanySql, insertCompanyParams)
+        .then(result => {
+          const [newCompany] = result.rows;
+          res.status(201).json(newCompany);
+        })
+        .catch(err => {
+          console.error(err);
+          res.status(501).json({ error: 'an un expected error occured.' });
+        });
+    });
+});
+
+// POST new Distributor information 👇🏼
+app.post('/api/new-distributor', (req, res) => {
+  const {
+    distributorAddress,
+    distributorCity,
+    distributorState,
+    distributorZip,
+    distributorName
+  } = req.body;
+  const insertDistributorAddressSql = `
+    insert into "distributorAddresses" ("address", "city", "state", "zip")
+    values      ($1, $2, $3, $4)
+    returning *`;
+  const insertDistributorAddressParams = [distributorAddress, distributorCity, distributorState, distributorZip];
+  db.query(insertDistributorAddressSql, insertDistributorAddressParams)
+    .then(distributorAddressResult => {
+      const [newDistributorAddress] = distributorAddressResult.rows;
+      const insertDistributorSql = `
+        insert into "distributors" ("distributorName", "distributorAddressId")
+        values      ($1, $2)
+        returning *`;
+      const insertDistributorParams = [distributorName, newDistributorAddress.distributorAddressId];
+      db.query(insertDistributorSql, insertDistributorParams)
+        .then(result => {
+          const [newDistributor] = result.rows;
+          res.status(201).json(newDistributor);
+        })
+        .catch(err => {
+          console.error(err);
+          res.status(501).json({ error: 'an unexpected error occured.' });
+        });
+    });
+});
+
 // POST a new JOB to the database 👇🏼
 app.post('/api/new-job', (req, res) => {
   const {
