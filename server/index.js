@@ -51,10 +51,10 @@ app.get('/api/jobs/:jobId', (req, res, next) => {
           "distributorAddresses"."state" as "distributorState",
           "distributorAddresses"."zip" as "distributorZip"
    from "jobs"
-   join "companyAddresses" using ("companyAddressId")
-   join "distributorAddresses" using ("distributorAddressId")
    join "companies" using ("companyId")
    join "distributors" using ("distributorId")
+   join "companyAddresses" using ("companyAddressId")
+   join "distributorAddresses" using ("distributorAddressId")
    where "jobId" = $1`;
   const params = [jobId];
   db.query(sql, params)
@@ -121,7 +121,7 @@ app.post('/api/new-company', (req, res) => {
         })
         .catch(err => {
           console.error(err);
-          res.status(501).json({ error: 'an un expected error occured.' });
+          res.status(500).json({ error: 'an un expected error occured.' });
         });
     });
 });
@@ -155,7 +155,7 @@ app.post('/api/new-distributor', (req, res) => {
         })
         .catch(err => {
           console.error(err);
-          res.status(501).json({ error: 'an unexpected error occured.' });
+          res.status(500).json({ error: 'an unexpected error occured.' });
         });
     });
 });
@@ -182,12 +182,12 @@ app.post('/api/new-job', (req, res) => {
     shippingStatus,
     paymentStatus
   } = req.body;
-  // if(!yearId ||!weekId ||!companyId ||!distributorId ||!jobNumber ||!paperSize ||!paperWeight ||!shipDate ||
-  //   !dueDate ||!inHomeDate ||!instructions ||!headline ||!storeCopies ||!distributorCopies ||!officeCopies ||
-  //   !orderStatus ||!shippingStatus ||!paymentStatus){
-  //   res.status(400).json({error: 'Make sure you have entered all required fields'});
-  //   return;
-  // }
+  if (!yearId || !weekId || !companyId || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
+    !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
+    !orderStatus || !shippingStatus || !paymentStatus) {
+    res.status(400).json({ error: 'Make sure you have entered all required fields' });
+    return;
+  }
   const insertJobSql = `
     insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
     values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
@@ -200,7 +200,7 @@ app.post('/api/new-job', (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(501).json({ error: 'sad day. error. ' });
+      res.status(500).json({ error: 'sad day. error. ' });
     });
 });
 
