@@ -165,20 +165,8 @@ app.post('/api/new-job', (req, res) => {
   const {
     yearId,
     weekId,
-    companyAddress,
-    companyCity,
-    companyState,
-    companyZip,
-    // companyAddressId,
-    distributorAddress,
-    distributorCity,
-    distributorState,
-    distributorZip,
-    // distributorAddressId,
-    companyName,
-    distributorName,
-    // companyId,
-    // distributorId,
+    companyId,
+    distributorId,
     jobNumber,
     paperSize,
     paperWeight,
@@ -200,57 +188,22 @@ app.post('/api/new-job', (req, res) => {
   //   res.status(400).json({error: 'Make sure you have entered all required fields'});
   //   return;
   // }
-  const insertCompanyAddressSql = `
-  insert into "companyAddresses" ("address", "city", "state", "zip")
-  values      ($1, $2, $3, $4)
-  returning *`;
-  const insertCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip];
-  db.query(insertCompanyAddressSql, insertCompanyAddressParams)
-    .then(companyAddressResult => {
-      const [newCompanyAddress] = companyAddressResult.rows;
-      const insertDistributorAddressSql = `
-    insert into "distributorAddresses" ("address", "city", "state", "zip")
-    values      ($1, $2, $3, $4)
+  const insertJobSql = `
+    insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
+    values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
     returning *`;
-      const insertDistributorAddressParams = [distributorAddress, distributorCity, distributorState, distributorZip];
-      db.query(insertDistributorAddressSql, insertDistributorAddressParams)
-        .then(distributorAddressResult => {
-          const [newDistributorAddress] = distributorAddressResult.rows;
-          const insertCompanySql = `
-      insert into "companies" ("companyName", "companyAddressId")
-      values      ($1, $2)
-      returning *`;
-          const insertCompanyParams = [companyName, newCompanyAddress.companyAddressId];
-          db.query(insertCompanySql, insertCompanyParams)
-            .then(companyResult => {
-              const [newCompany] = companyResult.rows;
-              const insertDistributorSql = `
-                insert into "distributors" ("distributorName", "distributorAddressId")
-                values      ($1, $2)
-                returning *`;
-              const insertDistributorParams = [distributorName, newDistributorAddress.distributorAddressId];
-              db.query(insertDistributorSql, insertDistributorParams)
-                .then(distributorResult => {
-                  const [newDistributor] = distributorResult.rows;
-                  const insertJobSql = `
-                insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "companyAddressId", "distributorAddressId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
-                values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
-                returning *`;
-                  const insertJobParams = [yearId, weekId, newCompany.companyId, newDistributor.distributorId, newCompanyAddress.companyAddressId, newDistributorAddress.distributorAddressId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, orderStatus, shippingStatus, paymentStatus];
-                  db.query(insertJobSql, insertJobParams)
-                    .then(result => {
-                      const [newJob] = result.rows;
-                      res.status(201).json(newJob);
-                    })
-                    .catch(err => {
-                      console.error(err);
-                      res.status(501).json({ error: 'sad day. error. ' });
-                    });
-                });
-            });
-        });
+  const insertJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, orderStatus, shippingStatus, paymentStatus];
+  db.query(insertJobSql, insertJobParams)
+    .then(result => {
+      const [newJob] = result.rows;
+      res.status(201).json(newJob);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(501).json({ error: 'sad day. error. ' });
     });
 });
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

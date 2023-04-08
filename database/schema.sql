@@ -13,8 +13,6 @@ CREATE TABLE "jobs" (
 	"weekId" integer NOT NULL,
 	"companyId" integer NOT NULL,
 	"distributorId" integer NOT NULL,
-	"companyAddressId" integer NOT NULL,
-	"distributorAddressId" integer NOT NULL,
 	"jobNumber" TEXT NOT NULL,
 	"paperSize" TEXT NOT NULL,
 	"paperWeight" TEXT NOT NULL,
@@ -109,8 +107,6 @@ ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk0" FOREIGN KEY ("yearId") REFERENCES "
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk1" FOREIGN KEY ("weekId") REFERENCES "weeks"("weekId");
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk2" FOREIGN KEY ("companyId") REFERENCES "companies"("companyId");
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk3" FOREIGN KEY ("distributorId") REFERENCES "distributors"("distributorId");
-ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk4" FOREIGN KEY ("companyAddressId") REFERENCES "companyAddresses"("companyAddressId");
-ALTER TABLE "jobs" ADD CONSTRAINT "jobs_fk5" FOREIGN KEY ("distributorAddressId") REFERENCES "distributorAddresses"("distributorAddressId");
 
 ALTER TABLE "companies" ADD CONSTRAINT "companies_fk0" FOREIGN KEY ("companyAddressId") REFERENCES "companyAddresses"("companyAddressId");
 
