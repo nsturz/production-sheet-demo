@@ -23,6 +23,15 @@ export default function NewJobModal() {
     state: '',
     zip: ''
   });
+  // Need to create an app.get() method for distributors before can use this 👇🏼
+  // const [distributors, setdistributors] = useState([]);
+  // useEffect(() => {
+  //   fetch('/api/jobs/1')
+  //     .then(res => res.json())
+  //     .then(job => {
+  //       setJob(job);
+  //     });
+  // }, []);
   const handleYearChange = event => {
     event.persist();
     setValues(values => ({
@@ -163,7 +172,7 @@ export default function NewJobModal() {
       zip: event.target.value
     }));
   };
-
+  // console.log('values:', values)
   return (
     <div>
       <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -192,6 +201,12 @@ export default function NewJobModal() {
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
+                  </select>
+                </div>
+                <div className="mb-2 mt-2">
+                  <label htmlFor="companyNameInput" >Distributor</label>
+                  <select name="" id="distributorSelect" className="form-select fw-light" >
+                    <option>Select one</option>
                   </select>
                 </div>
                 <div className="mb-2 mt-2">

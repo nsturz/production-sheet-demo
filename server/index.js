@@ -13,6 +13,19 @@ app.use(staticMiddleware);
 app.get('/api/hello', (req, res, next) => {
   res.json({ hello: 'world' });
 });
+// GET all distributors (mainly used in new-job-modal.jsx) 👇🏼
+app.get('/api/distributors', (req, res, next) => {
+  const sql = `
+  select "distributorId",
+        "distributorName",
+        "distributorAddressId"
+  from distributors`;
+  db.query(sql)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
 
 // GET all job info about one job 👇🏼
 app.get('/api/jobs/:jobId', (req, res, next) => {
