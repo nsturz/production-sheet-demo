@@ -93,36 +93,87 @@ app.post('/api/new-year', (req, res) => {
 });
 
 // POST a new JOB to the database 👇🏼
-// app.post('/api/new-job', (req, res) =>{
-//   const {
-//     companyAddress,
-//     companyCity,
-//     companyState,
-//     companyZip
-//     // companyId,
-//     // distributorId,
-//     //jobNumber,
-//     // paperSize,
-//     // paperWeight,
-//     // shipDate,
-//     // dueDate,
-//     // inHomeDate,
-//     // instructions,
-//     // headline,
-//     // storeCopies,
-//     // distributorCopies,
-//     // officeCopies,
-//     // orderStatus,
-//     // shippingStatus,
-//     // paymentStatus
-//   } = req.body;
-//   // if(!yearId ||!weekId ||!companyId ||!distributorId ||!jobNumber ||!paperSize ||!paperWeight ||!shipDate ||
-//   //   !dueDate ||!inHomeDate ||!instructions ||!headline ||!storeCopies ||!distributorCopies ||!officeCopies ||
-//   //   !orderStatus ||!shippingStatus ||!paymentStatus){
-//   //   res.status(400).json({error: 'Make sure you have entered all required fields'});
-//   //   return;
-//   // }
-// })
+app.post('/api/new-job', (req, res) => {
+  const {
+    // yearId,
+    // weekId,
+    companyAddress,
+    companyCity,
+    companyState,
+    companyZip,
+    // companyAddressId,
+    distributorAddress,
+    distributorCity,
+    distributorState,
+    distributorZip,
+    // distributorAddressId,
+    companyName,
+    distributorName
+    // companyId,
+    // distributorId,
+    // jobNumber,
+    // paperSize,
+    // paperWeight,
+    // shipDate,
+    // dueDate,
+    // inHomeDate,
+    // instructions,
+    // headline,
+    // storeCopies,
+    // distributorCopies,
+    // officeCopies,
+    // orderStatus,
+    // shippingStatus,
+    // paymentStatus
+  } = req.body;
+  // if(!yearId ||!weekId ||!companyId ||!distributorId ||!jobNumber ||!paperSize ||!paperWeight ||!shipDate ||
+  //   !dueDate ||!inHomeDate ||!instructions ||!headline ||!storeCopies ||!distributorCopies ||!officeCopies ||
+  //   !orderStatus ||!shippingStatus ||!paymentStatus){
+  //   res.status(400).json({error: 'Make sure you have entered all required fields'});
+  //   return;
+  // }
+  const insertCompanyAddressSql = `
+  insert into "companyAddresses" ("address", "city", "state", "zip")
+  values      ($1, $2, $3, $4)
+  returning *`;
+  const insertCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip];
+  db.query(insertCompanyAddressSql, insertCompanyAddressParams)
+    .then(companyAddressResult => {
+      const [newCompanyAddress] = companyAddressResult.rows;
+      const insertDistributorAddressSql = `
+    insert into "distributorAddresses" ("address", "city", "state", "zip")
+    values      ($1, $2, $3, $4)
+    returning *`;
+      const insertDistributorAddressParams = [distributorAddress, distributorCity, distributorState, distributorZip];
+      db.query(insertDistributorAddressSql, insertDistributorAddressParams)
+        .then(distributorAddressResult => {
+          const [newDistributorAddress] = distributorAddressResult.rows;
+          const insertCompanySql = `
+      insert into "companies" ("companyName", "companyAddressId")
+      values      ($1, $2)
+      returning *`;
+          const insertCompanyParams = [companyName, newCompanyAddress.companyAddressId];
+          db.query(insertCompanySql, insertCompanyParams)
+            .then(() => {
+              // we don't need to grab the result
+              const insertDistributorSql = `
+        insert into "distributors" ("distributorName", "distributorAddressId")
+        values      ($1, $2)
+        returning *`;
+              const insertDistributorParams = [distributorName, newDistributorAddress.distributorAddressId];
+              db.query(insertDistributorSql, insertDistributorParams)
+                .then(result => {
+                  const [newJob] = result.rows;
+                  res.status(201).json(newJob);
+                })
+                .catch(err => {
+                  console.error(err);
+                  res.status(501).json({ error: 'sad day. error. ' });
+                });
+            });
+        });
+    });
+});
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
