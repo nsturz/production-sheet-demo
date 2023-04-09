@@ -34,6 +34,16 @@ export default function NewJobModal() {
       });
   }, []);
 
+  const [years, setYears] = useState([]);
+  useEffect(() => {
+    // FETCH method GETS all years in database so they can be selected in the form 👇🏼
+    fetch('/api/years')
+      .then(res => res.json())
+      .then(years => {
+        setYears(years);
+      });
+  }, []);
+
   const handleYearChange = event => {
     event.persist();
     setValues(values => ({
@@ -183,6 +193,7 @@ export default function NewJobModal() {
   };
   // console.log('values:', values)
   // console.log('distributors:', distributors)
+  // console.log('years:', years)
   return (
     <div>
       <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -201,7 +212,13 @@ export default function NewJobModal() {
                   <label htmlFor="yearSelect" >Year</label>
                   <select name="" id="yearSelect" className='form-select fw-light' onChange={handleYearChange}>
                     <option>Select a year.</option>
-
+                    {
+                      years.map(event => {
+                        return (
+                          <option id={event.yearId} key={event.yearId}>{event.year}</option>
+                        );
+                      })
+                    }
                   </select>
                 </div>
                 <div className="mb-2 mt-2">

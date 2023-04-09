@@ -12,6 +12,16 @@ export default function ProductionSheet() {
       });
   }, []);
 
+  const [years, setYears] = useState([]);
+  useEffect(() => {
+    // FETCH method GETS all years in database so they can be selected in the form 👇🏼
+    fetch('/api/years')
+      .then(res => res.json())
+      .then(years => {
+        setYears(years);
+      });
+  }, []);
+
   return (
     <div>
       <div>
@@ -27,10 +37,14 @@ export default function ProductionSheet() {
           <div className="col-lg-8 col-12 p-0">
             <div className="d-flex">
               <select className="form-select fw-light m-1" aria-label="Default select example">
-                <option defaultValue>Year</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option>Select a year.</option>
+                {
+                  years.map(event => {
+                    return (
+                      <option id={event.yearId} key={event.yearId}>{event.year}</option>
+                    );
+                  })
+                }
               </select>
               <select className=" form-select fw-light m-1" aria-label="Default select example">
                 <option defaultValue>Week</option>

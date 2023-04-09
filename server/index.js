@@ -27,6 +27,30 @@ app.get('/api/years', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET all weeks (mainly used in new-job-modal.jsx) 👇🏼
+app.get('/api/weeks/:yearId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  if (!yearId) {
+    throw new ClientError(400, 'yearId must be a positive integer');
+  }
+  const sql = `
+  select "week",
+         "weekId",
+         "yearId"
+  from "weeks"
+  where "yearId" = $1
+  order by "week" asc`;
+  const params = [yearId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find week with yearId ${yearId}`);
+      }
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 // GET all distributors (mainly used in new-job-modal.jsx) 👇🏼
 app.get('/api/distributors', (req, res, next) => {
   const sql = `
