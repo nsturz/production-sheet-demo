@@ -217,6 +217,11 @@ app.post('/api/new-job', (req, res) => {
     yearId,
     weekId,
     companyId,
+    companyAddress,
+    companyCity,
+    companyState,
+    companyZip,
+    companyName,
     distributorId,
     jobNumber,
     paperSize,
@@ -233,25 +238,43 @@ app.post('/api/new-job', (req, res) => {
     shippingStatus,
     paymentStatus
   } = req.body;
-  if (!yearId || !weekId || !companyId || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
+  if (!yearId || !weekId || !companyId || !companyName || !companyAddress || !companyCity || !companyState || !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
     !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
     !orderStatus || !shippingStatus || !paymentStatus) {
     res.status(400).json({ error: 'Make sure you have entered all required fields' });
     return;
   }
-  const insertJobSql = `
-    insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
-    values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
-    returning *`;
-  const insertJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, orderStatus, shippingStatus, paymentStatus];
-  db.query(insertJobSql, insertJobParams)
-    .then(result => {
-      const [newJob] = result.rows;
-      res.status(201).json(newJob);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'sad day. error. ' });
+  const insertCompanyAddressSql = `
+  insert into "companyAddresses" ("address", "city", "state", "zip")
+  values      ($1, $2, $3, $4)
+  returning *`;
+  const insertCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip];
+  db.query(insertCompanyAddressSql, insertCompanyAddressParams)
+    .then(companyAddressResult => {
+      const [newCompanyAddress] = companyAddressResult.rows;
+      const insertCompanySql = `
+      insert into "companies" ("companyName", "companyAddressId")
+      values      ($1, $2)
+      returning *`;
+      const insertCompanyParams = [companyName, newCompanyAddress.companyAddressId];
+      db.query(insertCompanySql, insertCompanyParams)
+        .then(result => {
+          const [newCompany] = result.rows;
+          const insertJobSql = `
+            insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
+            values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+            returning *`;
+          const insertJobParams = [yearId, weekId, newCompany.companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, orderStatus, shippingStatus, paymentStatus];
+          db.query(insertJobSql, insertJobParams)
+            .then(result => {
+              const [newJob] = result.rows;
+              res.status(201).json(newJob);
+            })
+            .catch(err => {
+              console.error(err);
+              res.status(500).json({ error: 'sad day. error. ' });
+            });
+        });
     });
 });
 

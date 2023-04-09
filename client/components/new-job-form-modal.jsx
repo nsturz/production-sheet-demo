@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
 export default function NewJobModal() {
+  const [companyInfo, setCompanyInfo] = useState({
+    companyName: '',
+    companyAddress: '',
+    companyCity: '',
+    companyState: '',
+    companyZip: ''
+  });
   const [values, setValues] = useState({
     yearId: '',
     weekId: '',
-    companyName: '',
+    companyId: '',
     distributorId: '',
     jobNumber: '',
-    paperDetails: '',
+    paperSize: '',
+    paperWeight: '',
     shippingStatus: '',
     paymentStatus: '',
     otherStatus: '',
@@ -18,11 +26,7 @@ export default function NewJobModal() {
     shipDate: '',
     dueDate: '',
     inHomeDate: '',
-    headline: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: ''
+    headline: ''
   });
   const [weeks, setWeeks] = useState([]);
   const [distributors, setDistributors] = useState([]);
@@ -86,8 +90,8 @@ export default function NewJobModal() {
   };
   const handleCompanyNameChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
+    setCompanyInfo(companyInfo => ({
+      ...companyInfo,
       companyName: event.target.value
     }));
   };
@@ -98,11 +102,18 @@ export default function NewJobModal() {
       jobNumber: event.target.value
     }));
   };
-  const handlePaperDetailsChange = event => {
+  const handlePaperSizeChange = event => {
     event.persist();
     setValues(values => ({
       ...values,
-      paperDetails: event.target.value
+      paperSize: event.target.value
+    }));
+  };
+  const handlePaperWeightChange = event => {
+    event.persist();
+    setValues(values => ({
+      ...values,
+      paperWeight: event.target.value
     }));
   };
   const handleShippingStatusChange = event => {
@@ -130,21 +141,21 @@ export default function NewJobModal() {
     event.persist();
     setValues(values => ({
       ...values,
-      distributorCopies: event.target.value
+      distributorCopies: Number(event.target.value)
     }));
   };
   const handleOfficeCopiesChange = event => {
     event.persist();
     setValues(values => ({
       ...values,
-      officeCopies: event.target.value
+      officeCopies: Number(event.target.value)
     }));
   };
   const handleStoreCopiesChange = event => {
     event.persist();
     setValues(values => ({
       ...values,
-      storeCopies: event.target.value
+      storeCopies: Number(event.target.value)
     }));
   };
   const handleInstructionsChange = event => {
@@ -182,35 +193,43 @@ export default function NewJobModal() {
       headline: event.target.value
     }));
   };
-  const handleAddressChange = event => {
+  const handleCompanyAddressChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
-      address: event.target.value
+    setCompanyInfo(companyInfo => ({
+      ...companyInfo,
+      companyAddress: event.target.value
     }));
   };
   const handleCityChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
-      city: event.target.value
+    setCompanyInfo(companyInfo => ({
+      ...companyInfo,
+      companyCity: event.target.value
     }));
   };
   const handleStateChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
-      state: event.target.value
+    setCompanyInfo(companyInfo => ({
+      ...companyInfo,
+      companyState: event.target.value
     }));
   };
   const handleZipChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
-      zip: event.target.value
+    setCompanyInfo(companyInfo => ({
+      ...companyInfo,
+      companyZip: Number(event.target.value)
     }));
   };
+
+  // const handleSubmit = event => {
+  //   event.persist();
+  //   const company = {
+  //     companyAddress: companyAddress
+  //   }
+  // }
   // console.log('values:', values)
+  // console.log('companyInfo:', companyInfo)
   // console.log('weeks', weeks)
   // console.log('distributors:', distributors)
   // console.log('years:', years)
@@ -268,21 +287,22 @@ export default function NewJobModal() {
                   </select>
                 </div>
                 <div className="mb-2 mt-2">
-                  <label htmlFor="companyNameInput" >Company Name</label>
-                  <input type="text" className="form-control" id="companyNameInput" value={values.companyName} onChange={handleCompanyNameChange} />
-                </div>
-                <div className="mb-2 mt-2">
                   <label htmlFor="jobNumberInput" >Job Number</label>
                   <input type="text" className="form-control" id="jobNumberInput" value={values.jobNumber} onChange={handleJobNumberChange} />
                 </div>
                 <div className="mb-2 mt-2">
-                  <label htmlFor="paperDetailsInput">Paper Details</label>
-                  <input type="text" className="form-control" id="paperDetailsInput" value={values.paperDetails} onChange={handlePaperDetailsChange} />
+                  <label htmlFor="paperDetailsInput">Paper Size</label>
+                  <input type="text" className="form-control" id="paperDetailsInput" value={values.paperSize} onChange={handlePaperSizeChange} />
+                </div>
+                <div className="mb-2 mt-2">
+                  <label htmlFor="paperDetailsInput">Paper Weight</label>
+                  <input type="text" className="form-control" id="paperDetailsInput" value={values.paperweight} onChange={handlePaperWeightChange} />
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Shipping Status</label>
                     <select name="" id="shippingStatusSelect" className="form-select fw-light" value={values.shippingStatus} onChange={handleShippingStatusChange}>
+                      <option>Select one.</option>
                       <option>Shipped</option>
                       <option>Not Shipped</option>
                     </select>
@@ -290,6 +310,7 @@ export default function NewJobModal() {
                   <div className="col-3">
                     <label htmlFor="paymentStatusSelect">Payment Status</label>
                     <select name="" id="paymentStatusSelect" className="form-select fw-light" value={values.paymentStatus} onChange={handlePaymentStatusChange}>
+                      <option>Select one.</option>
                       <option>WOP</option>
                       <option>Paid</option>
                     </select>
@@ -297,6 +318,8 @@ export default function NewJobModal() {
                   <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Other Status</label>
                     <select name="" id="shippingStatusSelect" className="form-select fw-light" value={values.otherStatus} onChange={handleOtherStatusChange}>
+                      <option>Select one.</option>
+                      <option>Approved</option>
                       <option>WOO</option>
                       <option>WOA</option>
                       <option>ZNS</option>
@@ -343,21 +366,25 @@ export default function NewJobModal() {
                   <input type="text" id="headline" className="form-control" value={values.headline} onChange={handleHeadlineChange} />
                 </div>
                 <div className="mb-2 mt-2">
-                  <label htmlFor="address">Address</label>
-                  <input type="text" id="address" className="form-control" value={values.address} onChange={handleAddressChange}/>
+                  <label htmlFor="companyNameInput" >Company Name</label>
+                  <input type="text" className="form-control" id="companyNameInput" value={values.companyName} onChange={handleCompanyNameChange} />
+                </div>
+                <div className="mb-2 mt-2">
+                  <label htmlFor="address">Company Address</label>
+                  <input type="text" id="address" className="form-control" value={companyInfo.companyAddress} onChange={handleCompanyAddressChange}/>
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="city">City</label>
-                    <input type="text" id="city" className="form-control" value={values.city} onChange={handleCityChange}/>
+                    <input type="text" id="city" className="form-control" value={companyInfo.companyCity} onChange={handleCityChange}/>
                   </div>
                   <div className="col-3">
                     <label htmlFor="state">State</label>
-                    <input type="text" id="state" className="form-control" value={values.state} onChange={handleStateChange} />
+                    <input type="text" id="state" className="form-control" value={companyInfo.companyState} onChange={handleStateChange} />
                   </div>
                   <div className="col-3">
                     <label htmlFor="zip">Zip</label>
-                    <input type="text" id="zip" className="form-control" value={values.zip} onChange={handleZipChange} />
+                    <input type="text" id="zip" className="form-control" value={companyInfo.companyZip} onChange={handleZipChange} />
                   </div>
                 </div>
               </form>
