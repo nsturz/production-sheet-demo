@@ -66,18 +66,6 @@ export default function NewJobModal() {
     }
   };
 
-  // const handleYearIdChange = event => {
-  //   event.persist();
-  //   for (let i = 0; i < years.length; i++) {
-  //     if (event.target.value === years[i].year) {
-  //       setValues(values => ({
-  //         ...values,
-  //         yearId: years[i].yearId
-  //       }));
-  //     }
-  //   }
-  // };
-
   const handleWeekChange = event => {
     event.persist();
     setValues(values => ({
