@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/navbar';
-import Counter from '../components/test-button';
 import NewJobModal from '../components/new-job-form-modal';
 
 export default function ProductionSheet() {
@@ -18,7 +17,6 @@ export default function ProductionSheet() {
       <div>
         <NavBar className="navbar" />
       </div>
-      <Counter />
       <div className="container">
         <div className="m-3 d-flex flex-row flex-wrap">
           <div className="col-lg-4 col-12 p-0 ">

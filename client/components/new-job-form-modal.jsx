@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function NewJobModal() {
   const [values, setValues] = useState({
@@ -23,15 +23,17 @@ export default function NewJobModal() {
     state: '',
     zip: ''
   });
-  // Need to create an app.get() method for distributors before can use this 👇🏼
-  // const [distributors, setdistributors] = useState([]);
-  // useEffect(() => {
-  //   fetch('/api/jobs/1')
-  //     .then(res => res.json())
-  //     .then(job => {
-  //       setJob(job);
-  //     });
-  // }, []);
+
+  const [distributors, setDistributors] = useState([]);
+  useEffect(() => {
+    // FETCH method GETS all distributors in database so they can be selected in the form 👇🏼
+    fetch('/api/distributors')
+      .then(res => res.json())
+      .then(distributors => {
+        setDistributors(distributors);
+      });
+  }, []);
+
   const handleYearChange = event => {
     event.persist();
     setValues(values => ({
@@ -44,6 +46,13 @@ export default function NewJobModal() {
     setValues(values => ({
       ...values,
       week: event.target.value
+    }));
+  };
+  const handleDistributorChange = event => {
+    event.persist();
+    setValues(values => ({
+      ...values,
+      distributor: event.target.value
     }));
   };
   const handleCompanyNameChange = event => {
@@ -173,6 +182,7 @@ export default function NewJobModal() {
     }));
   };
   // console.log('values:', values)
+  // console.log('distributors:', distributors)
   return (
     <div>
       <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -190,8 +200,8 @@ export default function NewJobModal() {
                 <div className="mb-2 mt-2">
                   <label htmlFor="yearSelect" >Year</label>
                   <select name="" id="yearSelect" className='form-select fw-light' onChange={handleYearChange}>
-                    <option>2023</option>
-                    <option>2024</option>
+                    <option>Select a year.</option>
+
                   </select>
                 </div>
                 <div className="mb-2 mt-2">
@@ -205,8 +215,15 @@ export default function NewJobModal() {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="companyNameInput" >Distributor</label>
-                  <select name="" id="distributorSelect" className="form-select fw-light" >
-                    <option>Select one</option>
+                  <select name="" id="distributorSelect" className="form-select fw-light" value={values.distributor} onChange={handleDistributorChange} >
+                    <option>Select a distributor.</option>
+                    {
+                      distributors.map(event => {
+                        return (
+                          <option id={event.distributorId} key={event.distributorId}>{event.distributorName}</option>
+                        );
+                      })
+                    }
                   </select>
                 </div>
                 <div className="mb-2 mt-2">
