@@ -5,6 +5,7 @@ export default function NewJobModal() {
     yearId: '',
     weekId: '',
     companyName: '',
+    distributorId: '',
     jobNumber: '',
     paperDetails: '',
     shippingStatus: '',
@@ -61,7 +62,7 @@ export default function NewJobModal() {
     }
   };
 
-  const handleWeekChange = event => {
+  const handleWeekIdChange = event => {
     event.persist();
     for (let i = 0; i < weeks.length; i++) {
       if (Number(event.target.value) === weeks[i].week) {
@@ -72,12 +73,16 @@ export default function NewJobModal() {
       }
     }
   };
-  const handleDistributorChange = event => {
+  const handleDistributorIdChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
-      distributor: event.target.value
-    }));
+    for (let i = 0; i < distributors.length; i++) {
+      if (event.target.value === distributors[i].distributorName) {
+        setValues(values => ({
+          ...values,
+          distributorId: distributors[i].distributorId
+        }));
+      }
+    }
   };
   const handleCompanyNameChange = event => {
     event.persist();
@@ -238,7 +243,7 @@ export default function NewJobModal() {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="weekSelect" >Week</label>
-                  <select name="" id="weekSelect" className='form-select fw-light' value={values.week} onChange={handleWeekChange}>
+                  <select name="" id="weekSelect" className='form-select fw-light' value={values.week} onChange={handleWeekIdChange}>
                     <option value="1">Select a week.</option>
                     {
                       weeks.map(event => {
@@ -251,7 +256,7 @@ export default function NewJobModal() {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="companyNameInput" >Distributor</label>
-                  <select name="" id="distributorSelect" className="form-select fw-light" value={values.distributor} onChange={handleDistributorChange} >
+                  <select name="" id="distributorSelect" className="form-select fw-light" value={values.distributor} onChange={handleDistributorIdChange} >
                     <option>Select a distributor.</option>
                     {
                       distributors.map(event => {
