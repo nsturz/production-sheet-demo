@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function NewJobModal() {
   const [values, setValues] = useState({
-    year: '',
+    yearId: '',
     week: '',
     companyName: '',
     jobNumber: '',
@@ -44,13 +44,40 @@ export default function NewJobModal() {
       });
   }, []);
 
-  const handleYearChange = event => {
+  // const [weeks, setWeeks] = useState([]);
+  // useEffect(() => {
+  //   // FETCH method GETS all weeks in database so they can be selected in the form 👇🏼
+  //   fetch('/api/weeks/')
+  //     .then(res => res.json())
+  //     .then(years => {
+  //       setYears(years);
+  //     });
+  // }, []);
+
+  const handleYearIdChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
-      year: event.target.value
-    }));
+    for (let i = 0; i < years.length; i++) {
+      if (Number(event.target.value) === years[i].year) {
+        setValues(values => ({
+          ...values,
+          yearId: years[i].yearId
+        }));
+      }
+    }
   };
+
+  // const handleYearIdChange = event => {
+  //   event.persist();
+  //   for (let i = 0; i < years.length; i++) {
+  //     if (event.target.value === years[i].year) {
+  //       setValues(values => ({
+  //         ...values,
+  //         yearId: years[i].yearId
+  //       }));
+  //     }
+  //   }
+  // };
+
   const handleWeekChange = event => {
     event.persist();
     setValues(values => ({
@@ -210,7 +237,7 @@ export default function NewJobModal() {
               <form action="">
                 <div className="mb-2 mt-2">
                   <label htmlFor="yearSelect" >Year</label>
-                  <select name="" id="yearSelect" className='form-select fw-light' onChange={handleYearChange}>
+                  <select name="" id="yearSelect" className='form-select fw-light' onChange={handleYearIdChange}>
                     <option>Select a year.</option>
                     {
                       years.map(event => {

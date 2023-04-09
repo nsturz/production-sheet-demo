@@ -27,7 +27,7 @@ app.get('/api/years', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// GET all weeks (mainly used in new-job-modal.jsx) 👇🏼
+// GET all weeks by "yearId" (mainly used in new-job-modal.jsx) 👇🏼
 app.get('/api/weeks/:yearId', (req, res, next) => {
   const yearId = Number(req.params.yearId);
   if (!yearId) {
