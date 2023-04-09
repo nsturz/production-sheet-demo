@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function NewJobModal() {
   const [values, setValues] = useState({
     yearId: '',
-    week: '',
+    weekId: '',
     companyName: '',
     jobNumber: '',
     paperDetails: '',
@@ -23,7 +23,7 @@ export default function NewJobModal() {
     state: '',
     zip: ''
   });
-
+  const [weeks, setWeeks] = useState([]);
   const [distributors, setDistributors] = useState([]);
   useEffect(() => {
     // FETCH method GETS all distributors in database so they can be selected in the form 👇🏼
@@ -44,20 +44,15 @@ export default function NewJobModal() {
       });
   }, []);
 
-  // const [weeks, setWeeks] = useState([]);
-  // useEffect(() => {
-  //   // FETCH method GETS all weeks in database so they can be selected in the form 👇🏼
-  //   fetch('/api/weeks/')
-  //     .then(res => res.json())
-  //     .then(years => {
-  //       setYears(years);
-  //     });
-  // }, []);
-
   const handleYearIdChange = event => {
     event.persist();
     for (let i = 0; i < years.length; i++) {
       if (Number(event.target.value) === years[i].year) {
+        fetch(`/api/weeks/${years[i].yearId}`)
+          .then(res => res.json())
+          .then(weeks => {
+            setWeeks(weeks);
+          });
         setValues(values => ({
           ...values,
           yearId: years[i].yearId
@@ -68,10 +63,14 @@ export default function NewJobModal() {
 
   const handleWeekChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
-      week: event.target.value
-    }));
+    for (let i = 0; i < weeks.length; i++) {
+      if (Number(event.target.value) === weeks[i].week) {
+        setValues(values => ({
+          ...values,
+          weekId: weeks[i].weekId
+        }));
+      }
+    }
   };
   const handleDistributorChange = event => {
     event.persist();
@@ -207,6 +206,7 @@ export default function NewJobModal() {
     }));
   };
   // console.log('values:', values)
+  // console.log('weeks', weeks)
   // console.log('distributors:', distributors)
   // console.log('years:', years)
   return (
@@ -239,10 +239,14 @@ export default function NewJobModal() {
                 <div className="mb-2 mt-2">
                   <label htmlFor="weekSelect" >Week</label>
                   <select name="" id="weekSelect" className='form-select fw-light' value={values.week} onChange={handleWeekChange}>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
+                    <option value="1">Select a week.</option>
+                    {
+                      weeks.map(event => {
+                        return (
+                          <option id={event.weekId} key={event.weekId}>{event.week}</option>
+                        );
+                      })
+                    }
                   </select>
                 </div>
                 <div className="mb-2 mt-2">
