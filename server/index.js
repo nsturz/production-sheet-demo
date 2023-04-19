@@ -216,7 +216,6 @@ app.post('/api/new-job', (req, res) => {
   const {
     yearId,
     weekId,
-    companyId,
     companyAddress,
     companyCity,
     companyState,
@@ -238,7 +237,8 @@ app.post('/api/new-job', (req, res) => {
     shippingStatus,
     paymentStatus
   } = req.body;
-  if (!yearId || !weekId || !companyId || !companyName || !companyAddress || !companyCity || !companyState || !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
+  if (!yearId || !weekId || !companyName || !companyAddress || !companyCity || !companyState ||
+    !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
     !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
     !orderStatus || !shippingStatus || !paymentStatus) {
     res.status(400).json({ error: 'Make sure you have entered all required fields' });
