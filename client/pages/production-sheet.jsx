@@ -3,6 +3,12 @@ import NavBar from '../components/navbar';
 import NewJobModal from '../components/new-job-form-modal';
 
 export default function ProductionSheet() {
+  // const [jobs, setJobs] = useState([]);
+  // This "year" and "week" state is used for the "search" form at the top of <ProductionSheet /> 👇🏼
+  // const [year, setYear] = useState('');
+  // const [week, setWeek] = useState('');
+
+  // This state and useEffect GETS 1 job form the database, might delete later. 👇🏼
   const [job, setJob] = useState('');
   useEffect(() => {
     fetch('/api/jobs/1')
@@ -12,9 +18,10 @@ export default function ProductionSheet() {
       });
   }, []);
 
+  // All code from "START 🏁" to "FINISH 🏁" is used for the form in <NewJobModal /> 👇🏼
+  // START 🏁
   const [years, setYears] = useState([]);
   useEffect(() => {
-    // FETCH method GETS all years in database so they can be selected in the form 👇🏼
     fetch('/api/years')
       .then(res => res.json())
       .then(years => {
@@ -22,7 +29,6 @@ export default function ProductionSheet() {
       });
   }, []);
   const [weeks, setWeeks] = useState([]);
-
   const [values, setValues] = useState({
     yearId: '',
     weekId: '',
@@ -245,7 +251,7 @@ export default function ProductionSheet() {
       })
       .catch(console.error);
   }
-
+  // FINISH 🏁
   return (
     <div>
       <div>
