@@ -71,9 +71,12 @@ app.get('/api/job-list', (req, res, next) => {
     yearId,
     weekId
   } = req.body;
-  // if (!yearId && !weekId) {
-  //   throw new ClientError(400, 'You must include a yearId and weekId in the request.');
-  // }
+  if (!yearId && !weekId) {
+    throw new ClientError(400, 'You must include a yearId and weekId in the request.');
+  } else if (!yearId || !weekId) {
+    throw new ClientError(400, 'Both a yearId and weekId must be included in the request.');
+
+  }
   const sql = `
    select to_char("shipDate",'yyyy-MM-dd') as "shipDate",
           to_char("dueDate", 'yyyy-MM-dd') as "dueDate",
