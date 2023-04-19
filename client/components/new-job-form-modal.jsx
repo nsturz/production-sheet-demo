@@ -139,7 +139,7 @@ export default function NewJobModal(props) {
                     </select>
                   </div>
                   <div className="col-3">
-                    <label htmlFor="shippingStatusSelect">Other Status</label>
+                    <label htmlFor="shippingStatusSelect">Order Status</label>
                     <select name="" id="shippingStatusSelect" className="form-select fw-light" value={props.values.orderStatus} onChange={props.handleOrderStatusChange} required>
                       <option>Select one.</option>
                       <option>Approved</option>
