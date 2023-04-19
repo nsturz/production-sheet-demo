@@ -69,10 +69,10 @@ export default function NewJobModal(props) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body">
-              <form id="new-job-form" onSubmit={handleSubmit}>
+              <form id="new-job-form" onSubmit={handleSubmit} >
                 <div className="mb-2 mt-2">
                   <label htmlFor="yearSelect" >Year</label>
-                  <select name="" id="yearSelect" className='form-select fw-light' onChange={props.handleYearIdChange}>
+                  <select name="" id="yearSelect" className='form-select fw-light' onChange={props.handleYearIdChange} required>
                     <option>Select a year.</option>
                     {
                       props.years.map(event => {
@@ -85,7 +85,7 @@ export default function NewJobModal(props) {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="weekSelect" >Week</label>
-                  <select name="" id="weekSelect" className='form-select fw-light' value={props.values.week} onChange={props.handleWeekIdChange}>
+                  <select name="" id="weekSelect" className='form-select fw-light' value={props.values.week} onChange={props.handleWeekIdChange} required>
                     <option value="1">Select a week.</option>
                     {
                       props.weeks.map(event => {
@@ -98,7 +98,7 @@ export default function NewJobModal(props) {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="companyNameInput" >Distributor</label>
-                  <select name="" id="distributorSelect" className="form-select fw-light" value={props.values.distributor} onChange={props.handleDistributorIdChange} >
+                  <select name="" id="distributorSelect" className="form-select fw-light" value={props.values.distributor} onChange={props.handleDistributorIdChange} required>
                     <option>Select a distributor.</option>
                     {
                       props.distributors.map(event => {
@@ -111,20 +111,20 @@ export default function NewJobModal(props) {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="jobNumberInput" >Job Number</label>
-                  <input type="text" className="form-control" id="jobNumberInput" value={props.values.jobNumber} onChange={props.handleJobNumberChange} />
+                  <input type="text" className="form-control" id="jobNumberInput" value={props.values.jobNumber} onChange={props.handleJobNumberChange} required />
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="paperDetailsInput">Paper Size</label>
-                  <input type="text" className="form-control" id="paperDetailsInput" value={props.values.paperSize} onChange={props.handlePaperSizeChange} />
+                  <input type="text" className="form-control" id="paperDetailsInput" value={props.values.paperSize} onChange={props.handlePaperSizeChange} required />
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="paperDetailsInput">Paper Weight</label>
-                  <input type="text" className="form-control" id="paperDetailsInput" value={props.values.paperweight} onChange={props.handlePaperWeightChange} />
+                  <input type="text" className="form-control" id="paperDetailsInput" value={props.values.paperweight} onChange={props.handlePaperWeightChange} required/>
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Shipping Status</label>
-                    <select name="" id="shippingStatusSelect" className="form-select fw-light" value={props.values.shippingStatus} onChange={props.handleShippingStatusChange}>
+                    <select name="" id="shippingStatusSelect" className="form-select fw-light" value={props.values.shippingStatus} onChange={props.handleShippingStatusChange} required>
                       <option>Select one.</option>
                       <option>Shipped</option>
                       <option>Not Shipped</option>
@@ -132,7 +132,7 @@ export default function NewJobModal(props) {
                   </div>
                   <div className="col-3">
                     <label htmlFor="paymentStatusSelect">Payment Status</label>
-                    <select name="" id="paymentStatusSelect" className="form-select fw-light" value={props.values.paymentStatus} onChange={props.handlePaymentStatusChange}>
+                    <select name="" id="paymentStatusSelect" className="form-select fw-light" value={props.values.paymentStatus} onChange={props.handlePaymentStatusChange} required>
                       <option>Select one.</option>
                       <option>WOP</option>
                       <option>Paid</option>
@@ -140,7 +140,7 @@ export default function NewJobModal(props) {
                   </div>
                   <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Other Status</label>
-                    <select name="" id="shippingStatusSelect" className="form-select fw-light" value={props.values.orderStatus} onChange={props.handleOrderStatusChange}>
+                    <select name="" id="shippingStatusSelect" className="form-select fw-light" value={props.values.orderStatus} onChange={props.handleOrderStatusChange} required>
                       <option>Select one.</option>
                       <option>Approved</option>
                       <option>WOO</option>
@@ -155,59 +155,59 @@ export default function NewJobModal(props) {
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="distributorCopies">Distributor Copies</label>
-                    <input type="text" id="distributorCopies" className="form-control" value={props.values.distributorCopies} onChange={props.handleDistributorCopiesChange}/>
+                    <input type="text" id="distributorCopies" className="form-control" value={props.values.distributorCopies} onChange={props.handleDistributorCopiesChange} required/>
                   </div>
                   <div className="col-3">
                     <label htmlFor="storeCopies">Store Copies</label>
-                    <input type="text" id="storeCopies" className="form-control" value={props.values.storeCopies} onChange={props.handleStoreCopiesChange}/>
+                    <input type="text" id="storeCopies" className="form-control" value={props.values.storeCopies} onChange={props.handleStoreCopiesChange} required/>
                   </div>
                   <div className="col-3">
                     <label htmlFor="officeCopies">Office Copies</label>
-                    <input type="text" id="officeCopies" className="form-control" value={props.values.officeCopies} onChange={props.handleOfficeCopiesChange}/>
+                    <input type="text" id="officeCopies" className="form-control" value={props.values.officeCopies} onChange={props.handleOfficeCopiesChange} required/>
                   </div>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="instructions">Instructions</label>
-                  <textarea name="" id="instructions" className="form-control" value={props.values.instructions} onChange={props.handleInstructionsChange} />
+                  <textarea name="" id="instructions" className="form-control" value={props.values.instructions} onChange={props.handleInstructionsChange} required/>
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="shipDate">Ship Date</label>
-                    <input type="date" id="shipDate" className="form-control fw-light" value={props.values.shipDate} onChange={props.handleShipDateChange}/>
+                    <input type="date" id="shipDate" className="form-control fw-light" value={props.values.shipDate} onChange={props.handleShipDateChange} required/>
                   </div>
                   <div className="col-3">
                     <label htmlFor="storeCopies">Due Date</label>
-                    <input type="date" id="dueDate" className="form-control fw-light" value={props.values.dueDate} onChange={props.handleDueDateChange}/>
+                    <input type="date" id="dueDate" className="form-control fw-light" value={props.values.dueDate} onChange={props.handleDueDateChange} required/>
                   </div>
                   <div className="col-3">
                     <label htmlFor="officeCopies">In Home</label>
-                    <input type="date" id="inHomeDate" className="form-control fw-light" value={props.values.inHomeDate} onChange={props.handleInHomeDateChange} />
+                    <input type="date" id="inHomeDate" className="form-control fw-light" value={props.values.inHomeDate} onChange={props.handleInHomeDateChange} required />
                   </div>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="headline">Headline</label>
-                  <input type="text" id="headline" className="form-control" value={props.values.headline} onChange={props.handleHeadlineChange} />
+                  <input type="text" id="headline" className="form-control" value={props.values.headline} onChange={props.handleHeadlineChange} required/>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="companyNameInput" >Company Name</label>
-                  <input type="text" className="form-control" id="companyNameInput" value={props.values.companyName} onChange={props.handleCompanyNameChange} />
+                  <input type="text" className="form-control" id="companyNameInput" value={props.values.companyName} onChange={props.handleCompanyNameChange} required/>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="address">Company Address</label>
-                  <input type="text" id="address" className="form-control" value={props.values.companyAddress} onChange={props.handleCompanyAddressChange}/>
+                  <input type="text" id="address" className="form-control" value={props.values.companyAddress} onChange={props.handleCompanyAddressChange} required/>
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="city">City</label>
-                    <input type="text" id="city" className="form-control" value={props.values.companyCity} onChange={props.handleCityChange}/>
+                    <input type="text" id="city" className="form-control" value={props.values.companyCity} onChange={props.handleCityChange} required/>
                   </div>
                   <div className="col-3">
                     <label htmlFor="state">State</label>
-                    <input type="text" id="state" className="form-control" value={props.values.companyState} onChange={props.handleStateChange} />
+                    <input type="text" id="state" className="form-control" value={props.values.companyState} onChange={props.handleStateChange} required/>
                   </div>
                   <div className="col-3">
                     <label htmlFor="zip">Zip</label>
-                    <input type="text" id="zip" className="form-control" value={props.values.companyZip} onChange={props.handleZipChange} />
+                    <input type="text" id="zip" className="form-control" value={props.values.companyZip} onChange={props.handleZipChange} required/>
                   </div>
                 </div>
                 <div className="modal-footer">
