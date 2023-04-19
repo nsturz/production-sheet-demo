@@ -3,10 +3,69 @@ import NavBar from '../components/navbar';
 import NewJobModal from '../components/new-job-form-modal';
 
 export default function ProductionSheet() {
+  // this grabs all the years from the database first so that it can be displayed
+  // both on ProductionSheet, and NewJobModal 👇🏼
+  const [years, setYears] = useState([]);
+  useEffect(() => {
+    fetch('/api/years')
+      .then(res => res.json())
+      .then(years => {
+        setYears(years);
+      });
+  }, []);
+  const [weeks, setWeeks] = useState([]);
+
+  // This bundle of code allows the "search" button to work properly when pressed 👇🏼
+  const [searchParams, setSearchParams] = useState({
+    yearId: '',
+    weekId: ''
+  });
+  const handleYearChange = event => {
+    event.persist();
+    for (let i = 0; i < years.length; i++) {
+      if (Number(event.target.value) === years[i].year) {
+        fetch(`/api/weeks/${years[i].yearId}`)
+          .then(res => res.json())
+          .then(weeks => {
+            setWeeks(weeks);
+          });
+        setSearchParams({
+          ...searchParams,
+          yearId: years[i].yearId
+        });
+      }
+    }
+  };
+  const handleWeekChange = event => {
+    event.persist();
+    for (let i = 0; i < weeks.length; i++) {
+      if (Number(event.target.value) === weeks[i].week) {
+        setSearchParams({
+          ...searchParams,
+          weekId: weeks[i].weekId
+        });
+      }
+    }
+  };
   // const [jobs, setJobs] = useState([]);
-  // This "year" and "week" state is used for the "search" form at the top of <ProductionSheet /> 👇🏼
-  // const [year, setYear] = useState('');
-  // const [week, setWeek] = useState('');
+
+  function searchJobs(searchParams) {
+    // console.log('fetch method fired!')
+    fetch('/api/job-list', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(searchParams)
+    })
+      // console.log('searchParams inside the function:', searchParams)
+      .then(response => {
+        response.json();
+      })
+      .catch(console.error);
+  }
+
+  // console.log('searchParams:', searchParams)
 
   // This state and useEffect GETS 1 job form the database, might delete later. 👇🏼
   const [job, setJob] = useState('');
@@ -19,16 +78,9 @@ export default function ProductionSheet() {
   }, []);
 
   // All code from "START 🏁" to "FINISH 🏁" is used for the form in <NewJobModal /> 👇🏼
+
   // START 🏁
-  const [years, setYears] = useState([]);
-  useEffect(() => {
-    fetch('/api/years')
-      .then(res => res.json())
-      .then(years => {
-        setYears(years);
-      });
-  }, []);
-  const [weeks, setWeeks] = useState([]);
+
   const [values, setValues] = useState({
     yearId: '',
     weekId: '',
@@ -265,8 +317,8 @@ export default function ProductionSheet() {
             </div>
           </div>
           <div className="col-lg-8 col-12 p-0">
-            <div className="d-flex">
-              <select className="form-select fw-light m-1" aria-label="Default select example">
+            <form className="d-flex" onSubmit={searchJobs}>
+              <select className="form-select fw-light m-1" aria-label="Default select example" onChange={handleYearChange}>
                 <option>Select a year.</option>
                 {
                   years.map(event => {
@@ -276,16 +328,20 @@ export default function ProductionSheet() {
                   })
                 }
               </select>
-              <select className=" form-select fw-light m-1" aria-label="Default select example">
-                <option defaultValue>Week</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+              <select className=" form-select fw-light m-1" aria-label="Default select example" onChange={handleWeekChange}>
+                <option>Select a week.</option>
+                {
+                  weeks.map(event => {
+                    return (
+                      <option id={event.weekId} key={event.weekId}>{event.week}</option>
+                    );
+                  })
+                }
               </select>
               <div className="m-1">
-                <button type="button" className="btn btn-success ">Search</button>
+                <button type="submit" className="btn btn-success ">Search</button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
         <div className="d-flex justify-content-center m-3">
