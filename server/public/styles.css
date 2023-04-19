@@ -1,0 +1,54 @@
+a {
+  text-decoration: none;
+}
+
+body {
+  font-family: Lato, sans-serif;
+}
+
+.edit-icon {
+  color: #808080;
+}
+
+i {
+  font-size: 30px;
+}
+
+.job-details {
+  justify-content: space-between;
+}
+
+.job-details-header {
+  background-color: #d9d9d9;
+}
+
+li {
+  margin: 0%;
+}
+
+.navbar {
+  background-color: #212529;
+}
+
+.overflow-x {
+  overflow-x: scroll;
+}
+
+.overflow-y {
+  overflow-y: scroll;
+}
+
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+@media screen and (max-width: 768px) {
+  h4 {
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 10px;
+  }
+}
