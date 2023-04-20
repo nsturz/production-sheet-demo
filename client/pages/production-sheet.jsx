@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/navbar';
 import NewJobModal from '../components/new-job-form-modal';
 
-export default function ProductionSheet() {
+export default function ProductionSheet(props) {
   // this grabs all the years from the database first so that it can be displayed
   // both on ProductionSheet, and NewJobModal 👇🏼
   const [years, setYears] = useState([]);
@@ -20,6 +20,8 @@ export default function ProductionSheet() {
     yearId: '',
     weekId: ''
   });
+
+  // console.log('main searchParams :', searchParams)
   const handleYearChange = event => {
     event.persist();
     for (let i = 0; i < years.length; i++) {
@@ -47,25 +49,6 @@ export default function ProductionSheet() {
       }
     }
   };
-  // const [jobs, setJobs] = useState([]);
-
-  function searchJobs(searchParams) {
-    // console.log('fetch method fired!')
-    fetch('/api/job-list', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(searchParams)
-    })
-      // console.log('searchParams inside the function:', searchParams)
-      .then(response => {
-        response.json();
-      })
-      .catch(console.error);
-  }
-
-  // console.log('searchParams:', searchParams)
 
   // This state and useEffect GETS 1 job form the database, might delete later. 👇🏼
   const [job, setJob] = useState('');
@@ -303,6 +286,21 @@ export default function ProductionSheet() {
       })
       .catch(console.error);
   }
+
+  function handleSubmit(event) {
+    // console.log('handleSubmit fired!')
+    event.preventDefault();
+    const params = {
+      yearId: searchParams.yearId,
+      weekId: searchParams.weekId
+    };
+    props.onSubmit(params);
+    setSearchParams({
+      yearId: '',
+      weekId: ''
+    });
+    document.getElementById('search-job-form').reset();
+  }
   // FINISH 🏁
   return (
     <div>
@@ -317,7 +315,7 @@ export default function ProductionSheet() {
             </div>
           </div>
           <div className="col-lg-8 col-12 p-0">
-            <form className="d-flex" onSubmit={searchJobs}>
+            <form id="search-job-form" className="d-flex" onSubmit={handleSubmit}>
               <select className="form-select fw-light m-1" aria-label="Default select example" onChange={handleYearChange}>
                 <option>Select a year.</option>
                 {

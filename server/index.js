@@ -66,11 +66,9 @@ app.get('/api/distributors', (req, res, next) => {
 });
 
 // GET all job info about multiple jobs based on year id AND weekId👇🏼
-app.get('/api/job-list', (req, res, next) => {
-  const {
-    yearId,
-    weekId
-  } = req.body;
+app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  const weekId = Number(req.params.weekId);
   if (!yearId && !weekId) {
     throw new ClientError(400, 'You must include a yearId and weekId in the request.');
   } else if (!yearId || !weekId) {
