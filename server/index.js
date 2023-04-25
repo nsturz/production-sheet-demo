@@ -92,6 +92,7 @@ app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
           "storeCopies",
           "distributorCopies",
           "officeCopies",
+          "totalCopies",
           "orderStatus",
           "paymentStatus",
           "shippingStatus",
@@ -319,7 +320,7 @@ app.post('/api/new-job', (req, res) => {
         .then(result => {
           const [newCompany] = result.rows;
           const insertJobSql = `
-            insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
+            insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","orderStatus", "shippingStatus", "paymentStatus")
             values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
             returning *`;
           const insertJobParams = [yearId, weekId, newCompany.companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, orderStatus, shippingStatus, paymentStatus];

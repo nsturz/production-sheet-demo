@@ -114,12 +114,12 @@ export default function NewJobModal(props) {
                   <input type="text" className="form-control" id="jobNumberInput" value={props.values.jobNumber} onChange={props.handleJobNumberChange} required />
                 </div>
                 <div className="mb-2 mt-2">
-                  <label htmlFor="paperDetailsInput">Paper Size</label>
-                  <input type="text" className="form-control" id="paperDetailsInput" value={props.values.paperSize} onChange={props.handlePaperSizeChange} required />
+                  <label htmlFor="paperSizeInput">Paper Size</label>
+                  <input type="text" className="form-control" id="paperSizeInput" value={props.values.paperSize} onChange={props.handlePaperSizeChange} required />
                 </div>
                 <div className="mb-2 mt-2">
-                  <label htmlFor="paperDetailsInput">Paper Weight</label>
-                  <input type="text" className="form-control" id="paperDetailsInput" value={props.values.paperweight} onChange={props.handlePaperWeightChange} required/>
+                  <label htmlFor="paperWeightInput">Paper Weight</label>
+                  <input type="text" className="form-control" id="paperWeightInput" value={props.values.paperweight} onChange={props.handlePaperWeightChange} required/>
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">

@@ -448,7 +448,7 @@ export default function ProductionSheet(props) {
                       <p className="m-1 col">{event.storeCopies}</p>
                       <p className="m-1 col">{event.distributorCopies}</p>
                       <p className="m-1 col">{event.officeCopies}</p>
-                      <p className="m-1 col">{event.distributorCopies + event.storeCopies + event.officeCopies}</p>
+                      <p className="m-1 col">{event.totalCopies}</p>
                     </div>
                     <div id="job-details-header-3 " className="d-flex job-details-header p-1">
                       <p className="m-1 col fw-bold ">Destination</p>
