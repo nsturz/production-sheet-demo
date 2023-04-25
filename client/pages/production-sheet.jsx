@@ -3,6 +3,45 @@ import NavBar from '../components/navbar';
 import NewJobModal from '../components/new-job-form-modal';
 
 export default function ProductionSheet(props) {
+  const [weeks, setWeeks] = useState([]);
+
+  const [totalCopies, setTotalCopies] = useState('');
+
+  const [values, setValues] = useState({
+    yearId: '',
+    weekId: '',
+    companyName: '',
+    companyAddress: '',
+    companyCity: '',
+    companyState: '',
+    companyZip: '',
+    distributorId: '',
+    jobNumber: '',
+    paperSize: '',
+    paperWeight: '',
+    shippingStatus: '',
+    paymentStatus: '',
+    orderStatus: '',
+    distributorCopies: '',
+    storeCopies: '',
+    officeCopies: '',
+    instructions: '',
+    shipDate: '',
+    dueDate: '',
+    inHomeDate: '',
+    headline: ''
+  });
+
+  // FETCH method GETS all distributors in database so they can be selected in the form 👇🏼
+  const [distributors, setDistributors] = useState([]);
+  useEffect(() => {
+    fetch('/api/distributors')
+      .then(res => res.json())
+      .then(distributors => {
+        setDistributors(distributors);
+      });
+  }, []);
+
   // this grabs all the years from the database first so that it can be displayed
   // both on ProductionSheet, and NewJobModal 👇🏼
   const [years, setYears] = useState([]);
@@ -13,9 +52,9 @@ export default function ProductionSheet(props) {
         setYears(years);
       });
   }, []);
-  const [weeks, setWeeks] = useState([]);
 
-  // This bundle of code allows the "search" button to work properly when pressed 👇🏼
+  // These useState variables allow the "search" button to work properly when pressed
+  // it gets cleared immediately after submitting the form 👇🏼
   const [searchParams, setSearchParams] = useState({
     yearId: '',
     weekId: '',
@@ -23,6 +62,8 @@ export default function ProductionSheet(props) {
     week: ''
   });
 
+  // These useState variables grab the value from searchParams, and store them so
+  // they can be rendered 👇🏼
   const [weekAndYear, setWeekAndYear] = useState({
     year: '',
     week: ''
@@ -69,44 +110,7 @@ export default function ProductionSheet(props) {
   }, []);
 
   // All code from "START 🏁" to "FINISH 🏁" is used for the form in <NewJobModal /> 👇🏼
-
   // START 🏁
-
-  const [values, setValues] = useState({
-    yearId: '',
-    weekId: '',
-    companyName: '',
-    companyAddress: '',
-    companyCity: '',
-    companyState: '',
-    companyZip: '',
-    distributorId: '',
-    jobNumber: '',
-    paperSize: '',
-    paperWeight: '',
-    shippingStatus: '',
-    paymentStatus: '',
-    orderStatus: '',
-    distributorCopies: '',
-    storeCopies: '',
-    officeCopies: '',
-    instructions: '',
-    shipDate: '',
-    dueDate: '',
-    inHomeDate: '',
-    headline: ''
-  });
-
-  const [distributors, setDistributors] = useState([]);
-  useEffect(() => {
-    // FETCH method GETS all distributors in database so they can be selected in the form 👇🏼
-    fetch('/api/distributors')
-      .then(res => res.json())
-      .then(distributors => {
-        setDistributors(distributors);
-      });
-  }, []);
-  // handleChange() functions for the form 👇🏼
   const handleYearIdChange = event => {
     event.persist();
     for (let i = 0; i < years.length; i++) {
@@ -302,6 +306,11 @@ export default function ProductionSheet(props) {
       weekId: searchParams.weekId
     };
     props.onSubmit(params);
+    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+      .then(res => res.json())
+      .then(totalCopies => {
+        setTotalCopies(totalCopies);
+      });
     setWeekAndYear({
       year: searchParams.year,
       week: searchParams.week
@@ -314,17 +323,8 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-
-  // console.log('weeks:', weeks)
-  // console.log('years:', years)
-  // console.log('searchParams.year:', searchParams.year)
-  // console.log('searchParams.week:', searchParams.week)
-  // console.log('weekAndYear.year:', weekAndYear.year)
-  // console.log('weekAndYear.week:', weekAndYear.week)
-  // // console.log('searchParams:', searchParams)
-  // console.log('props.jobs:', props.jobs)
-  // console.log('values:', values)
   // FINISH 🏁
+
   return (
     <div>
       <div>
@@ -369,13 +369,15 @@ export default function ProductionSheet(props) {
           <div className="col-12">
             {/* dynamically renders the "Week __ of ___" portion of the page 👇🏼 */}
             {
-            (typeof weekAndYear.year === 'number' &&
-            typeof weekAndYear.week === 'number' &&
-            props.jobs.length !== 0)
-              ? <h4>Week {weekAndYear.week} of {weekAndYear.year}</h4>
-              : <div />
+              (typeof weekAndYear.year === 'number' &&
+              typeof weekAndYear.week === 'number' &&
+              props.jobs.length !== 0)
+                ? <div>
+                  <h4>Week {weekAndYear.week} of {weekAndYear.year}</h4>
+                  <h4 className="fw-light"> Weekly Totals: {totalCopies}</h4>
+                </div>
+                : <div />
             }
-            <h4 className="fw-light"> Weekly Totals: 424,100</h4>
             <NewJobModal
             onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors} handleYearIdChange={handleYearIdChange}
             handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
@@ -397,6 +399,7 @@ export default function ProductionSheet(props) {
           // ternary operator renders message when nothing matches the search results 👇🏼
             : props.jobs[0] === undefined
               ? <div className="col-12"><p className="text-center">That search does not match any criteria.</p></div>
+              // this is rendered when we successfully have search results 👇🏼
               : <ul id="job-list">
                 {
               props.jobs.map(event => {

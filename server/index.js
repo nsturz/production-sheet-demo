@@ -51,6 +51,27 @@ app.get('/api/weeks/:yearId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET all the totalCopies of the week 👇🏼
+app.get('/api/total-copies/:yearId/:weekId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  const weekId = Number(req.params.weekId);
+  if (!yearId && !weekId) {
+    throw new ClientError(400, 'You must include a yearId and weekId in the request.');
+  } else if (!yearId || !weekId) {
+    throw new ClientError(400, 'Both a yearId and weekId must be included in the request.');
+  }
+  const sql = `
+  SELECT SUM("totalCopies")
+  from   "jobs"
+  where "yearId" = $1 AND "weekId" = $2`;
+  const params = [yearId, weekId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0].sum);
+    })
+    .catch(err => next(err));
+});
+
 // GET all distributors (mainly used in new-job-modal.jsx) 👇🏼
 app.get('/api/distributors', (req, res, next) => {
   const sql = `
