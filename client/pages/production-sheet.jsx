@@ -18,7 +18,9 @@ export default function ProductionSheet(props) {
   // This bundle of code allows the "search" button to work properly when pressed 👇🏼
   const [searchParams, setSearchParams] = useState({
     yearId: '',
-    weekId: ''
+    weekId: '',
+    year: '',
+    week: ''
   });
 
   const handleYearChange = event => {
@@ -32,7 +34,8 @@ export default function ProductionSheet(props) {
           });
         setSearchParams({
           ...searchParams,
-          yearId: years[i].yearId
+          yearId: years[i].yearId,
+          year: years[i].year
         });
       }
     }
@@ -43,7 +46,8 @@ export default function ProductionSheet(props) {
       if (Number(event.target.value) === weeks[i].week) {
         setSearchParams({
           ...searchParams,
-          weekId: weeks[i].weekId
+          weekId: weeks[i].weekId,
+          week: weeks[i].week
         });
       }
     }
@@ -299,6 +303,13 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
+
+  // console.log('weeks:', weeks)
+  // console.log('years:', years)
+  // console.log('searchParams.year:', searchParams.year)
+  // console.log('searchParams.week:', searchParams.week)
+  // // console.log('searchParams:', searchParams)
+  // console.log('props.jobs:', props.jobs)
   // FINISH 🏁
   return (
     <div>
@@ -309,7 +320,7 @@ export default function ProductionSheet(props) {
         <div className="m-3 d-flex flex-row flex-wrap">
           <div className="col-lg-4 col-12 p-0 ">
             <div className=" d-flex">
-              <h3 className="main-title m-1">Production Sheet |  Week 1</h3>
+              <h3 className="main-title m-1">Production Sheet</h3>
             </div>
           </div>
           <div className="col-lg-8 col-12 p-0">
@@ -342,6 +353,13 @@ export default function ProductionSheet(props) {
         </div>
         <div className="d-flex justify-content-center m-3">
           <div className="col-12">
+            {
+            (searchParams.year === '' && searchParams.week === '' && props.jobs.length === 0) ||
+            (searchParams.year === undefined && searchParams.week === undefined && props.jobs.length === 0)
+              ? <div />
+              : <h4>Week {searchParams.week} of {searchParams.year} </h4>
+            }
+
             <h4 className="fw-light"> Weekly Totals: 424,100</h4>
             <NewJobModal
             onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors} handleYearIdChange={handleYearIdChange}
