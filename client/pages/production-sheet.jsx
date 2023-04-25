@@ -23,6 +23,11 @@ export default function ProductionSheet(props) {
     week: ''
   });
 
+  const [weekAndYear, setWeekAndYear] = useState({
+    year: '',
+    week: ''
+  });
+
   const handleYearChange = event => {
     event.persist();
     for (let i = 0; i < years.length; i++) {
@@ -297,9 +302,15 @@ export default function ProductionSheet(props) {
       weekId: searchParams.weekId
     };
     props.onSubmit(params);
+    setWeekAndYear({
+      year: searchParams.year,
+      week: searchParams.week
+    });
     setSearchParams({
       yearId: '',
-      weekId: ''
+      weekId: '',
+      year: '',
+      week: ''
     });
     document.getElementById('search-job-form').reset();
   }
@@ -308,8 +319,11 @@ export default function ProductionSheet(props) {
   // console.log('years:', years)
   // console.log('searchParams.year:', searchParams.year)
   // console.log('searchParams.week:', searchParams.week)
+  // console.log('weekAndYear.year:', weekAndYear.year)
+  // console.log('weekAndYear.week:', weekAndYear.week)
   // // console.log('searchParams:', searchParams)
   // console.log('props.jobs:', props.jobs)
+  // console.log('values:', values)
   // FINISH 🏁
   return (
     <div>
@@ -353,13 +367,14 @@ export default function ProductionSheet(props) {
         </div>
         <div className="d-flex justify-content-center m-3">
           <div className="col-12">
+            {/* dynamically renders the "Week __ of ___" portion of the page 👇🏼 */}
             {
-            (searchParams.year === '' && searchParams.week === '' && props.jobs.length === 0) ||
-            (searchParams.year === undefined && searchParams.week === undefined && props.jobs.length === 0)
-              ? <div />
-              : <h4>Week {searchParams.week} of {searchParams.year} </h4>
+            (typeof weekAndYear.year === 'number' &&
+            typeof weekAndYear.week === 'number' &&
+            props.jobs.length !== 0)
+              ? <h4>Week {weekAndYear.week} of {weekAndYear.year}</h4>
+              : <div />
             }
-
             <h4 className="fw-light"> Weekly Totals: 424,100</h4>
             <NewJobModal
             onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors} handleYearIdChange={handleYearIdChange}
