@@ -6,6 +6,10 @@ body {
   font-family: Lato, sans-serif;
 }
 
+.box-shadow {
+  box-shadow: 3px 3px 3px 3px #d8d8d8;
+}
+
 .edit-icon {
   color: #808080;
 }

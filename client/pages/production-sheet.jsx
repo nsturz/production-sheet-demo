@@ -416,8 +416,8 @@ export default function ProductionSheet(props) {
                 {
                 props.jobs.map(event => {
                   return (
-                    <li className="mt-3 mb-5 col-12 job-container shadow" key={event.jobId}>
-                      <div className="d-flex">
+                    <li className="mt-3 mb-5 col-12 job-container" key={event.jobId}>
+                      <div className="d-flex flex-row">
                         <div className="col">
                           <div className="d-flex mt-1 mb-1">
                             <h4 id="order-number" className="job-status m-1">{event.jobNumber}</h4>
@@ -432,70 +432,74 @@ export default function ProductionSheet(props) {
                           </div>
                         </div>
                       </div>
-                      <div id="job-details-header-1" className="d-flex job-details-header p-1 col-12">
-                        <p className="col fw-bold ">Company Name</p>
-                        <p className=" col fw-bold">Paper Size</p>
-                        <p className=" col fw-bold">Paper Weight</p>
-                        <p className="col fw-bold">Ship Date</p>
-                        <p className=" col fw-bold">Due Date</p>
-                        <p className=" col fw-bold">In Home Date</p>
-                      </div>
-                      <div id="job-details-1" className="d-flex job-details p-1">
-                        <p id="company-name" className="m-1 col">{event.companyName}</p>
-                        {/* will need to figure out how to allow "quotation marks" */}
-                        <p id="paper-size" className="overflow-x m-1 col">{event.paperSize}</p>
-                        <p id="paper-weight" className="m-1 col">{event.paperWeight}</p>
-                        <p id="ship-date" className="text-danger m-1 col">{event.shipDate}</p>
-                        <p id="due-date" className="text-danger m-1 col">{event.dueDate}</p>
-                        <p id="in-home-date" className="text-danger m-1 col">{event.inHomeDate}</p>
-                      </div>
-                      <div id="job-details-header-2" className="d-flex job-details-header p-1">
-                        <p className="m-1 col fw-bold ">Instructions</p>
-                        <p className="m-1 col fw-bold">Headline</p>
-                        <p className="m-1 col fw-bold">Store Copies</p>
-                        <p className="m-1 col fw-bold">{event.distributorName} Copies</p>
-                        <p className="m-1 col fw-bold">Office Copies</p>
-                        <p className="m-1 col fw-bold">Total Copies</p>
-                      </div>
-                      <div id="job-details-2 " className="d-flex job-details p-1">
-                        <p className="m-1 col ">{event.instructions}</p>
-                        <p className="m-1 col">{event.headline}</p>
-                        <p className="m-1 col">{event.storeCopies}</p>
-                        <p className="m-1 col">{event.distributorCopies}</p>
-                        <p className="m-1 col">{event.officeCopies}</p>
-                        <p className="m-1 col">{event.totalCopies}</p>
-                      </div>
-                      <div id="job-details-header-3 " className="d-flex job-details-header p-1">
-                        <p className="m-1 col fw-bold ">Destination</p>
-                        <p className="m-1 col fw-bold">Address</p>
-                        <p className="m-1 col fw-bold">City</p>
-                        <p className="m-1 col fw-bold">State</p>
-                        <p className="m-1 col fw-bold">Zip</p>
-                        <p className="m-1 col fw-bold" />
-                      </div>
-                      <div id="job-details-3 " className="d-flex job-details p-1">
-                        <p className="m-1 col ">{event.distributorName}</p>
-                        <p className="m-1 col">{event.distributorAddress}</p>
-                        <p className="m-1 col">{event.distributorCity}</p>
-                        <p className="m-1 col">{event.distributorState}</p>
-                        <p className="m-1 col">{event.distributorZip}</p>
-                        <p className="m-1 col fw-bold" />
-                      </div>
-                      <div id="job-details-3 " className="d-flex job-details p-1">
-                        <p className="m-1 col ">{event.companyName}</p>
-                        <p className="m-1 col">{event.companyAddress}</p>
-                        <p className="m-1 col">{event.companyCity}</p>
-                        <p className="m-1 col">{event.companyState}</p>
-                        <p className="m-1 col">{event.companyZip}</p>
-                        <p className="m-1 col fw-bold" />
-                      </div>
-                      <div id="job-details-3 " className="d-flex job-details p-1">
-                        <p className="m-1 col ">Color Ad</p>
-                        <p className="m-1 col">N/A</p>
-                        <p className="m-1 col">N/A</p>
-                        <p className="m-1 col">N/A</p>
-                        <p className="m-1 col">N/A</p>
-                        <p className="m-1 col fw-bold" />
+                      <div className="d-flex flex-row">
+                        <div className="col-12 box-shadow">
+                          <div id="job-details-header-1" className="d-flex job-details-header p-1">
+                            <p className="col fw-bold ">Company Name</p>
+                            <p className=" col fw-bold">Paper Size</p>
+                            <p className=" col fw-bold">Paper Weight</p>
+                            <p className="col fw-bold">Ship Date</p>
+                            <p className=" col fw-bold">Due Date</p>
+                            <p className=" col fw-bold">In Home Date</p>
+                          </div>
+                          <div id="job-details-1" className="d-flex job-details p-1">
+                            <p id="company-name" className="m-1 col">{event.companyName}</p>
+                            {/* will need to figure out how to allow "quotation marks" */}
+                            <p id="paper-size" className="overflow-x m-1 col">{event.paperSize}</p>
+                            <p id="paper-weight" className="m-1 col">{event.paperWeight}</p>
+                            <p id="ship-date" className="text-danger m-1 col">{event.shipDate}</p>
+                            <p id="due-date" className="text-danger m-1 col">{event.dueDate}</p>
+                            <p id="in-home-date" className="text-danger m-1 col">{event.inHomeDate}</p>
+                          </div>
+                          <div id="job-details-header-2" className="d-flex job-details-header p-1">
+                            <p className="m-1 col fw-bold ">Instructions</p>
+                            <p className="m-1 col fw-bold">Headline</p>
+                            <p className="m-1 col fw-bold">Store Copies</p>
+                            <p className="m-1 col fw-bold">{event.distributorName} Copies</p>
+                            <p className="m-1 col fw-bold">Office Copies</p>
+                            <p className="m-1 col fw-bold">Total Copies</p>
+                          </div>
+                          <div id="job-details-2 " className="d-flex job-details p-1">
+                            <p className="m-1 col ">{event.instructions}</p>
+                            <p className="m-1 col">{event.headline}</p>
+                            <p className="m-1 col">{event.storeCopies}</p>
+                            <p className="m-1 col">{event.distributorCopies}</p>
+                            <p className="m-1 col">{event.officeCopies}</p>
+                            <p className="m-1 col">{event.totalCopies}</p>
+                          </div>
+                          <div id="job-details-header-3 " className="d-flex job-details-header p-1">
+                            <p className="m-1 col fw-bold ">Destination</p>
+                            <p className="m-1 col fw-bold">Address</p>
+                            <p className="m-1 col fw-bold">City</p>
+                            <p className="m-1 col fw-bold">State</p>
+                            <p className="m-1 col fw-bold">Zip</p>
+                            <p className="m-1 col fw-bold" />
+                          </div>
+                          <div id="job-details-3 " className="d-flex job-details p-1">
+                            <p className="m-1 col ">{event.distributorName}</p>
+                            <p className="m-1 col">{event.distributorAddress}</p>
+                            <p className="m-1 col">{event.distributorCity}</p>
+                            <p className="m-1 col">{event.distributorState}</p>
+                            <p className="m-1 col">{event.distributorZip}</p>
+                            <p className="m-1 col fw-bold" />
+                          </div>
+                          <div id="job-details-3 " className="d-flex job-details p-1">
+                            <p className="m-1 col ">{event.companyName}</p>
+                            <p className="m-1 col">{event.companyAddress}</p>
+                            <p className="m-1 col">{event.companyCity}</p>
+                            <p className="m-1 col">{event.companyState}</p>
+                            <p className="m-1 col">{event.companyZip}</p>
+                            <p className="m-1 col fw-bold" />
+                          </div>
+                          <div id="job-details-3 " className="d-flex job-details p-1">
+                            <p className="m-1 col ">Color Ad</p>
+                            <p className="m-1 col">N/A</p>
+                            <p className="m-1 col">N/A</p>
+                            <p className="m-1 col">N/A</p>
+                            <p className="m-1 col">N/A</p>
+                            <p className="m-1 col fw-bold" />
+                          </div>
+                        </div>
                       </div>
                     </li>
                   );
