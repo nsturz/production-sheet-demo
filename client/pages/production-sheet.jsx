@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/navbar';
 import NewJobModal from '../components/new-job-form-modal';
+import EditModal from '../components/edit-job-modal';
 
 export default function ProductionSheet(props) {
   const [weeks, setWeeks] = useState([]);
@@ -387,7 +388,7 @@ export default function ProductionSheet(props) {
             </form>
           </div>
         </div>
-        <div className="mt-3  d-flex flex-row justify-content-end">
+        <div className="mt-3  d-flex flex-row justify-space-between">
           <NewJobModal
             onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors} handleYearIdChange={handleYearIdChange}
             handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
@@ -425,7 +426,7 @@ export default function ProductionSheet(props) {
                         </div>
                         <div className="col">
                           <div className="d-flex justify-content-end">
-                            <a href=""><i className="fa-solid fa-pen-to-square m-1 edit-icon" /></a>
+                            <EditModal />
                           </div>
                         </div>
                       </div>

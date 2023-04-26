@@ -56,6 +56,7 @@ export default function NewJobModal(props) {
     }));
     document.getElementById('new-job-form').reset();
   }
+  // console.log('new job modal fired!')
   return (
     <div>
       <button type="button" className="new-job-btn bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
