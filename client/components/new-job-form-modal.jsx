@@ -58,8 +58,8 @@ export default function NewJobModal(props) {
   }
   return (
     <div>
-      <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        New Job +
+      <button type="button" className="new-job-btn bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <i className="fa-solid fa-plus text-primary" />
       </button>
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg">

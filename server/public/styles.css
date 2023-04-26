@@ -14,6 +14,10 @@ i {
   font-size: 30px;
 }
 
+img {
+  width: 150px;
+}
+
 .job-details {
   justify-content: space-between;
 }
@@ -28,6 +32,10 @@ li {
 
 .navbar {
   background-color: #212529;
+}
+
+.new-job-btn {
+  border: none;
 }
 
 .overflow-x {
@@ -50,5 +58,13 @@ ul {
 
   p {
     font-size: 10px;
+  }
+
+  .main-title {
+    font-size: 20px;
+  }
+
+  .main-title-wrapper {
+    justify-content: center;
   }
 }
