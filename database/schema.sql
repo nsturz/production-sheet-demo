@@ -24,6 +24,7 @@ CREATE TABLE "jobs" (
 	"storeCopies" integer NOT NULL,
 	"distributorCopies" integer NOT NULL,
 	"officeCopies" integer NOT NULL,
+	"totalCopies" integer NOT NULL,
 	"orderStatus" TEXT NOT NULL,
 	"shippingStatus" TEXT NOT NULL,
 	"paymentStatus" TEXT NOT NULL,

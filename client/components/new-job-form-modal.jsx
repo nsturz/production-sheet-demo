@@ -58,8 +58,8 @@ export default function NewJobModal(props) {
   }
   return (
     <div>
-      <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        New Job +
+      <button type="button" className="new-job-btn bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <i className="fa-solid fa-plus text-primary" />
       </button>
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg">
@@ -114,12 +114,12 @@ export default function NewJobModal(props) {
                   <input type="text" className="form-control" id="jobNumberInput" value={props.values.jobNumber} onChange={props.handleJobNumberChange} required />
                 </div>
                 <div className="mb-2 mt-2">
-                  <label htmlFor="paperDetailsInput">Paper Size</label>
-                  <input type="text" className="form-control" id="paperDetailsInput" value={props.values.paperSize} onChange={props.handlePaperSizeChange} required />
+                  <label htmlFor="paperSizeInput">Paper Size</label>
+                  <input type="text" className="form-control" id="paperSizeInput" value={props.values.paperSize} onChange={props.handlePaperSizeChange} required />
                 </div>
                 <div className="mb-2 mt-2">
-                  <label htmlFor="paperDetailsInput">Paper Weight</label>
-                  <input type="text" className="form-control" id="paperDetailsInput" value={props.values.paperweight} onChange={props.handlePaperWeightChange} required/>
+                  <label htmlFor="paperWeightInput">Paper Weight</label>
+                  <input type="text" className="form-control" id="paperWeightInput" value={props.values.paperweight} onChange={props.handlePaperWeightChange} required/>
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">

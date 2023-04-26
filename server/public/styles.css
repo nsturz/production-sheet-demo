@@ -6,12 +6,20 @@ body {
   font-family: Lato, sans-serif;
 }
 
+.box-shadow {
+  box-shadow: 3px 3px 3px 3px #d8d8d8;
+}
+
 .edit-icon {
   color: #808080;
 }
 
 i {
   font-size: 30px;
+}
+
+img {
+  width: 150px;
 }
 
 .job-details {
@@ -28,6 +36,10 @@ li {
 
 .navbar {
   background-color: #212529;
+}
+
+.new-job-btn {
+  border: none;
 }
 
 .overflow-x {
@@ -50,5 +62,13 @@ ul {
 
   p {
     font-size: 10px;
+  }
+
+  .main-title {
+    font-size: 20px;
+  }
+
+  .main-title-wrapper {
+    justify-content: center;
   }
 }

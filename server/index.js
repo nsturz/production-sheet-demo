@@ -51,6 +51,27 @@ app.get('/api/weeks/:yearId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET all the totalCopies of the week 👇🏼
+app.get('/api/total-copies/:yearId/:weekId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  const weekId = Number(req.params.weekId);
+  if (!yearId && !weekId) {
+    throw new ClientError(400, 'You must include a yearId and weekId in the request.');
+  } else if (!yearId || !weekId) {
+    throw new ClientError(400, 'Both a yearId and weekId must be included in the request.');
+  }
+  const sql = `
+  SELECT SUM("totalCopies")
+  from   "jobs"
+  where "yearId" = $1 AND "weekId" = $2`;
+  const params = [yearId, weekId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0].sum);
+    })
+    .catch(err => next(err));
+});
+
 // GET all distributors (mainly used in new-job-modal.jsx) 👇🏼
 app.get('/api/distributors', (req, res, next) => {
   const sql = `
@@ -60,6 +81,65 @@ app.get('/api/distributors', (req, res, next) => {
   from distributors`;
   db.query(sql)
     .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+// GET all job info about multiple jobs based on year id AND weekId👇🏼
+app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  const weekId = Number(req.params.weekId);
+  if (!yearId && !weekId) {
+    throw new ClientError(400, 'You must include a yearId and weekId in the request.');
+  } else if (!yearId || !weekId) {
+    throw new ClientError(400, 'Both a yearId and weekId must be included in the request.');
+
+  }
+  const sql = `
+   select to_char("shipDate",'yyyy-MM-dd') as "shipDate",
+          to_char("dueDate", 'yyyy-MM-dd') as "dueDate",
+          to_char("inHomeDate", 'yyyy-MM-dd') as "inHomeDate",
+          "jobId",
+          "yearId",
+          "weekId",
+          "companyId",
+          "distributorId",
+          "jobNumber",
+          "paperSize",
+          "paperWeight",
+          "instructions",
+          "headline",
+          "storeCopies",
+          "distributorCopies",
+          "officeCopies",
+          "totalCopies",
+          "orderStatus",
+          "paymentStatus",
+          "shippingStatus",
+          "companyName",
+          "distributorName",
+          "companyAddresses"."address" as "companyAddress",
+          "companyAddresses"."city" as "companyCity",
+          "companyAddresses"."state" as "companyState",
+          "companyAddresses"."zip" as "companyZip",
+          "distributorAddresses"."address" as "distributorAddress",
+          "distributorAddresses"."city" as "distributorCity",
+          "distributorAddresses"."state" as "distributorState",
+          "distributorAddresses"."zip" as "distributorZip"
+   from "jobs"
+   join "companies" using ("companyId")
+   join "distributors" using ("distributorId")
+   join "companyAddresses" using ("companyAddressId")
+   join "distributorAddresses" using ("distributorAddressId")
+   where "yearId" = $1 AND "weekId" = $2
+   order by "jobId" asc`;
+  const params = [yearId, weekId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find jobs with yearId ${yearId} and weekId ${weekId}`);
+      }
       res.json(result.rows);
     })
     .catch(err => next(err));
@@ -237,6 +317,7 @@ app.post('/api/new-job', (req, res) => {
     shippingStatus,
     paymentStatus
   } = req.body;
+  const totalCopies = Number(storeCopies) + Number(distributorCopies) + Number(officeCopies);
   if (!yearId || !weekId || !companyName || !companyAddress || !companyCity || !companyState ||
     !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
     !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
@@ -261,10 +342,10 @@ app.post('/api/new-job', (req, res) => {
         .then(result => {
           const [newCompany] = result.rows;
           const insertJobSql = `
-            insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies", "orderStatus", "shippingStatus", "paymentStatus")
-            values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+            insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus")
+            values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18, $19)
             returning *`;
-          const insertJobParams = [yearId, weekId, newCompany.companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, orderStatus, shippingStatus, paymentStatus];
+          const insertJobParams = [yearId, weekId, newCompany.companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus];
           db.query(insertJobSql, insertJobParams)
             .then(result => {
               const [newJob] = result.rows;
