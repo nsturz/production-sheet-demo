@@ -387,10 +387,7 @@ export default function ProductionSheet(props) {
             </form>
           </div>
         </div>
-        <div className="d-flex justify-content-center m-3">
-          <div className="col-12" />
-        </div>
-        <div className="d-flex flex-row justify-content-end">
+        <div className="mt-3  d-flex flex-row justify-content-end">
           <NewJobModal
             onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors} handleYearIdChange={handleYearIdChange}
             handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
