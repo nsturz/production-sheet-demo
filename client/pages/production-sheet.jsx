@@ -325,7 +325,7 @@ export default function ProductionSheet(props) {
     document.getElementById('search-job-form').reset();
   }
   // FINISH 🏁
-
+  // console.log('props.jobs[0].jobId:', props.jobs[0].jobId)
   return (
     <div>
       <div>
@@ -426,7 +426,7 @@ export default function ProductionSheet(props) {
                         </div>
                         <div className="col">
                           <div className="d-flex justify-content-end">
-                            <EditModal />
+                            <EditModal id={event.jobId}/>
                           </div>
                         </div>
                       </div>

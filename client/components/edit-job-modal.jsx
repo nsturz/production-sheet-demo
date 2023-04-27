@@ -2,12 +2,17 @@ import React from 'react';
 
 export default function EditModal(props) {
   // console.log('edit modal fired!')
+  // function  handleSubmit (event){
+  //   console.log('event.target.id', Number(event.target.id))
+  // }
   return (
     <div>
-      <a type="button" className="edit-job-btn bg-transparent " data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <i className="fa-solid fa-pen-to-square m-1 edit-icon" />
-      </a>
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <button
+      // onClick={handleSubmit}
+      type="button" className="edit-job-btn bg-transparent " data-bs-toggle="modal" data-bs-target="#editModal">
+        <i className="fa-solid fa-pen-to-square m-1 edit-icon" id={props.id} />
+      </button>
+      <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header">

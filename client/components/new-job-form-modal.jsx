@@ -59,10 +59,10 @@ export default function NewJobModal(props) {
   // console.log('new job modal fired!')
   return (
     <div>
-      <button type="button" className="new-job-btn bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <button type="button" className="new-job-btn bg-transparent" data-bs-toggle="modal" data-bs-target="#newJobModal">
         <i className="fa-solid fa-plus text-primary" />
       </button>
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade" id="newJobModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header">
