@@ -300,6 +300,10 @@ export default function ProductionSheet(props) {
       .catch(console.error);
   }
 
+  function editJob(editedJob) {
+
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     const params = {
@@ -426,7 +430,7 @@ export default function ProductionSheet(props) {
                         </div>
                         <div className="col">
                           <div className="d-flex justify-content-end">
-                            <EditModal id={event.jobId}/>
+                            <EditModal onSubmit={editJob} id={event.jobId} values={values} setValues={setValues} />
                           </div>
                         </div>
                       </div>
