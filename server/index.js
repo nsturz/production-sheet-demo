@@ -27,6 +27,48 @@ app.get('/api/years', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET one year by "yearId" (mainly used in edit-job-modal.jsx) 👇🏼
+app.get('/api/year/:yearId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  if (!yearId) {
+    throw new ClientError(400, 'yearId must be a positive integer');
+  }
+  const sql = `
+  select "year"
+  from "years"
+  where "yearId" = $1`;
+  const params = [yearId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find year with yearId ${yearId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+// GET one week by "weekId" (mainly used in edit-job-modal.jsx) 👇🏼
+app.get('/api/week/:weekId', (req, res, next) => {
+  const weekId = Number(req.params.weekId);
+  if (!weekId) {
+    throw new ClientError(400, 'week must be a positive integer');
+  }
+  const sql = `
+  select "week"
+  from "weeks"
+  where "weekId" = $1`;
+  const params = [weekId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find week with yearId ${weekId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
 // GET all weeks by "yearId" (mainly used in new-job-modal.jsx) 👇🏼
 app.get('/api/weeks/:yearId', (req, res, next) => {
   const yearId = Number(req.params.yearId);

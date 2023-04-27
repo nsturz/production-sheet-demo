@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function EditModal(props) {
+  const [year, setYear] = useState('');
+  const [week, setWeek] = useState('');
+
   function getJob(event) {
     const jobId = Number(event.target.id);
     fetch(`/api/jobs/${jobId}`)
@@ -30,6 +33,18 @@ export default function EditModal(props) {
           inHomeDate: job.inHomeDate,
           headline: job.headline
         });
+      });
+    fetch(`/api/year/${props.values.yearId}`)
+      .then(response => response.json())
+      .then(year => {
+        setYear(year);
+        // console.log('year inside the function:', year)
+      });
+    fetch(`/api/week/${props.values.weekId}`)
+      .then(response => response.json())
+      .then(week => {
+        setWeek(week);
+        // console.log('week inside the function:', week)
       });
   }
 
@@ -87,12 +102,14 @@ export default function EditModal(props) {
     // console.log('props.values at end of handleSubmit:', props.values)
   }
 
-  // console.log('props.values:', props.values)
+  //  console.log('props.values:', props.values)
+  // console.log('props.year:', props.year)
+  // console.log('year:', year.year)
   return (
     <div>
       <button
-      onClick={getJob}
-      type="button" className="edit-job-btn bg-transparent " data-bs-toggle="modal" data-bs-target="#editModal">
+       onClick={getJob}
+       type="button" className="edit-job-btn bg-transparent " data-bs-toggle="modal" data-bs-target="#editModal">
         <i className="fa-solid fa-pen-to-square m-1 edit-icon" id={props.id} />
       </button>
       <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -106,28 +123,26 @@ export default function EditModal(props) {
               <form id="edit-job-form" onSubmit={handleSubmit} >
                 <div className="mb-2 mt-2">
                   <label htmlFor="yearSelect" >Year</label>
-                  <select name="" id="editYear" className='form-select fw-light' required>
-                    <option>Year</option>
-                    {/* {
+                  <select value={year.year} name="" id="editYear" className='form-select fw-light' required>
+                    {
                       props.years.map(event => {
                         return (
                           <option id={event.yearId} key={event.yearId}>{event.year}</option>
                         );
                       })
-                    } */}
+                    }
                   </select>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="editWeek" >Week</label>
-                  <select name="" id="editWeek" className='form-select fw-light' required>
-                    <option value="1">Week</option>
-                    {/* {
+                  <select value={week.week} name="" id="editWeek" className='form-select fw-light' required>
+                    {
                       props.weeks.map(event => {
                         return (
                           <option id={event.weekId} key={event.weekId}>{event.week}</option>
                         );
                       })
-                    } */}
+                    }
                   </select>
                 </div>
                 <div className="mb-2 mt-2">

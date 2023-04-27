@@ -430,7 +430,7 @@ export default function ProductionSheet(props) {
                         </div>
                         <div className="col">
                           <div className="d-flex justify-content-end">
-                            <EditModal onSubmit={editJob} id={event.jobId} values={values} setValues={setValues} />
+                            <EditModal onSubmit={editJob} id={event.jobId} values={values} setValues={setValues} years={years} weeks={weeks}/>
                           </div>
                         </div>
                       </div>
