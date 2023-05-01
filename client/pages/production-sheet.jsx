@@ -4,6 +4,17 @@ import NewJobModal from '../components/new-job-form-modal';
 import EditModal from '../components/edit-job-modal';
 
 export default function ProductionSheet(props) {
+  // this grabs all the years from the database first so that it can be displayed
+  // both on ProductionSheet, and NewJobModal 👇🏼
+  const [years, setYears] = useState([]);
+  useEffect(() => {
+    fetch('/api/years')
+      .then(res => res.json())
+      .then(years => {
+        setYears(years);
+      });
+  }, []);
+
   const [weeks, setWeeks] = useState([]);
 
   const [totalCopies, setTotalCopies] = useState('');
@@ -11,6 +22,8 @@ export default function ProductionSheet(props) {
   const [values, setValues] = useState({
     yearId: '',
     weekId: '',
+    year: '',
+    week: '',
     companyName: '',
     companyAddress: '',
     companyCity: '',
@@ -40,17 +53,6 @@ export default function ProductionSheet(props) {
       .then(res => res.json())
       .then(distributors => {
         setDistributors(distributors);
-      });
-  }, []);
-
-  // this grabs all the years from the database first so that it can be displayed
-  // both on ProductionSheet, and NewJobModal 👇🏼
-  const [years, setYears] = useState([]);
-  useEffect(() => {
-    fetch('/api/years')
-      .then(res => res.json())
-      .then(years => {
-        setYears(years);
       });
   }, []);
 
@@ -123,7 +125,8 @@ export default function ProductionSheet(props) {
           });
         setValues(values => ({
           ...values,
-          yearId: years[i].yearId
+          yearId: years[i].yearId,
+          year: years[i].year
         }));
       }
     }
@@ -135,7 +138,8 @@ export default function ProductionSheet(props) {
       if (Number(event.target.value) === weeks[i].week) {
         setValues(values => ({
           ...values,
-          weekId: weeks[i].weekId
+          weekId: weeks[i].weekId,
+          week: weeks[i].week
         }));
       }
     }
@@ -304,6 +308,37 @@ export default function ProductionSheet(props) {
 
   }
 
+  function closeModal() {
+    setValues({
+      yearId: '',
+      weekId: '',
+      year: '',
+      week: '',
+      companyName: '',
+      companyAddress: '',
+      companyCity: '',
+      companyState: '',
+      companyZip: '',
+      distributorId: '',
+      jobNumber: '',
+      paperSize: '',
+      paperWeight: '',
+      shippingStatus: '',
+      paymentStatus: '',
+      orderStatus: '',
+      distributorCopies: '',
+      storeCopies: '',
+      officeCopies: '',
+      instructions: '',
+      shipDate: '',
+      dueDate: '',
+      inHomeDate: '',
+      headline: ''
+    });
+    document.getElementById('search-job-form').reset();
+
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     const params = {
@@ -328,8 +363,14 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
+
   // FINISH 🏁
   // console.log('props.jobs[0].jobId:', props.jobs[0].jobId)
+  // console.log('weekAndYear:', weekAndYear)
+  // console.log('searchParams:', searchParams)
+  // console.log('values:', values)
+  // console.log('years:', years)
+  // console.log('weeks:', weeks)
   return (
     <div>
       <div>
@@ -394,7 +435,8 @@ export default function ProductionSheet(props) {
         </div>
         <div className="mt-3  d-flex flex-row justify-space-between">
           <NewJobModal
-            onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors} handleYearIdChange={handleYearIdChange}
+            onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors}
+            closeModal={closeModal} handleYearIdChange={handleYearIdChange}
             handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
             handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
             handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
@@ -430,7 +472,7 @@ export default function ProductionSheet(props) {
                         </div>
                         <div className="col">
                           <div className="d-flex justify-content-end">
-                            <EditModal onSubmit={editJob} id={event.jobId} values={values} setValues={setValues} years={years} weeks={weeks}/>
+                            <EditModal onSubmit={editJob} closeModal={closeModal} id={event.jobId} values={values} setValues={setValues} years={years} weeks={weeks}/>
                           </div>
                         </div>
                       </div>

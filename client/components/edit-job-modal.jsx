@@ -38,13 +38,11 @@ export default function EditModal(props) {
       .then(response => response.json())
       .then(year => {
         setYear(year);
-        // console.log('year inside the function:', year)
       });
     fetch(`/api/week/${props.values.weekId}`)
       .then(response => response.json())
       .then(week => {
         setWeek(week);
-        // console.log('week inside the function:', week)
       });
   }
 
@@ -73,11 +71,12 @@ export default function EditModal(props) {
       inHomeDate: props.values.inHomeDate,
       headline: props.values.headline
     };
-    // console.log('editedJob:', editedJob)
     props.onSubmit(editedJob);
     props.setValues({
       yearId: '',
       weekId: '',
+      year: '',
+      week: '',
       companyName: '',
       companyAddress: '',
       companyCity: '',
@@ -99,7 +98,6 @@ export default function EditModal(props) {
       inHomeDate: '',
       headline: ''
     });
-    // console.log('props.values at end of handleSubmit:', props.values)
   }
 
   //  console.log('props.values:', props.values)
@@ -117,7 +115,7 @@ export default function EditModal(props) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title text-center">Edit Job</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+              <button onClick={props.closeModal} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body">
               <form id="edit-job-form" onSubmit={handleSubmit} >
@@ -260,7 +258,7 @@ export default function EditModal(props) {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button onClick={props.closeModal} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="submit" className="btn btn-primary">Save</button>
                 </div>
               </form>
