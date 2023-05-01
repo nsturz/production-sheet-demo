@@ -58,6 +58,11 @@ export default function NewJobModal(props) {
     }));
     document.getElementById('new-job-form').reset();
   }
+
+  // const backdrop = document.getElementById('newJobModal')
+  // backdrop.addEventListener('click', event => {
+  //   console.log('event.target:', event.target)
+  // })
   return (
     <div>
       <button type="button" className="new-job-btn bg-transparent" data-bs-toggle="modal" data-bs-target="#newJobModal">
