@@ -121,7 +121,7 @@ export default function EditModal(props) {
               <form id="edit-job-form" onSubmit={handleSubmit} >
                 <div className="mb-2 mt-2">
                   <label htmlFor="yearSelect" >Year</label>
-                  <select value={year.year} name="" id="editYear" className='form-select fw-light' required>
+                  <select value={year.year} onChange={props.handleYearIdChange} name="" id="editYear" className='form-select fw-light' required>
                     {
                       props.years.map(event => {
                         return (
@@ -133,7 +133,7 @@ export default function EditModal(props) {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="editWeek" >Week</label>
-                  <select value={week.week} name="" id="editWeek" className='form-select fw-light' required>
+                  <select value={week.week} onChange={props.handleWeekIdChange} name="" id="editWeek" className='form-select fw-light' required>
                     {
                       props.weeks.map(event => {
                         return (
@@ -145,33 +145,33 @@ export default function EditModal(props) {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="companyNameInput" >Distributor</label>
-                  <select name="" id="editDistributor" className="form-select fw-light" required>
+                  <select onChange={props.handleDistributorIdChange} name="" id="editDistributor" className="form-select fw-light" required>
                     <option>Distributor</option>
-                    {/* {
+                    {
                       props.distributors.map(event => {
                         return (
                           <option id={event.distributorId} key={event.distributorId}>{event.distributorName}</option>
                         );
                       })
-                    } */}
+                    }
                   </select>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="jobNumberInput" >Job Number</label>
-                  <input value={props.values.jobNumber} type="text" className="form-control" id="editJobNumber" required />
+                  <input value={props.values.jobNumber} onChange={props.handleJobNumberChange} type="text" className="form-control" id="editJobNumber" required />
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="paperSizeInput">Paper Size</label>
-                  <input value={props.values.paperSize} type="text" className="form-control" id="editPaperSize" required />
+                  <input value={props.values.paperSize} onChange={props.handlePaperSizeChange} type="text" className="form-control" id="editPaperSize" required />
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="paperWeightInput">Paper Weight</label>
-                  <input value={props.values.paperWeight} type="text" className="form-control" id="editPaperWeight" required />
+                  <input value={props.values.paperWeight} onChange={props.handlePaperWeightChange} type="text" className="form-control" id="editPaperWeight" required />
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Shipping Status</label>
-                    <select value={props.values.shippingStatus} name="" id="editShippingStatus" className="form-select fw-light" required>
+                    <select value={props.values.shippingStatus} onChange={props.handleShippingStatusChange} name="" id="editShippingStatus" className="form-select fw-light" required>
                       <option>Select one.</option>
                       <option>Shipped</option>
                       <option>Not Shipped</option>
@@ -179,7 +179,7 @@ export default function EditModal(props) {
                   </div>
                   <div className="col-3">
                     <label htmlFor="paymentStatusSelect">Payment Status</label>
-                    <select value={props.values.paymentStatus} name="" id="editPaymentStatus" className="form-select fw-light" required>
+                    <select value={props.values.paymentStatus} onChange={props.handlePaymentStatusChange} name="" id="editPaymentStatus" className="form-select fw-light" required>
                       <option>Select one.</option>
                       <option>WOP</option>
                       <option>Paid</option>
@@ -187,7 +187,7 @@ export default function EditModal(props) {
                   </div>
                   <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Order Status</label>
-                    <select value={props.values.orderStatus} name="" id="editOrderStatus" className="form-select fw-light" required>
+                    <select value={props.values.orderStatus} onChange={props.handleOrderStatusChange} name="" id="editOrderStatus" className="form-select fw-light" required>
                       <option>Select one.</option>
                       <option>Approved</option>
                       <option>WOO</option>
@@ -202,59 +202,59 @@ export default function EditModal(props) {
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="distributorCopies">Distributor Copies</label>
-                    <input value={props.values.distributorCopies} type="text" id="editDistributorCopies" className="form-control" required />
+                    <input value={props.values.distributorCopies} onChange={props.handleDistributorCopiesChange} type="text" id="editDistributorCopies" className="form-control" required />
                   </div>
                   <div className="col-3">
                     <label htmlFor="storeCopies">Store Copies</label>
-                    <input value={props.values.storeCopies} type="text" id="editStoreCopies" className="form-control" required />
+                    <input value={props.values.storeCopies} onChange={props.handleStoreCopiesChange} type="text" id="editStoreCopies" className="form-control" required />
                   </div>
                   <div className="col-3">
                     <label htmlFor="officeCopies">Office Copies</label>
-                    <input value={props.values.officeCopies} type="text" id="editOfficeCopies" className="form-control" required />
+                    <input value={props.values.officeCopies} onChange={props.handleOfficeCopiesChange} type="text" id="editOfficeCopies" className="form-control" required />
                   </div>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="instructions">Instructions</label>
-                  <textarea value={props.values.instructions} name="" id="editInstructions" className="form-control" required />
+                  <textarea value={props.values.instructions} onChange={props.handleInstructionsChange} name="" id="editInstructions" className="form-control" required />
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="shipDate">Ship Date</label>
-                    <input value={props.values.shipDate} type="date" id="editShipDate" className="form-control fw-light" required />
+                    <input value={props.values.shipDate} onChange={props.handleShipDateChange} type="date" id="editShipDate" className="form-control fw-light" required />
                   </div>
                   <div className="col-3">
                     <label htmlFor="storeCopies">Due Date</label>
-                    <input value={props.values.dueDate} type="date" id="editDueDate" className="form-control fw-light" required />
+                    <input value={props.values.dueDate} onChange={props.handleDueDateChange} type="date" id="editDueDate" className="form-control fw-light" required />
                   </div>
                   <div className="col-3">
                     <label htmlFor="officeCopies">In Home</label>
-                    <input value={props.values.inHomeDate} type="date" id="editInHomeDate" className="form-control fw-light" required />
+                    <input value={props.values.inHomeDate} onChange={props.handleInHomeDateChange} type="date" id="editInHomeDate" className="form-control fw-light" required />
                   </div>
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="headline">Headline</label>
-                  <input value={props.values.headline} type="text" id="editHeadline" className="form-control" required />
+                  <input value={props.values.headline} onChange={props.handleHeadlineChange} type="text" id="editHeadline" className="form-control" required />
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="companyNameInput" >Company Name</label>
-                  <input value={props.values.companyName} type="text" className="form-control" id="editCompanyNameInput" required />
+                  <input value={props.values.companyName} onChange={props.handleCompanyNameChange} type="text" className="form-control" id="editCompanyNameInput" required />
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="address">Company Address</label>
-                  <input value={props.values.companyAddress} type="text" id="editAddress" className="form-control" required />
+                  <input value={props.values.companyAddress} onChange={props.handleCompanyAddressChange} type="text" id="editAddress" className="form-control" required />
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="city">City</label>
-                    <input value={props.values.companyCity} type="text" id="editCity" className="form-control" required />
+                    <input value={props.values.companyCity} onChange={props.handleCityChange} type="text" id="editCity" className="form-control" required />
                   </div>
                   <div className="col-3">
                     <label htmlFor="state">State</label>
-                    <input value={props.values.companyState} type="text" id="editState" className="form-control" required />
+                    <input value={props.values.companyState} onChange={props.handleStateChange} type="text" id="editState" className="form-control" required />
                   </div>
                   <div className="col-3">
                     <label htmlFor="zip">Zip</label>
-                    <input value={props.values.companyZip} type="text" id="editZip" className="form-control" required />
+                    <input value={props.values.companyZip} onChange={props.handleZipChange} type="text" id="editZip" className="form-control" required />
                   </div>
                 </div>
                 <div className="modal-footer">

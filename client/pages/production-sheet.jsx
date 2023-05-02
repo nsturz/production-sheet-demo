@@ -472,7 +472,18 @@ export default function ProductionSheet(props) {
                         </div>
                         <div className="col">
                           <div className="d-flex justify-content-end">
-                            <EditModal onSubmit={editJob} closeModal={closeModal} id={event.jobId} values={values} setValues={setValues} years={years} weeks={weeks}/>
+                            <EditModal onSubmit={editJob} closeModal={closeModal} id={event.jobId} values={values} distributors={distributors}
+                              setValues={setValues} years={years} weeks={weeks} handleYearIdChange={handleYearIdChange}
+                              handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
+                              handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
+                              handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
+                              handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
+                              handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
+                              handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
+                              handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
+                              handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
+                              handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
+                              handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
                           </div>
                         </div>
                       </div>
