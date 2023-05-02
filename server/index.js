@@ -432,6 +432,7 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
     shippingStatus,
     paymentStatus
   } = req.body;
+  const totalCopies = Number(storeCopies) + Number(distributorCopies) + Number(officeCopies);
   if (!yearId || !weekId || !companyName || !companyId || !companyAddress || !companyCity || !companyState ||
     !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
     !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
@@ -476,12 +477,13 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
                     "storeCopies" = $13,
                     "distributorCopies" = $14,
                     "officeCopies" = $15,
-                    "orderStatus" = $16,
-                    "shippingStatus" = $17,
-                    "paymentStatus" = $18
-            where "jobId" = $19
+                    "totalCopies" = $16,
+                    "orderStatus" = $17,
+                    "shippingStatus" = $18,
+                    "paymentStatus" = $19
+            where "jobId" = $20
             returning *`;
-          const updateJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, orderStatus, shippingStatus, paymentStatus, jobId];
+          const updateJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus, jobId];
           db.query(updateJobSql, updateJobParams)
             .then(result => {
               const [updatedJob] = result.rows;

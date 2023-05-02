@@ -365,7 +365,7 @@ export default function ProductionSheet(props) {
   }
 
   // FINISH 🏁
-  // console.log('props.jobs[0].jobId:', props.jobs[0].jobId)
+  // console.log('props.jobs:', props.jobs)
   // console.log('weekAndYear:', weekAndYear)
   // console.log('searchParams:', searchParams)
   // console.log('values:', values)
