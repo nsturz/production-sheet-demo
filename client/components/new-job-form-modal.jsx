@@ -83,7 +83,7 @@ export default function NewJobModal(props) {
                   <select name="" id="yearSelect" className='form-select fw-light' value={props.values.year} onChange={props.handleYearIdChange} required>
                     <option>Select a year.</option>
                     {
-                      props.years.map(event => {
+                      props.yearsList.map(event => {
                         return (
                           <option id={event.yearId} key={event.yearId}>{event.year}</option>
                         );
@@ -96,7 +96,7 @@ export default function NewJobModal(props) {
                   <select name="" id="weekSelect" className='form-select fw-light' value={props.values.week} onChange={props.handleWeekIdChange} required>
                     <option>Select a week.</option>
                     {
-                      props.weeks.map(event => {
+                      props.weeksList.map(event => {
                         return (
                           <option id={event.weekId} key={event.weekId}>{event.week}</option>
                         );

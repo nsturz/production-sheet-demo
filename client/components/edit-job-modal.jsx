@@ -140,7 +140,7 @@ export default function EditModal(props) {
   }
 
   // console.log('props.values:', props.values)
-  // console.log('props.year:', props.year)
+  // // console.log('props.year:', props.year)
   // console.log('year:', year)
   // console.log('week:', week)
   // console.log('props.weekAndYear:', props.weekAndYear)
@@ -164,7 +164,7 @@ export default function EditModal(props) {
                   <label htmlFor="yearSelect" >Year</label>
                   <select value={year.year} onChange={props.handleYearIdChange} name="" id="editYear" className='form-select fw-light' required>
                     {
-                      props.years.map(event => {
+                      props.yearsList.map(event => {
                         return (
                           <option id={event.yearId} key={event.yearId}>{event.year}</option>
                         );
@@ -176,7 +176,7 @@ export default function EditModal(props) {
                   <label htmlFor="editWeek" >Week</label>
                   <select value={week.week} onChange={props.handleWeekIdChange} name="" id="editWeek" className='form-select fw-light' required>
                     {
-                      props.weeks.map(event => {
+                      props.weeksList.map(event => {
                         return (
                           <option id={event.weekId} key={event.weekId}>{event.week}</option>
                         );

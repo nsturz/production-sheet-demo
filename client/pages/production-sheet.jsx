@@ -4,18 +4,18 @@ import NewJobModal from '../components/new-job-form-modal';
 import EditModal from '../components/edit-job-modal';
 
 export default function ProductionSheet(props) {
-  // this grabs all the years from the database first so that it can be displayed
-  // both on ProductionSheet, and NewJobModal 👇🏼
-  const [years, setYears] = useState([]);
+  // this grabs all the years from the database and creates an array in state👇🏼
+  const [yearsList, setYearsList] = useState([]);
   useEffect(() => {
     fetch('/api/years')
       .then(res => res.json())
-      .then(years => {
-        setYears(years);
+      .then(yearsList => {
+        setYearsList(yearsList);
       });
   }, []);
 
-  const [weeks, setWeeks] = useState([]);
+  // this will display all weeks pertaining to whichever year is selected at the top of Productionsheet  👇🏼
+  const [weeksList, setWeeksList] = useState([]);
 
   const [totalCopies, setTotalCopies] = useState('');
 
@@ -77,29 +77,29 @@ export default function ProductionSheet(props) {
 
   const handleYearChange = event => {
     event.persist();
-    for (let i = 0; i < years.length; i++) {
-      if (Number(event.target.value) === years[i].year) {
-        fetch(`/api/weeks/${years[i].yearId}`)
+    for (let i = 0; i < yearsList.length; i++) {
+      if (Number(event.target.value) === yearsList[i].year) {
+        fetch(`/api/weeks/${yearsList[i].yearId}`)
           .then(res => res.json())
-          .then(weeks => {
-            setWeeks(weeks);
+          .then(weeksList => {
+            setWeeksList(weeksList);
           });
         setSearchParams({
           ...searchParams,
-          yearId: years[i].yearId,
-          year: years[i].year
+          yearId: yearsList[i].yearId,
+          year: yearsList[i].year
         });
       }
     }
   };
   const handleWeekChange = event => {
     event.persist();
-    for (let i = 0; i < weeks.length; i++) {
-      if (Number(event.target.value) === weeks[i].week) {
+    for (let i = 0; i < weeksList.length; i++) {
+      if (Number(event.target.value) === weeksList[i].week) {
         setSearchParams({
           ...searchParams,
-          weekId: weeks[i].weekId,
-          week: weeks[i].week
+          weekId: weeksList[i].weekId,
+          week: weeksList[i].week
         });
       }
     }
@@ -115,21 +115,21 @@ export default function ProductionSheet(props) {
       });
   }, []);
 
-  // All code from "START 🏁" to "FINISH 🏁" is used for the form in <NewJobModal /> 👇🏼
+  // All code from "START 🏁" to "FINISH 🏁" is used in NewJobModal and EditJobModal 👇🏼
   // START 🏁
   const handleYearIdChange = event => {
     event.persist();
-    for (let i = 0; i < years.length; i++) {
-      if (Number(event.target.value) === years[i].year) {
-        fetch(`/api/weeks/${years[i].yearId}`)
+    for (let i = 0; i < yearsList.length; i++) {
+      if (Number(event.target.value) === yearsList[i].year) {
+        fetch(`/api/weeks/${yearsList[i].yearId}`)
           .then(res => res.json())
-          .then(weeks => {
-            setWeeks(weeks);
+          .then(weeksList => {
+            setWeeksList(weeksList);
           });
         setValues(values => ({
           ...values,
-          yearId: years[i].yearId,
-          year: years[i].year
+          yearId: yearsList[i].yearId,
+          year: yearsList[i].year
         }));
       }
     }
@@ -137,12 +137,12 @@ export default function ProductionSheet(props) {
 
   const handleWeekIdChange = event => {
     event.persist();
-    for (let i = 0; i < weeks.length; i++) {
-      if (Number(event.target.value) === weeks[i].week) {
+    for (let i = 0; i < weeksList.length; i++) {
+      if (Number(event.target.value) === weeksList[i].week) {
         setValues(values => ({
           ...values,
-          weekId: weeks[i].weekId,
-          week: weeks[i].week
+          weekId: weeksList[i].weekId,
+          week: weeksList[i].week
         }));
       }
     }
@@ -386,8 +386,8 @@ export default function ProductionSheet(props) {
   // console.log('weekAndYear:', weekAndYear)
   // console.log('searchParams:', searchParams)
   // console.log('values:', values)
-  // console.log('years:', years)
-  // console.log('weeks:', weeks)
+  //  console.log('yearsList:', yearsList)
+  //  console.log('weeksList:', weeksList)
   return (
     <div>
       <div>
@@ -427,7 +427,7 @@ export default function ProductionSheet(props) {
               <select className="form-select fw-light m-1" aria-label="Default select example" onChange={handleYearChange}>
                 <option>Select a year.</option>
                 {
-                  years.map(event => {
+                  yearsList.map(event => {
                     return (
                       <option id={event.yearId} key={event.yearId}>{event.year}</option>
                     );
@@ -437,7 +437,7 @@ export default function ProductionSheet(props) {
               <select className=" form-select fw-light m-1" aria-label="Default select example" onChange={handleWeekChange}>
                 <option>Select a week.</option>
                 {
-                  weeks.map(event => {
+                  weeksList.map(event => {
                     return (
                       <option id={event.weekId} key={event.weekId}>{event.week}</option>
                     );
@@ -452,7 +452,7 @@ export default function ProductionSheet(props) {
         </div>
         <div className="mt-3  d-flex flex-row justify-space-between">
           <NewJobModal
-            onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors}
+            onSubmit={addJob} job={job} values={values} setValues={setValues} yearsList={yearsList} weeksList={weeksList} distributors={distributors}
             closeModal={closeModal} handleYearIdChange={handleYearIdChange}
             handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
             handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
@@ -490,7 +490,7 @@ export default function ProductionSheet(props) {
                         <div className="col">
                           <div className="d-flex justify-content-end">
                             <EditModal onSubmit={editJob} id={event.jobId} values={values} distributors={distributors}
-                              setValues={setValues} years={years} weeks={weeks} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
+                              setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
                               handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
                               handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
                               handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
