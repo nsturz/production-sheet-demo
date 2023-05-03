@@ -110,6 +110,7 @@ export default function EditModal(props) {
       inHomeDate: props.values.inHomeDate,
       headline: props.values.headline
     };
+    // console.log('editedJob in handleSubmit:', editedJob)
     props.onSubmit(editedJob);
     props.setValues({
       yearId: '',
@@ -137,6 +138,7 @@ export default function EditModal(props) {
       inHomeDate: '',
       headline: ''
     });
+    document.getElementById('search-job-form').reset();
   }
 
   // console.log('props.values:', props.values)

@@ -20,9 +20,9 @@ export default function ProductionSheet(props) {
   const [totalCopies, setTotalCopies] = useState('');
 
   const [values, setValues] = useState({
-    jobId: '',
     yearId: '',
     weekId: '',
+    jobId: '',
     year: '',
     week: '',
     companyName: '',
@@ -310,15 +310,20 @@ export default function ProductionSheet(props) {
   function editJob(editedJob) {
     // console.log('editJob fired')
     // console.log('editedJob in editJob:', editJob)
-    fetch(`/api/edited-job/${editJob.jobId}`, {
+    fetch(`/api/edit-job/${editedJob.jobId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(editedJob)
     })
-      .then(response => {
-        response.json();
+      .then(() => {
+        const newJobList = [...props.jobs];
+        for (let i = 0; i < newJobList.length; i++) {
+          if (newJobList[i].jobId === editedJob.jobId) {
+            newJobList.splice(i, 1, editedJob);
+          }
+        } props.setJobs(newJobList);
       })
       .catch(console.error);
   }
