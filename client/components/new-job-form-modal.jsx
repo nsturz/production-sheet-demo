@@ -31,6 +31,7 @@ export default function NewJobModal(props) {
     props.onSubmit(newJob);
     props.setValues(values => ({
       ...props.values,
+      jobId: '',
       yearId: '',
       weekId: '',
       year: '',

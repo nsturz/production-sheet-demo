@@ -20,6 +20,7 @@ export default function ProductionSheet(props) {
   const [totalCopies, setTotalCopies] = useState('');
 
   const [values, setValues] = useState({
+    jobId: '',
     yearId: '',
     weekId: '',
     year: '',
@@ -305,11 +306,24 @@ export default function ProductionSheet(props) {
   }
 
   function editJob(editedJob) {
-
+    // console.log('editJob fired')
+    // console.log('editedJob in editJob:', editJob)
+    fetch(`/api/edited-job/${editJob.jobId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(editedJob)
+    })
+      .then(response => {
+        response.json();
+      })
+      .catch(console.error);
   }
 
   function closeModal() {
     setValues({
+      jobId: '',
       yearId: '',
       weekId: '',
       year: '',
@@ -336,7 +350,6 @@ export default function ProductionSheet(props) {
       headline: ''
     });
     document.getElementById('search-job-form').reset();
-
   }
 
   function handleSubmit(event) {
@@ -472,7 +485,7 @@ export default function ProductionSheet(props) {
                         </div>
                         <div className="col">
                           <div className="d-flex justify-content-end">
-                            <EditModal onSubmit={editJob} closeModal={closeModal} id={event.jobId} values={values} distributors={distributors}
+                            <EditModal onSubmit={editJob} id={event.jobId} values={values} distributors={distributors}
                               setValues={setValues} years={years} weeks={weeks} handleYearIdChange={handleYearIdChange}
                               handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
                               handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}

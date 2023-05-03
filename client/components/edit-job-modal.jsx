@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 
 export default function EditModal(props) {
-  const [year, setYear] = useState('');
-  const [week, setWeek] = useState('');
+  const [year, setYear] = useState({
+    year: ''
+  });
+  const [week, setWeek] = useState({
+    week: ''
+  });
 
   function getJob(event) {
     const jobId = Number(event.target.id);
@@ -10,6 +14,7 @@ export default function EditModal(props) {
       .then(response => response.json())
       .then(job => {
         props.setValues({
+          jobId: job.jobId,
           yearId: job.yearId,
           weekId: job.weekId,
           companyName: job.companyName,
@@ -37,17 +42,55 @@ export default function EditModal(props) {
     fetch(`/api/year/${props.values.yearId}`)
       .then(response => response.json())
       .then(year => {
-        setYear(year);
+        // console.log('year fetch fired')
+        setYear({
+          year
+        });
       });
     fetch(`/api/week/${props.values.weekId}`)
       .then(response => response.json())
       .then(week => {
         setWeek(week);
+        // console.log('week fetch fired')
       });
+  }
+
+  function closeModal() {
+    props.setValues({
+      jobId: '',
+      yearId: '',
+      weekId: '',
+      year: '',
+      week: '',
+      companyName: '',
+      companyAddress: '',
+      companyCity: '',
+      companyState: '',
+      companyZip: '',
+      distributorId: '',
+      jobNumber: '',
+      paperSize: '',
+      paperWeight: '',
+      shippingStatus: '',
+      paymentStatus: '',
+      orderStatus: '',
+      distributorCopies: '',
+      storeCopies: '',
+      officeCopies: '',
+      instructions: '',
+      shipDate: '',
+      dueDate: '',
+      inHomeDate: '',
+      headline: ''
+    });
+    setYear({ year: '' });
+    setWeek({ week: '' });
+    document.getElementById('search-job-form').reset();
   }
 
   function handleSubmit(event) {
     const editedJob = {
+      jobId: props.values.jobId,
       yearId: props.values.yearId,
       weekId: props.values.weekId,
       companyName: props.values.companyName,
@@ -102,7 +145,8 @@ export default function EditModal(props) {
 
   //  console.log('props.values:', props.values)
   // console.log('props.year:', props.year)
-  // console.log('year:', year.year)
+  // console.log('year:', year)
+  // console.log('week:', week)
   return (
     <div>
       <button
@@ -115,7 +159,7 @@ export default function EditModal(props) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title text-center">Edit Job</h5>
-              <button onClick={props.closeModal} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+              <button onClick={closeModal} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body">
               <form id="edit-job-form" onSubmit={handleSubmit} >
@@ -258,7 +302,7 @@ export default function EditModal(props) {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button onClick={props.closeModal} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button onClick={closeModal} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="submit" className="btn btn-primary">Save</button>
                 </div>
               </form>
