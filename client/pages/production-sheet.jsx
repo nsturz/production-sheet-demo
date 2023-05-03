@@ -70,7 +70,9 @@ export default function ProductionSheet(props) {
   // they can be rendered 👇🏼
   const [weekAndYear, setWeekAndYear] = useState({
     year: '',
-    week: ''
+    yearId: '',
+    week: '',
+    weekId: ''
   });
 
   const handleYearChange = event => {
@@ -366,7 +368,9 @@ export default function ProductionSheet(props) {
       });
     setWeekAndYear({
       year: searchParams.year,
-      week: searchParams.week
+      yearId: searchParams.yearId,
+      week: searchParams.week,
+      weekId: searchParams.weekId
     });
     setSearchParams({
       yearId: '',
@@ -486,7 +490,7 @@ export default function ProductionSheet(props) {
                         <div className="col">
                           <div className="d-flex justify-content-end">
                             <EditModal onSubmit={editJob} id={event.jobId} values={values} distributors={distributors}
-                              setValues={setValues} years={years} weeks={weeks} handleYearIdChange={handleYearIdChange}
+                              setValues={setValues} years={years} weeks={weeks} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
                               handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
                               handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
                               handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}

@@ -39,19 +39,15 @@ export default function EditModal(props) {
           headline: job.headline
         });
       });
-    fetch(`/api/year/${props.values.yearId}`)
+    fetch(`/api/year/${props.weekAndYear.yearId}`)
       .then(response => response.json())
       .then(year => {
-        // console.log('year fetch fired')
-        setYear({
-          year
-        });
+        setYear(year);
       });
-    fetch(`/api/week/${props.values.weekId}`)
+    fetch(`/api/week/${props.weekAndYear.weekId}`)
       .then(response => response.json())
       .then(week => {
         setWeek(week);
-        // console.log('week fetch fired')
       });
   }
 
@@ -143,10 +139,11 @@ export default function EditModal(props) {
     });
   }
 
-  //  console.log('props.values:', props.values)
+  // console.log('props.values:', props.values)
   // console.log('props.year:', props.year)
   // console.log('year:', year)
   // console.log('week:', week)
+  // console.log('props.weekAndYear:', props.weekAndYear)
   return (
     <div>
       <button
