@@ -31,8 +31,11 @@ export default function NewJobModal(props) {
     props.onSubmit(newJob);
     props.setValues(values => ({
       ...props.values,
+      jobId: '',
       yearId: '',
       weekId: '',
+      year: '',
+      week: '',
       companyName: '',
       companyAddress: '',
       companyCity: '',
@@ -55,27 +58,29 @@ export default function NewJobModal(props) {
       headline: ''
     }));
     document.getElementById('new-job-form').reset();
+    props.closeModal();
   }
+
   return (
     <div>
-      <button type="button" className="new-job-btn bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <button type="button" className="new-job-btn bg-transparent" data-bs-toggle="modal" data-bs-target="#newJobModal">
         <i className="fa-solid fa-plus text-primary" />
       </button>
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade" id="newJobModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg">
-          <div className="modal-content">
+          <div className="modal-content" >
             <div className="modal-header">
               <h5 className="modal-title text-center" id="exampleModalLabel">New Job</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+              <button onClick={props.closeModal} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body">
               <form id="new-job-form" onSubmit={handleSubmit} >
                 <div className="mb-2 mt-2">
                   <label htmlFor="yearSelect" >Year</label>
-                  <select name="" id="yearSelect" className='form-select fw-light' onChange={props.handleYearIdChange} required>
+                  <select name="" id="yearSelect" className='form-select fw-light' value={props.values.year} onChange={props.handleYearIdChange} required>
                     <option>Select a year.</option>
                     {
-                      props.years.map(event => {
+                      props.yearsList.map(event => {
                         return (
                           <option id={event.yearId} key={event.yearId}>{event.year}</option>
                         );
@@ -86,9 +91,9 @@ export default function NewJobModal(props) {
                 <div className="mb-2 mt-2">
                   <label htmlFor="weekSelect" >Week</label>
                   <select name="" id="weekSelect" className='form-select fw-light' value={props.values.week} onChange={props.handleWeekIdChange} required>
-                    <option value="1">Select a week.</option>
+                    <option>Select a week.</option>
                     {
-                      props.weeks.map(event => {
+                      props.weeksList.map(event => {
                         return (
                           <option id={event.weekId} key={event.weekId}>{event.week}</option>
                         );
@@ -119,7 +124,7 @@ export default function NewJobModal(props) {
                 </div>
                 <div className="mb-2 mt-2">
                   <label htmlFor="paperWeightInput">Paper Weight</label>
-                  <input type="text" className="form-control" id="paperWeightInput" value={props.values.paperweight} onChange={props.handlePaperWeightChange} required/>
+                  <input type="text" className="form-control" id="paperWeightInput" value={props.values.paperWeight} onChange={props.handlePaperWeightChange} required/>
                 </div>
                 <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
@@ -211,7 +216,7 @@ export default function NewJobModal(props) {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button onClick={props.closeModal} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="submit" className="btn btn-primary">Save</button>
                 </div>
               </form>

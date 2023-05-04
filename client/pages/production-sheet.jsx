@@ -1,15 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/navbar';
 import NewJobModal from '../components/new-job-form-modal';
+import EditModal from '../components/edit-job-modal';
 
 export default function ProductionSheet(props) {
-  const [weeks, setWeeks] = useState([]);
+  // this grabs all the years from the database and creates an array in state👇🏼
+  const [yearsList, setYearsList] = useState([]);
+  useEffect(() => {
+    fetch('/api/years')
+      .then(res => res.json())
+      .then(yearsList => {
+        setYearsList(yearsList);
+      });
+  }, []);
+
+  // this will display all weeks pertaining to whichever year is selected at the top of Productionsheet  👇🏼
+  const [weeksList, setWeeksList] = useState([]);
 
   const [totalCopies, setTotalCopies] = useState('');
 
   const [values, setValues] = useState({
     yearId: '',
     weekId: '',
+    companyId: '',
+    jobId: '',
+    year: '',
+    week: '',
     companyName: '',
     companyAddress: '',
     companyCity: '',
@@ -42,17 +58,6 @@ export default function ProductionSheet(props) {
       });
   }, []);
 
-  // this grabs all the years from the database first so that it can be displayed
-  // both on ProductionSheet, and NewJobModal 👇🏼
-  const [years, setYears] = useState([]);
-  useEffect(() => {
-    fetch('/api/years')
-      .then(res => res.json())
-      .then(years => {
-        setYears(years);
-      });
-  }, []);
-
   // These useState variables allow the "search" button to work properly when pressed
   // it gets cleared immediately after submitting the form 👇🏼
   const [searchParams, setSearchParams] = useState({
@@ -66,34 +71,36 @@ export default function ProductionSheet(props) {
   // they can be rendered 👇🏼
   const [weekAndYear, setWeekAndYear] = useState({
     year: '',
-    week: ''
+    yearId: '',
+    week: '',
+    weekId: ''
   });
 
   const handleYearChange = event => {
     event.persist();
-    for (let i = 0; i < years.length; i++) {
-      if (Number(event.target.value) === years[i].year) {
-        fetch(`/api/weeks/${years[i].yearId}`)
+    for (let i = 0; i < yearsList.length; i++) {
+      if (Number(event.target.value) === yearsList[i].year) {
+        fetch(`/api/weeks/${yearsList[i].yearId}`)
           .then(res => res.json())
-          .then(weeks => {
-            setWeeks(weeks);
+          .then(weeksList => {
+            setWeeksList(weeksList);
           });
         setSearchParams({
           ...searchParams,
-          yearId: years[i].yearId,
-          year: years[i].year
+          yearId: yearsList[i].yearId,
+          year: yearsList[i].year
         });
       }
     }
   };
   const handleWeekChange = event => {
     event.persist();
-    for (let i = 0; i < weeks.length; i++) {
-      if (Number(event.target.value) === weeks[i].week) {
+    for (let i = 0; i < weeksList.length; i++) {
+      if (Number(event.target.value) === weeksList[i].week) {
         setSearchParams({
           ...searchParams,
-          weekId: weeks[i].weekId,
-          week: weeks[i].week
+          weekId: weeksList[i].weekId,
+          week: weeksList[i].week
         });
       }
     }
@@ -109,20 +116,21 @@ export default function ProductionSheet(props) {
       });
   }, []);
 
-  // All code from "START 🏁" to "FINISH 🏁" is used for the form in <NewJobModal /> 👇🏼
+  // All code from "START 🏁" to "FINISH 🏁" is used in NewJobModal and EditJobModal 👇🏼
   // START 🏁
   const handleYearIdChange = event => {
     event.persist();
-    for (let i = 0; i < years.length; i++) {
-      if (Number(event.target.value) === years[i].year) {
-        fetch(`/api/weeks/${years[i].yearId}`)
+    for (let i = 0; i < yearsList.length; i++) {
+      if (Number(event.target.value) === yearsList[i].year) {
+        fetch(`/api/weeks/${yearsList[i].yearId}`)
           .then(res => res.json())
-          .then(weeks => {
-            setWeeks(weeks);
+          .then(weeksList => {
+            setWeeksList(weeksList);
           });
         setValues(values => ({
           ...values,
-          yearId: years[i].yearId
+          yearId: yearsList[i].yearId,
+          year: yearsList[i].year
         }));
       }
     }
@@ -130,11 +138,12 @@ export default function ProductionSheet(props) {
 
   const handleWeekIdChange = event => {
     event.persist();
-    for (let i = 0; i < weeks.length; i++) {
-      if (Number(event.target.value) === weeks[i].week) {
+    for (let i = 0; i < weeksList.length; i++) {
+      if (Number(event.target.value) === weeksList[i].week) {
         setValues(values => ({
           ...values,
-          weekId: weeks[i].weekId
+          weekId: weeksList[i].weekId,
+          week: weeksList[i].week
         }));
       }
     }
@@ -293,10 +302,63 @@ export default function ProductionSheet(props) {
       },
       body: JSON.stringify(newJob)
     })
-      .then(response => {
-        response.json();
+      .then(response => response.json())
+      .then(newJob => {
+        const newJobList = [...props.jobs];
+        newJobList.push(newJob);
+        props.setJobs({ newJobList });
       })
       .catch(console.error);
+  }
+
+  function editJob(editedJob) {
+    fetch(`/api/edit-job/${editedJob.jobId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(editedJob)
+    })
+      .then(() => {
+        const newJobList = [...props.jobs];
+        for (let i = 0; i < newJobList.length; i++) {
+          if (newJobList[i].jobId === editedJob.jobId) {
+            newJobList.splice(i, 1, editedJob);
+          }
+        } props.setJobs(newJobList);
+      })
+      .catch(console.error);
+  }
+
+  function closeModal() {
+    setValues({
+      jobId: '',
+      yearId: '',
+      weekId: '',
+      year: '',
+      week: '',
+      companyName: '',
+      companyAddress: '',
+      companyCity: '',
+      companyState: '',
+      companyZip: '',
+      distributorId: '',
+      jobNumber: '',
+      paperSize: '',
+      paperWeight: '',
+      shippingStatus: '',
+      paymentStatus: '',
+      orderStatus: '',
+      distributorCopies: '',
+      storeCopies: '',
+      officeCopies: '',
+      instructions: '',
+      shipDate: '',
+      dueDate: '',
+      inHomeDate: '',
+      headline: ''
+    });
+    document.getElementById('search-job-form').reset();
   }
 
   function handleSubmit(event) {
@@ -313,7 +375,9 @@ export default function ProductionSheet(props) {
       });
     setWeekAndYear({
       year: searchParams.year,
-      week: searchParams.week
+      yearId: searchParams.yearId,
+      week: searchParams.week,
+      weekId: searchParams.weekId
     });
     setSearchParams({
       yearId: '',
@@ -323,8 +387,8 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-  // FINISH 🏁
 
+  // FINISH 🏁
   return (
     <div>
       <div>
@@ -364,7 +428,7 @@ export default function ProductionSheet(props) {
               <select className="form-select fw-light m-1" aria-label="Default select example" onChange={handleYearChange}>
                 <option>Select a year.</option>
                 {
-                  years.map(event => {
+                  yearsList.map(event => {
                     return (
                       <option id={event.yearId} key={event.yearId}>{event.year}</option>
                     );
@@ -374,7 +438,7 @@ export default function ProductionSheet(props) {
               <select className=" form-select fw-light m-1" aria-label="Default select example" onChange={handleWeekChange}>
                 <option>Select a week.</option>
                 {
-                  weeks.map(event => {
+                  weeksList.map(event => {
                     return (
                       <option id={event.weekId} key={event.weekId}>{event.week}</option>
                     );
@@ -387,9 +451,10 @@ export default function ProductionSheet(props) {
             </form>
           </div>
         </div>
-        <div className="mt-3  d-flex flex-row justify-content-end">
+        <div className="mt-3  d-flex flex-row justify-space-between">
           <NewJobModal
-            onSubmit={addJob} job={job} values={values} setValues={setValues} years={years} weeks={weeks} distributors={distributors} handleYearIdChange={handleYearIdChange}
+            onSubmit={addJob} job={job} values={values} setValues={setValues} yearsList={yearsList} weeksList={weeksList} distributors={distributors}
+            closeModal={closeModal} handleYearIdChange={handleYearIdChange}
             handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
             handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
             handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
@@ -425,7 +490,18 @@ export default function ProductionSheet(props) {
                         </div>
                         <div className="col">
                           <div className="d-flex justify-content-end">
-                            <a href=""><i className="fa-solid fa-pen-to-square m-1 edit-icon" /></a>
+                            <EditModal onSubmit={editJob} id={event.jobId} values={values} distributors={distributors}
+                              setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
+                              handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
+                              handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
+                              handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
+                              handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
+                              handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
+                              handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
+                              handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
+                              handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
+                              handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
+                              handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
                           </div>
                         </div>
                       </div>

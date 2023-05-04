@@ -38,7 +38,8 @@ li {
   background-color: #212529;
 }
 
-.new-job-btn {
+.new-job-btn,
+.edit-job-btn {
   border: none;
 }
 

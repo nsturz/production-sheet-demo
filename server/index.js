@@ -27,6 +27,48 @@ app.get('/api/years', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET one year by "yearId" (mainly used in edit-job-modal.jsx) 👇🏼
+app.get('/api/year/:yearId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  if (!yearId) {
+    throw new ClientError(400, 'yearId must be a positive integer');
+  }
+  const sql = `
+  select "year"
+  from "years"
+  where "yearId" = $1`;
+  const params = [yearId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find year with yearId ${yearId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+// GET one week by "weekId" (mainly used in edit-job-modal.jsx) 👇🏼
+app.get('/api/week/:weekId', (req, res, next) => {
+  const weekId = Number(req.params.weekId);
+  if (!weekId) {
+    throw new ClientError(400, 'week must be a positive integer');
+  }
+  const sql = `
+  select "week"
+  from "weeks"
+  where "weekId" = $1`;
+  const params = [weekId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find week with yearId ${weekId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
 // GET all weeks by "yearId" (mainly used in new-job-modal.jsx) 👇🏼
 app.get('/api/weeks/:yearId', (req, res, next) => {
   const yearId = Number(req.params.yearId);
@@ -156,8 +198,8 @@ app.get('/api/jobs/:jobId', (req, res, next) => {
           to_char("dueDate", 'yyyy-MM-dd') as "dueDate",
           to_char("inHomeDate", 'yyyy-MM-dd') as "inHomeDate",
           "jobId",
-          "yearId",
-          "weekId",
+          "yearId" as "yearId",
+          "weekId" as "weekId",
           "companyId",
           "distributorId",
           "jobNumber",
@@ -350,6 +392,102 @@ app.post('/api/new-job', (req, res) => {
             .then(result => {
               const [newJob] = result.rows;
               res.status(201).json(newJob);
+            })
+            .catch(err => {
+              console.error(err);
+              res.status(500).json({ error: 'sad day. error. ' });
+            });
+        });
+    });
+});
+
+// UPDATE Jobs in the database 👇🏼
+app.patch('/api/edit-job/:jobId', (req, res) => {
+  const jobId = Number(req.params.jobId);
+  if (!jobId) {
+    throw new ClientError(400, 'jobId must be a positive integer');
+  }
+  const {
+    yearId,
+    weekId,
+    companyId,
+    companyAddress,
+    companyCity,
+    companyState,
+    companyZip,
+    companyName,
+    distributorId,
+    jobNumber,
+    paperSize,
+    paperWeight,
+    shipDate,
+    dueDate,
+    inHomeDate,
+    instructions,
+    headline,
+    storeCopies,
+    distributorCopies,
+    officeCopies,
+    orderStatus,
+    shippingStatus,
+    paymentStatus
+  } = req.body;
+  const totalCopies = Number(storeCopies) + Number(distributorCopies) + Number(officeCopies);
+  if (!yearId || !weekId || !companyName || !companyId || !companyAddress || !companyCity || !companyState ||
+    !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
+    !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
+    !orderStatus || !shippingStatus || !paymentStatus) {
+    res.status(400).json({ error: 'Make sure you have entered all required fields' });
+    return;
+  }
+  const updateCompanySql = `
+          UPDATE "companies"
+          set    "companyName" = $1
+          where  "companyId" = $2
+          returning *`;
+  const updateCompanyParams = [companyName, companyId];
+  db.query(updateCompanySql, updateCompanyParams)
+    .then(result => {
+      const [updatedCompany] = result.rows;
+      const updateCompanyAddressSql = `
+          UPDATE "companyAddresses"
+          set    "address" = $1,
+                 "city" = $2,
+                 "state" = $3,
+                 "zip" = $4
+          where  "companyAddressId" = $5
+          returning *`;
+      const updateCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip, updatedCompany.companyAddressId];
+      db.query(updateCompanyAddressSql, updateCompanyAddressParams)
+        .then(() => {
+          const updateJobSql = `
+            UPDATE "jobs"
+            set     "yearId" = $1,
+                    "weekId" = $2,
+                    "companyId" = $3,
+                    "distributorId" = $4,
+                    "jobNumber" = $5,
+                    "paperSize" = $6,
+                    "paperWeight" = $7,
+                    "shipDate" = $8,
+                    "dueDate" = $9,
+                    "inHomeDate" = $10,
+                    "instructions" = $11,
+                    "headline" = $12,
+                    "storeCopies" = $13,
+                    "distributorCopies" = $14,
+                    "officeCopies" = $15,
+                    "totalCopies" = $16,
+                    "orderStatus" = $17,
+                    "shippingStatus" = $18,
+                    "paymentStatus" = $19
+            where "jobId" = $20
+            returning *`;
+          const updateJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus, jobId];
+          db.query(updateJobSql, updateJobParams)
+            .then(result => {
+              const [updatedJob] = result.rows;
+              res.status(201).json(updatedJob);
             })
             .catch(err => {
               console.error(err);
