@@ -8,6 +8,10 @@ export default function EditModal(props) {
     week: ''
   });
 
+  // const [companyId, setCompanyId] = useState({
+  //   companyId: ''
+  // })
+
   function getJob(event) {
     const jobId = Number(event.target.id);
     fetch(`/api/jobs/${jobId}`)
@@ -17,6 +21,7 @@ export default function EditModal(props) {
           jobId: job.jobId,
           yearId: job.yearId,
           weekId: job.weekId,
+          companyId: job.companyId,
           companyName: job.companyName,
           companyAddress: job.companyAddress,
           companyCity: job.companyCity,
@@ -56,6 +61,7 @@ export default function EditModal(props) {
       jobId: '',
       yearId: '',
       weekId: '',
+      companyId: '',
       year: '',
       week: '',
       companyName: '',
@@ -89,6 +95,7 @@ export default function EditModal(props) {
       jobId: props.values.jobId,
       yearId: props.values.yearId,
       weekId: props.values.weekId,
+      companyId: props.values.companyId,
       companyName: props.values.companyName,
       companyAddress: props.values.companyAddress,
       companyCity: props.values.companyCity,
@@ -110,11 +117,11 @@ export default function EditModal(props) {
       inHomeDate: props.values.inHomeDate,
       headline: props.values.headline
     };
-    // console.log('editedJob in handleSubmit:', editedJob)
     props.onSubmit(editedJob);
     props.setValues({
       yearId: '',
       weekId: '',
+      companyId: '',
       year: '',
       week: '',
       companyName: '',
@@ -141,11 +148,6 @@ export default function EditModal(props) {
     document.getElementById('search-job-form').reset();
   }
 
-  // console.log('props.values:', props.values)
-  // // console.log('props.year:', props.year)
-  // console.log('year:', year)
-  // console.log('week:', week)
-  // console.log('props.weekAndYear:', props.weekAndYear)
   return (
     <div>
       <button

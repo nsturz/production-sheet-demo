@@ -22,6 +22,7 @@ export default function ProductionSheet(props) {
   const [values, setValues] = useState({
     yearId: '',
     weekId: '',
+    companyId: '',
     jobId: '',
     year: '',
     week: '',
@@ -301,15 +302,16 @@ export default function ProductionSheet(props) {
       },
       body: JSON.stringify(newJob)
     })
-      .then(response => {
-        response.json();
+      .then(response => response.json())
+      .then(newJob => {
+        const newJobList = [...props.jobs];
+        newJobList.push(newJob);
+        props.setJobs({ newJobList });
       })
       .catch(console.error);
   }
 
   function editJob(editedJob) {
-    // console.log('editJob fired')
-    // console.log('editedJob in editJob:', editJob)
     fetch(`/api/edit-job/${editedJob.jobId}`, {
       method: 'PATCH',
       headers: {
@@ -387,12 +389,6 @@ export default function ProductionSheet(props) {
   }
 
   // FINISH 🏁
-  // console.log('props.jobs:', props.jobs)
-  // console.log('weekAndYear:', weekAndYear)
-  // console.log('searchParams:', searchParams)
-  // console.log('values:', values)
-  //  console.log('yearsList:', yearsList)
-  //  console.log('weeksList:', weeksList)
   return (
     <div>
       <div>
