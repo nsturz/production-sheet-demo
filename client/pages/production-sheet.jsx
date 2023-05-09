@@ -466,7 +466,6 @@ export default function ProductionSheet(props) {
             handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
             handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
             handleStateChange={handleStateChange} handleZipChange={handleZipChange} />
-          <CancelJobModal />
         </div>
         {
           // ternary operator renders message when nothing has been searched yet 👇🏼
@@ -504,6 +503,7 @@ export default function ProductionSheet(props) {
                               handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
                               handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
                               handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
+                            <CancelJobModal />
                           </div>
                         </div>
                       </div>
