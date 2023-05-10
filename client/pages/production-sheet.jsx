@@ -331,6 +331,10 @@ export default function ProductionSheet(props) {
       .catch(console.error);
   }
 
+  function cancelJob(selectedJob) {
+
+  }
+
   function closeModal() {
     setValues({
       jobId: '',
@@ -503,7 +507,7 @@ export default function ProductionSheet(props) {
                               handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
                               handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
                               handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
-                            <CancelJobModal />
+                            <CancelJobModal id={event.jobId} onSubmit={cancelJob} jobs={props.jobs} />
                           </div>
                         </div>
                       </div>

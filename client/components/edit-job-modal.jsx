@@ -152,8 +152,8 @@ export default function EditModal(props) {
     <div>
       <button
        onClick={getJob}
-       type="button" className="edit-job-btn bg-transparent " data-bs-toggle="modal" data-bs-target="#editModal">
-        <i className="fa-solid fa-pen-to-square m-1 edit-icon" id={props.id} />
+       type="button" className="edit-job-btn bg-transparent m-0 p-1" data-bs-toggle="modal" data-bs-target="#editModal">
+        <i className="fa-solid fa-pen-to-square edit-icon" id={props.id} />
       </button>
       <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg">
