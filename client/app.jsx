@@ -12,7 +12,7 @@ export default function App() {
       });
   }
   return (
-    <ProductionSheet onSubmit={searchJobs} jobs={jobs}/>
+    <ProductionSheet onSubmit={searchJobs} jobs={jobs} setJobs={setJobs}/>
 
   );
 }

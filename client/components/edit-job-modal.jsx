@@ -8,10 +8,6 @@ export default function EditModal(props) {
     week: ''
   });
 
-  // const [companyId, setCompanyId] = useState({
-  //   companyId: ''
-  // })
-
   function getJob(event) {
     const jobId = Number(event.target.id);
     fetch(`/api/jobs/${jobId}`)
@@ -91,6 +87,7 @@ export default function EditModal(props) {
   }
 
   function handleSubmit(event) {
+    event.preventDefault();
     const editedJob = {
       jobId: props.values.jobId,
       yearId: props.values.yearId,

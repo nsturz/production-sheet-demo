@@ -332,7 +332,12 @@ export default function ProductionSheet(props) {
   }
 
   function cancelJob(selectedJob) {
-
+    const newJobList = [...props.jobs];
+    newJobList.forEach((event, index) => {
+      if (newJobList[index].jobId === selectedJob.jobId) {
+        newJobList.splice(index, 1);
+      } props.setJobs(newJobList);
+    });
   }
 
   function closeModal() {
