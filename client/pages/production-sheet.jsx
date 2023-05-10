@@ -333,12 +333,19 @@ export default function ProductionSheet(props) {
 
   function cancelJob(selectedJob) {
     const newJobList = [...props.jobs];
+    const cancelledJobs = [...props.cancelledJobs];
     newJobList.forEach((event, index) => {
       if (newJobList[index].jobId === selectedJob.jobId) {
-        newJobList.splice(index, 1);
-      } props.setJobs(newJobList);
+        const spliced = newJobList.splice(index, 1);
+        props.setJobs(newJobList);
+        cancelledJobs.push(spliced);
+        props.setCancelledJobs(cancelledJobs);
+      }
     });
   }
+
+  // console.log('props.jobs:', props.jobs)
+  // console.log('props.cancelledJobs:', props.cancelledJobs)
 
   function closeModal() {
     setValues({
