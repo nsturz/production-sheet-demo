@@ -332,16 +332,26 @@ export default function ProductionSheet(props) {
   }
 
   function cancelJob(selectedJob) {
-    const newJobList = [...props.jobs];
-    const cancelledJobs = [...props.cancelledJobs];
-    newJobList.forEach((event, index) => {
-      if (newJobList[index].jobId === selectedJob.jobId) {
-        const spliced = newJobList.splice(index, 1);
-        props.setJobs(newJobList);
-        cancelledJobs.push(spliced);
-        props.setCancelledJobs(cancelledJobs);
-      }
-    });
+    // console.log('selectedJob in cancelJob:', selectedJob)
+    fetch(`/api/cancel-job/${selectedJob.jobId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(selectedJob)
+    })
+      .then(() => {
+        const newJobList = [...props.jobs];
+        const cancelledJobs = [...props.cancelledJobs];
+        newJobList.forEach((event, index) => {
+          if (newJobList[index].jobId === selectedJob.jobId) {
+            const spliced = newJobList.splice(index, 1);
+            props.setJobs(newJobList);
+            cancelledJobs.push(spliced);
+            props.setCancelledJobs(cancelledJobs);
+          }
+        });
+      });
   }
 
   // console.log('props.jobs:', props.jobs)

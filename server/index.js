@@ -461,7 +461,7 @@ app.post('/api/new-job', (req, res) => {
     });
 });
 
-// POST a CANCELLED JOB to the database 👇🏼
+// CANCEL a job, and UPDATE its "isCancelled" status in the database👇🏼
 app.patch('/api/cancel-job/:jobId', (req, res) => {
   const jobId = Number(req.params.jobId);
   if (!jobId) {
