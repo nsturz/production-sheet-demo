@@ -462,59 +462,24 @@ app.post('/api/new-job', (req, res) => {
 });
 
 // POST a CANCELLED JOB to the database 👇🏼
-app.post('/api/cancelled-job', (req, res) => {
-  const {
-    jobId,
-    yearId,
-    weekId,
-    companyId,
-    distributorId,
-    jobNumber,
-    paperSize,
-    paperWeight,
-    shipDate,
-    dueDate,
-    inHomeDate,
-    instructions,
-    headline,
-    storeCopies,
-    distributorCopies,
-    officeCopies,
-    orderStatus,
-    shippingStatus,
-    paymentStatus
-  } = req.body;
-
-  const totalCopies = Number(storeCopies) + Number(distributorCopies) + Number(officeCopies);
-
-  if (!jobId || !yearId || !weekId || !companyId || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
-    !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
-    !orderStatus || !shippingStatus || !paymentStatus) {
-    res.status(400).json({ error: 'Make sure you have entered all required fields' });
-    return;
+app.patch('/api/cancel-job/:jobId', (req, res) => {
+  const jobId = Number(req.params.jobId);
+  if (!jobId) {
+    throw new ClientError(400, 'jobId must be a positive integer');
   }
-  const insertCancelledJobSql = `
-      insert into "cancelledJobs" ("jobId", "yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus")
-      values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18, $19, $20)
-      returning *`;
-  const insertCancelledJobParams = [jobId, yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus];
-  db.query(insertCancelledJobSql, insertCancelledJobParams)
-    .then(() => {
-      const updateJobSql = `
-      UPDATE "jobs"
-      set    "isCancelled" = true
-      where  "jobId" = $1
-      returning *`;
-      const updateJobParams = [jobId];
-      db.query(updateJobSql, updateJobParams)
-        .then(result => {
-          const [newJob] = result.rows;
-          res.status(201).json(newJob);
-        })
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({ error: 'sad day. error. ' });
-        });
+  const updateJobSql = `
+    UPDATE "jobs"
+    set    "isCancelled" = true
+    where  "jobId" = $1
+    returning *`;
+  const updateJobParams = [jobId];
+  db.query(updateJobSql, updateJobParams)
+    .then(result => {
+      res.status(201).json(result.rows);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'sad day. error. ' });
     });
 });
 
