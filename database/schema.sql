@@ -33,6 +33,31 @@ CREATE TABLE "jobs" (
   OIDS=FALSE
 );
 
+CREATE TABLE "cancelledJobs" (
+	"jobId" integer NOT NULL,
+	"yearId" integer NOT NULL,
+	"weekId" integer NOT NULL,
+	"companyId" integer NOT NULL,
+	"distributorId" integer NOT NULL,
+	"jobNumber" TEXT NOT NULL,
+	"paperSize" TEXT NOT NULL,
+	"paperWeight" TEXT NOT NULL,
+	"shipDate" DATE NOT NULL,
+	"dueDate" DATE NOT NULL,
+	"inHomeDate" DATE NOT NULL,
+	"instructions" TEXT NOT NULL,
+	"headline" TEXT NOT NULL,
+	"storeCopies" integer NOT NULL,
+	"distributorCopies" integer NOT NULL,
+	"officeCopies" integer NOT NULL,
+	"totalCopies" integer NOT NULL,
+	"orderStatus" TEXT NOT NULL,
+	"shippingStatus" TEXT NOT NULL,
+	"paymentStatus" TEXT NOT NULL
+) WITH (
+  OIDS=FALSE
+);
+
 
 
 CREATE TABLE "companies" (
@@ -115,3 +140,9 @@ ALTER TABLE "distributors" ADD CONSTRAINT "distributors_fk0" FOREIGN KEY ("distr
 
 
 ALTER TABLE "weeks" ADD CONSTRAINT "weeks_fk0" FOREIGN KEY ("yearId") REFERENCES "years"("yearId");
+
+ALTER TABLE "cancelledJobs" ADD CONSTRAINT "cancelledJobs_fk0" FOREIGN KEY ("jobId") REFERENCES "jobs"("jobId");
+ALTER TABLE "cancelledJobs" ADD CONSTRAINT "cancelledJobs_fk1" FOREIGN KEY ("yearId") REFERENCES "years"("yearId");
+ALTER TABLE "cancelledJobs" ADD CONSTRAINT "cancelledJobs_fk2" FOREIGN KEY ("weekId") REFERENCES "weeks"("weekId");
+ALTER TABLE "cancelledJobs" ADD CONSTRAINT "cancelledJobs_fk3" FOREIGN KEY ("companyId") REFERENCES "companies"("companyId");
+ALTER TABLE "cancelledJobs" ADD CONSTRAINT "cancelledJobs_fk4" FOREIGN KEY ("distributorId") REFERENCES "distributors"("distributorId");

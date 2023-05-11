@@ -37,4 +37,28 @@ values (
   'Approved',
   'Shipped',
   'Paid'
-)
+);
+
+insert into "cancelledJobs" ("jobId", "yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus")
+values (
+  1,
+  1,
+  1,
+  1,
+  1,
+  'ASH23-01-001',
+  '10.75 x 11.875 Full Bleed',
+  '43#',
+  DATE '2022-12-15',
+  DATE '2022-12-22',
+  DATE '2023-1-2',
+  'N/A',
+  'NEW YEAR, NEW BRANDS, NEW...',
+  200,
+  345000,
+  100,
+  345300,
+  'Approved',
+  'Shipped',
+  'Paid'
+);
