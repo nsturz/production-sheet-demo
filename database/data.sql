@@ -16,7 +16,7 @@ values      ('Furniture Connection - Clarksville', 1);
 insert into "distributors" ("distributorName", "distributorAddressId")
 values      ('Valassis Atlanta', 1);
 
-insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus")
+insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus", "isCancelled")
 values (
   1,
   1,
@@ -36,7 +36,8 @@ values (
   345300,
   'Approved',
   'Shipped',
-  'Paid'
+  'Paid',
+  false
 );
 
 insert into "cancelledJobs" ("jobId", "yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus")

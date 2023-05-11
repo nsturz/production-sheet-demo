@@ -28,6 +28,7 @@ CREATE TABLE "jobs" (
 	"orderStatus" TEXT NOT NULL,
 	"shippingStatus" TEXT NOT NULL,
 	"paymentStatus" TEXT NOT NULL,
+	"isCancelled" BOOLEAN NOT NULL,
 	CONSTRAINT "jobs_pk" PRIMARY KEY ("jobId")
 ) WITH (
   OIDS=FALSE
