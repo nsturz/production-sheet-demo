@@ -187,6 +187,65 @@ app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET all CANCELLED JOBS based on year id AND weekId👇🏼
+app.get('/api/cancelled-job-list/:yearId/:weekId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  const weekId = Number(req.params.weekId);
+  if (!yearId && !weekId) {
+    throw new ClientError(400, 'You must include a yearId and weekId in the request.');
+  } else if (!yearId || !weekId) {
+    throw new ClientError(400, 'Both a yearId and weekId must be included in the request.');
+
+  }
+  const sql = `
+   select to_char("shipDate",'yyyy-MM-dd') as "shipDate",
+          to_char("dueDate", 'yyyy-MM-dd') as "dueDate",
+          to_char("inHomeDate", 'yyyy-MM-dd') as "inHomeDate",
+          "jobId",
+          "yearId",
+          "weekId",
+          "companyId",
+          "distributorId",
+          "jobNumber",
+          "paperSize",
+          "paperWeight",
+          "instructions",
+          "headline",
+          "storeCopies",
+          "distributorCopies",
+          "officeCopies",
+          "totalCopies",
+          "orderStatus",
+          "paymentStatus",
+          "shippingStatus",
+          "companyName",
+          "distributorName",
+          "companyAddresses"."address" as "companyAddress",
+          "companyAddresses"."city" as "companyCity",
+          "companyAddresses"."state" as "companyState",
+          "companyAddresses"."zip" as "companyZip",
+          "distributorAddresses"."address" as "distributorAddress",
+          "distributorAddresses"."city" as "distributorCity",
+          "distributorAddresses"."state" as "distributorState",
+          "distributorAddresses"."zip" as "distributorZip"
+   from "jobs"
+   join "companies" using ("companyId")
+   join "distributors" using ("distributorId")
+   join "companyAddresses" using ("companyAddressId")
+   join "distributorAddresses" using ("distributorAddressId")
+   where "yearId" = $1 AND "weekId" = $2 AND "isCancelled" = true
+   order by "jobId" asc`;
+  const params = [yearId, weekId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find jobs with yearId ${yearId} and weekId ${weekId}`);
+      }
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 // GET all job info about one job 👇🏼
 app.get('/api/jobs/:jobId', (req, res, next) => {
   const jobId = Number(req.params.jobId);
