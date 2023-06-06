@@ -306,8 +306,8 @@ export default function ProductionSheet(props) {
       .then(response => response.json())
       .then(newJob => {
         const jobList = [...props.jobs];
-        const newJobList = jobList.concat(newJob);
-        props.setJobs({ newJobList });
+        jobList.push(newJob);
+        props.setJobs({ jobList });
       })
       .catch(console.error);
   }
