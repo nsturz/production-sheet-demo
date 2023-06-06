@@ -105,7 +105,7 @@ app.get('/api/total-copies/:yearId/:weekId', (req, res, next) => {
   const sql = `
   SELECT SUM("totalCopies")
   from   "jobs"
-  where "yearId" = $1 AND "weekId" = $2`;
+  where "yearId" = $1 AND "weekId" = $2 AND "isCancelled" = false`;
   const params = [yearId, weekId];
   db.query(sql, params)
     .then(result => {

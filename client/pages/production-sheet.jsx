@@ -353,6 +353,17 @@ export default function ProductionSheet(props) {
             // props.setCancelledJobs(newCancelledJobs);
           }
         });
+      });
+
+    //   🛑🛑🛑
+    const params = {
+      yearId: weekAndYear.yearId,
+      weekId: weekAndYear.weekId
+    };
+    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+      .then(res => res.json())
+      .then(totalCopies => {
+        setTotalCopies(totalCopies);
       })
       .catch(console.error);
   }
@@ -414,6 +425,7 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
+
   // FINISH 🏁
   return (
     <div>
