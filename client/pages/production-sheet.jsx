@@ -305,8 +305,8 @@ export default function ProductionSheet(props) {
     })
       .then(response => response.json())
       .then(newJob => {
-        const newJobList = [...props.jobs];
-        newJobList.push(newJob);
+        const jobList = [...props.jobs];
+        const newJobList = jobList.concat(newJob);
         props.setJobs({ newJobList });
       })
       .catch(console.error);
@@ -341,13 +341,14 @@ export default function ProductionSheet(props) {
     })
       .then(() => {
         const newJobList = [...props.jobs];
-        const cancelledJobs = [...props.cancelledJobs];
+        // const cancelledJobs = [...props.cancelledJobs];
         newJobList.forEach((event, index) => {
           if (newJobList[index].jobId === selectedJob.jobId) {
-            const spliced = newJobList.splice(index, 1);
+            // const spliced =
+            newJobList.splice(index, 1);
             props.setJobs(newJobList);
-            cancelledJobs.push(spliced);
-            props.setCancelledJobs(cancelledJobs);
+            // const newCancelledJobs = cancelledJobs.concat(spliced);
+            // props.setCancelledJobs(newCancelledJobs);
           }
         });
       });
@@ -410,7 +411,6 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-
   // FINISH 🏁
   return (
     <div>

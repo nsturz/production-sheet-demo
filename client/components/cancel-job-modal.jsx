@@ -9,10 +9,7 @@ export default function CancelJobModal(props) {
   }
 
   function handleClick(event) {
-    // console.log('handleClick fired!')
     setSelectedJobId(Number(event.target.id));
-    // console.log('event target:', event.target)
-    // console.log('selectedJobId INSIDE handleClick:', selectedJobId)
   }
 
   function handleSubmit(event) {
