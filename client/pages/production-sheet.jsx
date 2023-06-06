@@ -332,7 +332,6 @@ export default function ProductionSheet(props) {
   }
 
   function cancelJob(selectedJob) {
-    // console.log('selectedJob in cancelJob:', selectedJob)
     fetch(`/api/cancel-job/${selectedJob.jobId}`, {
       method: 'PATCH',
       headers: {
@@ -353,9 +352,6 @@ export default function ProductionSheet(props) {
         });
       });
   }
-
-  // console.log('props.jobs:', props.jobs)
-  // console.log('props.cancelledJobs:', props.cancelledJobs)
 
   function closeModal() {
     setValues({

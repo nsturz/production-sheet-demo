@@ -23,7 +23,6 @@ export default function CancelJobModal(props) {
     // console.log('selectedJob in handleSubmit:', selectedJob)
     props.onSubmit(selectedJob);
     setSelectedJobId('');
-    document.getElementById('cancel-job-form').reset();
   }
 
   // console.log('selectedJobId OUTSIDE handleClick:', selectedJobId)
@@ -49,7 +48,7 @@ export default function CancelJobModal(props) {
                 <div className="modal-footer">
                   <button onClick={closeModal}
                   type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" className="btn btn-primary bg-danger border-0" data-bs-dismiss="modal">Confirm</button>
+                  <button type="submit" className="btn btn-primary bg-danger border-0">Confirm</button>
                 </div>
               </div>
             </div>
