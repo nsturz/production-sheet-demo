@@ -1,29 +1,23 @@
-import React, { useState }
-  from 'react';
+import React from 'react';
 
 export default function CancelJobModal(props) {
-  const [selectedJobId, setSelectedJobId] = useState('');
 
   function closeModal() {
-    setSelectedJobId('');
+    props.setSelectedJobId('');
   }
 
   function handleClick(event) {
-    setSelectedJobId(Number(event.target.id));
+    props.setSelectedJobId(Number(event.target.id));
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     const selectedJob = {
-      jobId: selectedJobId
+      jobId: props.selectedJobId
     };
-    // console.log('selectedJob in handleSubmit:', selectedJob)
     props.onSubmit(selectedJob);
-    setSelectedJobId('');
+    closeModal();
   }
-
-  // console.log('selectedJobId OUTSIDE handleClick:', selectedJobId)
-  // console.log('props.jobs:', props.jobs)
   return (
     <div>
       <form id="cancel-job-form" onSubmit={handleSubmit}>

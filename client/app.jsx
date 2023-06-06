@@ -14,7 +14,7 @@ export default function App() {
         setJobs(newJobArray);
       });
   }
-  // console.log('jobs in app.jsx:', jobs)
+
   return (
     <ProductionSheet onSubmit={searchJobs} jobs={jobs} setJobs={setJobs}
     cancelledJobs={cancelledJobs} setCancelledJobs={setCancelledJobs}/>

@@ -77,6 +77,8 @@ export default function ProductionSheet(props) {
     weekId: ''
   });
 
+  const [selectedJobId, setSelectedJobId] = useState('');
+
   const handleYearChange = event => {
     event.persist();
     for (let i = 0; i < yearsList.length; i++) {
@@ -351,7 +353,8 @@ export default function ProductionSheet(props) {
             // props.setCancelledJobs(newCancelledJobs);
           }
         });
-      });
+      })
+      .catch(console.error);
   }
 
   function closeModal() {
@@ -525,7 +528,7 @@ export default function ProductionSheet(props) {
                               handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
                               handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
                               handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
-                            <CancelJobModal id={event.jobId} onSubmit={cancelJob} jobs={props.jobs} />
+                            <CancelJobModal id={event.jobId} onSubmit={cancelJob} jobs={props.jobs} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>
                           </div>
                         </div>
                       </div>
