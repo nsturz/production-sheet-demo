@@ -308,6 +308,9 @@ export default function ProductionSheet(props) {
       .then(response => response.json())
       .then(newJob => {
         const jobList = [...props.jobs];
+        if (jobList.length === 0) {
+          return;
+        }
         const newJobList = jobList.concat(newJob);
         props.setJobs(newJobList);
       })
@@ -399,6 +402,11 @@ export default function ProductionSheet(props) {
       yearId: searchParams.yearId,
       weekId: searchParams.weekId
     };
+    if (params.yearId === weekAndYear.yearId && params.weekId === weekAndYear.weekId) {
+      return (
+        window.alert(`The page is already displaying week ${weekAndYear.week} of ${weekAndYear.year}`)
+      );
+    }
     props.onSubmit(params);
     fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
       .then(res => res.json())
@@ -419,7 +427,9 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-  //  console.log('props.jobs:', props.jobs)
+  // console.log('props.jobs!:', props.jobs)
+  // console.log('searchParams:', searchParams)
+  // console.log('weekAndYear:', weekAndYear)
   // FINISH 🏁
   return (
     <div>
