@@ -343,19 +343,13 @@ export default function ProductionSheet(props) {
     })
       .then(() => {
         const newJobList = [...props.jobs];
-        // const cancelledJobs = [...props.cancelledJobs];
         newJobList.forEach((event, index) => {
           if (newJobList[index].jobId === selectedJob.jobId) {
-            // const spliced =
             newJobList.splice(index, 1);
             props.setJobs(newJobList);
-            // const newCancelledJobs = cancelledJobs.concat(spliced);
-            // props.setCancelledJobs(newCancelledJobs);
           }
         });
       });
-
-    //   🛑🛑🛑
     const params = {
       yearId: weekAndYear.yearId,
       weekId: weekAndYear.weekId
@@ -506,7 +500,7 @@ export default function ProductionSheet(props) {
         </div>
         {
           // ternary operator renders message when nothing has been searched yet 👇🏼
-          props.jobs.length === 0
+          props.jobs.length === 0 && weekAndYear.yearId === '' && weekAndYear.weekId === ''
             ? <div className="col-12"><p className="text-center">Nothing to display yet.</p></div>
           // ternary operator renders message when nothing matches the search results 👇🏼
             : props.jobs[0] === undefined
