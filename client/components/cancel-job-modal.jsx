@@ -20,6 +20,20 @@ export default function CancelJobModal(props) {
   }
   return (
     <div>
+      <div className={props.overlay} />
+      <div className={props.deleteModalStyle}>
+        <div className="rounded bg-white mb-2 mt-2 p-3">
+          <form className='d-flex justify-content-center'>
+            <div>
+              <h5 className='text-center mt-5'>Are you sure you want to cancel this job?</h5>
+              <div className="row d-flex flex-nowrap justify-content-center">
+                <button onClick={props.hideDeleteModal}className="btn btn-secondary mt-5 me-3 me-3 mb-5 col-4">Cancel</button>
+                <button className="btn btn-danger mt-5 ms-3 me-3 mb-5 col-4">Confirm</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
       <form id="cancel-job-form" onSubmit={handleSubmit}>
         <button type="button" className="edit-job-btn bg-transparent m-0 p-1 " data-bs-toggle="modal" data-bs-target="#cancelJobModal">
           <i className="fa-solid fa-trash edit-icon" id={props.id} onClick={handleClick}
