@@ -105,7 +105,7 @@ app.get('/api/total-copies/:yearId/:weekId', (req, res, next) => {
   const sql = `
   SELECT SUM("totalCopies")
   from   "jobs"
-  where "yearId" = $1 AND "weekId" = $2`;
+  where "yearId" = $1 AND "weekId" = $2 AND "isCancelled" = false`;
   const params = [yearId, weekId];
   db.query(sql, params)
     .then(result => {
@@ -174,7 +174,66 @@ app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
    join "distributors" using ("distributorId")
    join "companyAddresses" using ("companyAddressId")
    join "distributorAddresses" using ("distributorAddressId")
-   where "yearId" = $1 AND "weekId" = $2
+   where "yearId" = $1 AND "weekId" = $2 AND "isCancelled" = false
+   order by "jobId" asc`;
+  const params = [yearId, weekId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find jobs with yearId ${yearId} and weekId ${weekId}`);
+      }
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+// GET all CANCELLED JOBS based on year id AND weekId👇🏼
+app.get('/api/cancelled-job-list/:yearId/:weekId', (req, res, next) => {
+  const yearId = Number(req.params.yearId);
+  const weekId = Number(req.params.weekId);
+  if (!yearId && !weekId) {
+    throw new ClientError(400, 'You must include a yearId and weekId in the request.');
+  } else if (!yearId || !weekId) {
+    throw new ClientError(400, 'Both a yearId and weekId must be included in the request.');
+
+  }
+  const sql = `
+   select to_char("shipDate",'yyyy-MM-dd') as "shipDate",
+          to_char("dueDate", 'yyyy-MM-dd') as "dueDate",
+          to_char("inHomeDate", 'yyyy-MM-dd') as "inHomeDate",
+          "jobId",
+          "yearId",
+          "weekId",
+          "companyId",
+          "distributorId",
+          "jobNumber",
+          "paperSize",
+          "paperWeight",
+          "instructions",
+          "headline",
+          "storeCopies",
+          "distributorCopies",
+          "officeCopies",
+          "totalCopies",
+          "orderStatus",
+          "paymentStatus",
+          "shippingStatus",
+          "companyName",
+          "distributorName",
+          "companyAddresses"."address" as "companyAddress",
+          "companyAddresses"."city" as "companyCity",
+          "companyAddresses"."state" as "companyState",
+          "companyAddresses"."zip" as "companyZip",
+          "distributorAddresses"."address" as "distributorAddress",
+          "distributorAddresses"."city" as "distributorCity",
+          "distributorAddresses"."state" as "distributorState",
+          "distributorAddresses"."zip" as "distributorZip"
+   from "jobs"
+   join "companies" using ("companyId")
+   join "distributors" using ("distributorId")
+   join "companyAddresses" using ("companyAddressId")
+   join "distributorAddresses" using ("distributorAddressId")
+   where "yearId" = $1 AND "weekId" = $2 AND "isCancelled" = true
    order by "jobId" asc`;
   const params = [yearId, weekId];
   db.query(sql, params)
@@ -360,6 +419,7 @@ app.post('/api/new-job', (req, res) => {
     paymentStatus
   } = req.body;
   const totalCopies = Number(storeCopies) + Number(distributorCopies) + Number(officeCopies);
+  const isCancelled = false;
   if (!yearId || !weekId || !companyName || !companyAddress || !companyCity || !companyState ||
     !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
     !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
@@ -384,10 +444,10 @@ app.post('/api/new-job', (req, res) => {
         .then(result => {
           const [newCompany] = result.rows;
           const insertJobSql = `
-            insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus")
-            values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18, $19)
+            insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus", "isCancelled")
+            values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18, $19, $20)
             returning *`;
-          const insertJobParams = [yearId, weekId, newCompany.companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus];
+          const insertJobParams = [yearId, weekId, newCompany.companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus, isCancelled];
           db.query(insertJobSql, insertJobParams)
             .then(result => {
               const [newJob] = result.rows;
@@ -398,6 +458,28 @@ app.post('/api/new-job', (req, res) => {
               res.status(500).json({ error: 'sad day. error. ' });
             });
         });
+    });
+});
+
+// CANCEL a job, and UPDATE its "isCancelled" status in the database👇🏼
+app.patch('/api/cancel-job/:jobId', (req, res) => {
+  const jobId = Number(req.params.jobId);
+  if (!jobId) {
+    throw new ClientError(400, 'jobId must be a positive integer');
+  }
+  const updateJobSql = `
+    UPDATE "jobs"
+    set    "isCancelled" = true
+    where  "jobId" = $1
+    returning *`;
+  const updateJobParams = [jobId];
+  db.query(updateJobSql, updateJobParams)
+    .then(result => {
+      res.status(201).json(result.rows);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'sad day. error. ' });
     });
 });
 

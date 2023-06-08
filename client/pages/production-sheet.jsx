@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/navbar';
 import NewJobModal from '../components/new-job-form-modal';
 import EditModal from '../components/edit-job-modal';
+import CancelJobModal from '../components/cancel-job-modal';
 
 export default function ProductionSheet(props) {
   // this grabs all the years from the database and creates an array in state👇🏼
@@ -75,6 +76,8 @@ export default function ProductionSheet(props) {
     week: '',
     weekId: ''
   });
+
+  const [selectedJobId, setSelectedJobId] = useState('');
 
   const handleYearChange = event => {
     event.persist();
@@ -294,7 +297,7 @@ export default function ProductionSheet(props) {
     }));
   };
 
-  function addJob(newJob, event) {
+  function addJob(newJob) {
     fetch('/api/new-job', {
       method: 'POST',
       headers: {
@@ -304,9 +307,12 @@ export default function ProductionSheet(props) {
     })
       .then(response => response.json())
       .then(newJob => {
-        const newJobList = [...props.jobs];
-        newJobList.push(newJob);
-        props.setJobs({ newJobList });
+        const jobList = [...props.jobs];
+        if (jobList.length === 0) {
+          return;
+        }
+        const newJobList = jobList.concat(newJob);
+        props.setJobs(newJobList);
       })
       .catch(console.error);
   }
@@ -326,6 +332,35 @@ export default function ProductionSheet(props) {
             newJobList.splice(i, 1, editedJob);
           }
         } props.setJobs(newJobList);
+      })
+      .catch(console.error);
+  }
+
+  function cancelJob(selectedJob) {
+    fetch(`/api/cancel-job/${selectedJob.jobId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(selectedJob)
+    })
+      .then(() => {
+        const newJobList = [...props.jobs];
+        newJobList.forEach((event, index) => {
+          if (newJobList[index].jobId === selectedJob.jobId) {
+            newJobList.splice(index, 1);
+            props.setJobs(newJobList);
+          }
+        });
+      });
+    const params = {
+      yearId: weekAndYear.yearId,
+      weekId: weekAndYear.weekId
+    };
+    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+      .then(res => res.json())
+      .then(totalCopies => {
+        setTotalCopies(totalCopies);
       })
       .catch(console.error);
   }
@@ -367,6 +402,11 @@ export default function ProductionSheet(props) {
       yearId: searchParams.yearId,
       weekId: searchParams.weekId
     };
+    if (params.yearId === weekAndYear.yearId && params.weekId === weekAndYear.weekId) {
+      return (
+        window.alert(`The page is already displaying week ${weekAndYear.week} of ${weekAndYear.year}`)
+      );
+    }
     props.onSubmit(params);
     fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
       .then(res => res.json())
@@ -387,7 +427,9 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-
+  // console.log('props.jobs!:', props.jobs)
+  // console.log('searchParams:', searchParams)
+  // console.log('weekAndYear:', weekAndYear)
   // FINISH 🏁
   return (
     <div>
@@ -468,117 +510,120 @@ export default function ProductionSheet(props) {
         </div>
         {
           // ternary operator renders message when nothing has been searched yet 👇🏼
-          props.jobs.length === 0
+          props.jobs.length === 0 && weekAndYear.yearId === '' && weekAndYear.weekId === ''
             ? <div className="col-12"><p className="text-center">Nothing to display yet.</p></div>
           // ternary operator renders message when nothing matches the search results 👇🏼
             : props.jobs[0] === undefined
               ? <div className="col-12"><p className="text-center">That search does not match any criteria.</p></div>
               // this is rendered when we successfully have search results 👇🏼
-              : <ul id="job-list">
-                {
-                props.jobs.map(event => {
-                  return (
-                    <li className="mt-3 mb-5 col-12 job-container" key={event.jobId}>
-                      <div className="d-flex flex-row">
-                        <div className="col">
-                          <div className="d-flex mt-1 mb-1">
-                            <h4 id="order-number" className="job-status m-1">{event.jobNumber}</h4>
-                            <h4 id="order-status" className="job-status m-1 text-info">{event.orderStatus}</h4>
-                            <h4 id="payment-status " className="job-status m-1 text-success">{event.paymentStatus}</h4>
-                            <h4 id="shipping-status " className="job-status m-1">{event.shippingStatus}</h4>
+              : props.jobs.length !== 0 && typeof weekAndYear.yearId === 'number' && typeof weekAndYear.weekId === 'number'
+                ? <ul id="job-list">
+                  {
+                  props.jobs.map(event => {
+                    return (
+                      <li className="mt-3 mb-5 col-12 job-container" key={event.jobId}>
+                        <div className="d-flex flex-row">
+                          <div className="col">
+                            <div className="d-flex mt-1 mb-1">
+                              <h4 id="order-number" className="job-status m-1">{event.jobNumber}</h4>
+                              <h4 id="order-status" className="job-status m-1 text-info">{event.orderStatus}</h4>
+                              <h4 id="payment-status " className="job-status m-1 text-success">{event.paymentStatus}</h4>
+                              <h4 id="shipping-status " className="job-status m-1">{event.shippingStatus}</h4>
+                            </div>
+                          </div>
+                          <div className="col">
+                            <div className="d-flex justify-content-end">
+                              <EditModal onSubmit={editJob} id={event.jobId} values={values} distributors={distributors}
+                                setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
+                                handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
+                                handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
+                                handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
+                                handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
+                                handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
+                                handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
+                                handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
+                                handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
+                                handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
+                                handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
+                              <CancelJobModal id={event.jobId} onSubmit={cancelJob} jobs={props.jobs} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>
+                            </div>
                           </div>
                         </div>
-                        <div className="col">
-                          <div className="d-flex justify-content-end">
-                            <EditModal onSubmit={editJob} id={event.jobId} values={values} distributors={distributors}
-                              setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
-                              handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
-                              handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
-                              handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
-                              handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
-                              handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
-                              handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
-                              handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
-                              handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
-                              handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
-                              handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
+                        <div className="d-flex flex-row">
+                          <div className="col-12 box-shadow">
+                            <div id="job-details-header-1" className="d-flex job-details-header p-1">
+                              <p className="col fw-bold ">Company Name</p>
+                              <p className=" col fw-bold">Paper Size</p>
+                              <p className=" col fw-bold">Paper Weight</p>
+                              <p className="col fw-bold">Ship Date</p>
+                              <p className=" col fw-bold">Due Date</p>
+                              <p className=" col fw-bold">In Home Date</p>
+                            </div>
+                            <div id="job-details-1" className="d-flex job-details p-1">
+                              <p id="company-name" className="m-1 col">{event.companyName}</p>
+                              {/* will need to figure out how to allow "quotation marks" */}
+                              <p id="paper-size" className="overflow-x m-1 col">{event.paperSize}</p>
+                              <p id="paper-weight" className="m-1 col">{event.paperWeight}</p>
+                              <p id="ship-date" className="text-danger m-1 col">{event.shipDate}</p>
+                              <p id="due-date" className="text-danger m-1 col">{event.dueDate}</p>
+                              <p id="in-home-date" className="text-danger m-1 col">{event.inHomeDate}</p>
+                            </div>
+                            <div id="job-details-header-2" className="d-flex job-details-header p-1">
+                              <p className="m-1 col fw-bold ">Instructions</p>
+                              <p className="m-1 col fw-bold">Headline</p>
+                              <p className="m-1 col fw-bold">Store Copies</p>
+                              <p className="m-1 col fw-bold">{event.distributorName} Copies</p>
+                              <p className="m-1 col fw-bold">Office Copies</p>
+                              <p className="m-1 col fw-bold">Total Copies</p>
+                            </div>
+                            <div id="job-details-2 " className="d-flex job-details p-1">
+                              <p className="m-1 col ">{event.instructions}</p>
+                              <p className="m-1 col">{event.headline}</p>
+                              <p className="m-1 col">{event.storeCopies}</p>
+                              <p className="m-1 col">{event.distributorCopies}</p>
+                              <p className="m-1 col">{event.officeCopies}</p>
+                              <p className="m-1 col">{event.totalCopies}</p>
+                            </div>
+                            <div id="job-details-header-3 " className="d-flex job-details-header p-1">
+                              <p className="m-1 col fw-bold ">Destination</p>
+                              <p className="m-1 col fw-bold">Address</p>
+                              <p className="m-1 col fw-bold">City</p>
+                              <p className="m-1 col fw-bold">State</p>
+                              <p className="m-1 col fw-bold">Zip</p>
+                              <p className="m-1 col fw-bold" />
+                            </div>
+                            <div id="job-details-3 " className="d-flex job-details p-1">
+                              <p className="m-1 col ">{event.distributorName}</p>
+                              <p className="m-1 col">{event.distributorAddress}</p>
+                              <p className="m-1 col">{event.distributorCity}</p>
+                              <p className="m-1 col">{event.distributorState}</p>
+                              <p className="m-1 col">{event.distributorZip}</p>
+                              <p className="m-1 col fw-bold" />
+                            </div>
+                            <div id="job-details-3 " className="d-flex job-details p-1">
+                              <p className="m-1 col ">{event.companyName}</p>
+                              <p className="m-1 col">{event.companyAddress}</p>
+                              <p className="m-1 col">{event.companyCity}</p>
+                              <p className="m-1 col">{event.companyState}</p>
+                              <p className="m-1 col">{event.companyZip}</p>
+                              <p className="m-1 col fw-bold" />
+                            </div>
+                            <div id="job-details-3 " className="d-flex job-details p-1">
+                              <p className="m-1 col ">Color Ad</p>
+                              <p className="m-1 col">N/A</p>
+                              <p className="m-1 col">N/A</p>
+                              <p className="m-1 col">N/A</p>
+                              <p className="m-1 col">N/A</p>
+                              <p className="m-1 col fw-bold" />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="d-flex flex-row">
-                        <div className="col-12 box-shadow">
-                          <div id="job-details-header-1" className="d-flex job-details-header p-1">
-                            <p className="col fw-bold ">Company Name</p>
-                            <p className=" col fw-bold">Paper Size</p>
-                            <p className=" col fw-bold">Paper Weight</p>
-                            <p className="col fw-bold">Ship Date</p>
-                            <p className=" col fw-bold">Due Date</p>
-                            <p className=" col fw-bold">In Home Date</p>
-                          </div>
-                          <div id="job-details-1" className="d-flex job-details p-1">
-                            <p id="company-name" className="m-1 col">{event.companyName}</p>
-                            {/* will need to figure out how to allow "quotation marks" */}
-                            <p id="paper-size" className="overflow-x m-1 col">{event.paperSize}</p>
-                            <p id="paper-weight" className="m-1 col">{event.paperWeight}</p>
-                            <p id="ship-date" className="text-danger m-1 col">{event.shipDate}</p>
-                            <p id="due-date" className="text-danger m-1 col">{event.dueDate}</p>
-                            <p id="in-home-date" className="text-danger m-1 col">{event.inHomeDate}</p>
-                          </div>
-                          <div id="job-details-header-2" className="d-flex job-details-header p-1">
-                            <p className="m-1 col fw-bold ">Instructions</p>
-                            <p className="m-1 col fw-bold">Headline</p>
-                            <p className="m-1 col fw-bold">Store Copies</p>
-                            <p className="m-1 col fw-bold">{event.distributorName} Copies</p>
-                            <p className="m-1 col fw-bold">Office Copies</p>
-                            <p className="m-1 col fw-bold">Total Copies</p>
-                          </div>
-                          <div id="job-details-2 " className="d-flex job-details p-1">
-                            <p className="m-1 col ">{event.instructions}</p>
-                            <p className="m-1 col">{event.headline}</p>
-                            <p className="m-1 col">{event.storeCopies}</p>
-                            <p className="m-1 col">{event.distributorCopies}</p>
-                            <p className="m-1 col">{event.officeCopies}</p>
-                            <p className="m-1 col">{event.totalCopies}</p>
-                          </div>
-                          <div id="job-details-header-3 " className="d-flex job-details-header p-1">
-                            <p className="m-1 col fw-bold ">Destination</p>
-                            <p className="m-1 col fw-bold">Address</p>
-                            <p className="m-1 col fw-bold">City</p>
-                            <p className="m-1 col fw-bold">State</p>
-                            <p className="m-1 col fw-bold">Zip</p>
-                            <p className="m-1 col fw-bold" />
-                          </div>
-                          <div id="job-details-3 " className="d-flex job-details p-1">
-                            <p className="m-1 col ">{event.distributorName}</p>
-                            <p className="m-1 col">{event.distributorAddress}</p>
-                            <p className="m-1 col">{event.distributorCity}</p>
-                            <p className="m-1 col">{event.distributorState}</p>
-                            <p className="m-1 col">{event.distributorZip}</p>
-                            <p className="m-1 col fw-bold" />
-                          </div>
-                          <div id="job-details-3 " className="d-flex job-details p-1">
-                            <p className="m-1 col ">{event.companyName}</p>
-                            <p className="m-1 col">{event.companyAddress}</p>
-                            <p className="m-1 col">{event.companyCity}</p>
-                            <p className="m-1 col">{event.companyState}</p>
-                            <p className="m-1 col">{event.companyZip}</p>
-                            <p className="m-1 col fw-bold" />
-                          </div>
-                          <div id="job-details-3 " className="d-flex job-details p-1">
-                            <p className="m-1 col ">Color Ad</p>
-                            <p className="m-1 col">N/A</p>
-                            <p className="m-1 col">N/A</p>
-                            <p className="m-1 col">N/A</p>
-                            <p className="m-1 col">N/A</p>
-                            <p className="m-1 col fw-bold" />
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })
-            }
-              </ul>
+                      </li>
+                    );
+                  })
+                }
+                </ul>
+                : <div className="col-12"><p className="text-center">Nothing to display yet.</p></div>
         }
       </div>
     </div>
