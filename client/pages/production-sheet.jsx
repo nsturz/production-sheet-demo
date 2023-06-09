@@ -81,7 +81,9 @@ export default function ProductionSheet(props) {
 
   // *** Modal state and functions for delete job, add job, and edit job*** 👇🏼
   const [overlay, setOverlay] = useState('overlay d-none');
+  const [editOverlay, setEditOverlay] = useState('overlay d-none');
   const [deleteModalStyle, setDeleteModalStyle] = useState('position-fixed delete-modal-wrapper col-10 col-lg-8 d-none');
+  const [editModalStyle, setEditModalStyle] = useState('position-absolute edit-modal-wrapper col-10 bg-white rounded d-none');
 
   const showDeleteModal = event => {
     event.preventDefault();
@@ -95,6 +97,18 @@ export default function ProductionSheet(props) {
     setOverlay('overlay d-none');
     setDeleteModalStyle('position-fixed delete-modal-wrapper col-10 col-lg-8 d-none');
     setSelectedJobId('');
+  };
+
+  const showEditModal = event => {
+    event.preventDefault();
+    setEditOverlay('overlay');
+    setEditModalStyle('position-absolute edit-modal-wrapper col-10 bg-white rounded');
+  };
+
+  const hideEditModal = event => {
+    event.preventDefault();
+    setEditOverlay('overlay d-none');
+    setEditModalStyle('position-absolute edit-modal-wrapper col-10 bg-white rounded d-none');
   };
 
   //* ** HandleChange functions for year and week 👇🏼 ***
@@ -560,7 +574,9 @@ export default function ProductionSheet(props) {
                                 handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
                                 handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
                                 handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
-                                handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
+                                handleStateChange={handleStateChange} handleZipChange={handleZipChange} editModalStyle={editModalStyle} setEditModalStyle={setEditModalStyle}
+                                editOverlay={editOverlay} setEditOverlay={setEditOverlay} hideEditModal={hideEditModal}/>
+                              <button onClick={showEditModal}>Edit</button>
                               <button onClick={showDeleteModal} className="edit-job-btn bg-transparent m-0 p-1 " >
                                 <i className="fa-solid fa-trash edit-icon" id={event.jobId}/>
                               </button>
