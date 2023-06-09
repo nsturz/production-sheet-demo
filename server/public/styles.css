@@ -11,8 +11,11 @@ body {
 }
 
 .delete-modal-wrapper {
-  top: 40%;
-  left: 33%;
+  /* top: 40%;
+  left: 33%; */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .edit-icon {
@@ -88,7 +91,7 @@ ul {
   }
 }
 
-@media screen and (max-width: 950px) {
+/* @media screen and (max-width: 950px) {
   .delete-modal-wrapper {
     top: 40%;
     left: 30%;
@@ -170,4 +173,4 @@ ul {
     top: 40%;
     left: 1%;
   }
-}
+} */

@@ -81,18 +81,20 @@ export default function ProductionSheet(props) {
 
   // *** Modal state and functions for delete job, add job, and edit job*** 👇🏼
   const [overlay, setOverlay] = useState('overlay d-none');
-  const [deleteModalStyle, setDeleteModalStyle] = useState('position-absolute delete-modal-wrapper d-none');
+  const [deleteModalStyle, setDeleteModalStyle] = useState('position-fixed delete-modal-wrapper col-10 col-lg-8 d-none');
 
   const showDeleteModal = event => {
     event.preventDefault();
     setOverlay('overlay');
-    setDeleteModalStyle('position-absolute delete-modal-wrapper');
+    setDeleteModalStyle('position-fixed delete-modal-wrapper col-10 col-lg-8');
+    setSelectedJobId(Number(event.target.id));
   };
 
   const hideDeleteModal = event => {
     event.preventDefault();
     setOverlay('overlay d-none');
-    setDeleteModalStyle('position-absolute delete-modal-wrapper d-none');
+    setDeleteModalStyle('position-fixed delete-modal-wrapper col-10 col-lg-8 d-none');
+    setSelectedJobId('');
   };
 
   //* ** HandleChange functions for year and week 👇🏼 ***
@@ -444,9 +446,6 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-  // console.log('props.jobs!:', props.jobs)
-  // console.log('searchParams:', searchParams)
-  // console.log('weekAndYear:', weekAndYear)
   // FINISH 🏁
   return (
     <div>
@@ -562,9 +561,9 @@ export default function ProductionSheet(props) {
                                 handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
                                 handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
                                 handleStateChange={handleStateChange} handleZipChange={handleZipChange}/>
-                              <button onClick={showDeleteModal}>HA!</button>
-                              <CancelJobModal id={event.jobId} onSubmit={cancelJob} jobs={props.jobs} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}
-                                overlay={overlay} deleteModalStyle={deleteModalStyle} hideDeleteModal={hideDeleteModal}/>
+                              <button onClick={showDeleteModal} className="edit-job-btn bg-transparent m-0 p-1 " >
+                                <i className="fa-solid fa-trash edit-icon" id={event.jobId}/>
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -637,6 +636,8 @@ export default function ProductionSheet(props) {
                             </div>
                           </div>
                         </div>
+                        <CancelJobModal onClick={showDeleteModal} onSubmit={cancelJob} jobs={props.jobs} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}
+                          overlay={overlay} setOverlay={setOverlay} deleteModalStyle={deleteModalStyle} setDeleteModalStyle={setDeleteModalStyle} hideDeleteModal={hideDeleteModal} />
                       </li>
                     );
                   })
