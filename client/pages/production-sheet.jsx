@@ -537,6 +537,15 @@ export default function ProductionSheet(props) {
             handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
             handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
             handleStateChange={handleStateChange} handleZipChange={handleZipChange} />
+          {
+             (typeof weekAndYear.year === 'number' &&
+              typeof weekAndYear.week === 'number' &&
+              props.jobs.length !== 0)
+               ? <button onClick={showEditModal} type="button" className="edit-job-btn bg-transparent m-0 p-1">
+                 <i className="fa-solid fa-pen-to-square edit-icon" id={props.id} />
+               </button>
+               : <div />
+            }
         </div>
         {
           // ternary operator renders message when nothing has been searched yet 👇🏼
@@ -563,20 +572,6 @@ export default function ProductionSheet(props) {
                           </div>
                           <div className="col">
                             <div className="d-flex justify-content-end">
-                              <EditModal onSubmit={editJob} id={event.jobId} values={values} distributors={distributors}
-                                setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
-                                handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
-                                handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
-                                handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
-                                handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
-                                handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
-                                handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
-                                handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
-                                handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
-                                handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
-                                handleStateChange={handleStateChange} handleZipChange={handleZipChange} editModalStyle={editModalStyle} setEditModalStyle={setEditModalStyle}
-                                editOverlay={editOverlay} setEditOverlay={setEditOverlay} hideEditModal={hideEditModal}/>
-                              <button onClick={showEditModal}>Edit</button>
                               <button onClick={showDeleteModal} className="edit-job-btn bg-transparent m-0 p-1 " >
                                 <i className="fa-solid fa-trash edit-icon" id={event.jobId}/>
                               </button>
@@ -661,6 +656,19 @@ export default function ProductionSheet(props) {
                 </ul>
                 : <div className="col-12"><p className="text-center">Nothing to display yet.</p></div>
         }
+        <EditModal onSubmit={editJob}values={values} jobs={props.jobs} distributors={distributors}
+          setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
+          handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
+          handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
+          handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
+          handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
+          handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
+          handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
+          handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
+          handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
+          handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
+          handleStateChange={handleStateChange} handleZipChange={handleZipChange} editModalStyle={editModalStyle} setEditModalStyle={setEditModalStyle}
+          editOverlay={editOverlay} setEditOverlay={setEditOverlay} hideEditModal={hideEditModal} />
       </div>
     </div>
   );

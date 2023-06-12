@@ -10,6 +10,9 @@ export default function EditModal(props) {
 
   function getJob(event) {
     const jobId = Number(event.target.id);
+    // props.jobs.forEach((event, index) => {
+    //   event.jobNumber === jobNumber ?
+    // })
     fetch(`/api/jobs/${jobId}`)
       .then(response => response.json())
       .then(job => {
@@ -52,39 +55,39 @@ export default function EditModal(props) {
       });
   }
 
-  function closeModal() {
-    props.setValues({
-      jobId: '',
-      yearId: '',
-      weekId: '',
-      companyId: '',
-      year: '',
-      week: '',
-      companyName: '',
-      companyAddress: '',
-      companyCity: '',
-      companyState: '',
-      companyZip: '',
-      distributorId: '',
-      jobNumber: '',
-      paperSize: '',
-      paperWeight: '',
-      shippingStatus: '',
-      paymentStatus: '',
-      orderStatus: '',
-      distributorCopies: '',
-      storeCopies: '',
-      officeCopies: '',
-      instructions: '',
-      shipDate: '',
-      dueDate: '',
-      inHomeDate: '',
-      headline: ''
-    });
-    setYear({ year: '' });
-    setWeek({ week: '' });
-    document.getElementById('search-job-form').reset();
-  }
+  // function closeModal() {
+  //   props.setValues({
+  //     jobId: '',
+  //     yearId: '',
+  //     weekId: '',
+  //     companyId: '',
+  //     year: '',
+  //     week: '',
+  //     companyName: '',
+  //     companyAddress: '',
+  //     companyCity: '',
+  //     companyState: '',
+  //     companyZip: '',
+  //     distributorId: '',
+  //     jobNumber: '',
+  //     paperSize: '',
+  //     paperWeight: '',
+  //     shippingStatus: '',
+  //     paymentStatus: '',
+  //     orderStatus: '',
+  //     distributorCopies: '',
+  //     storeCopies: '',
+  //     officeCopies: '',
+  //     instructions: '',
+  //     shipDate: '',
+  //     dueDate: '',
+  //     inHomeDate: '',
+  //     headline: ''
+  //   });
+  //   setYear({ year: '' });
+  //   setWeek({ week: '' });
+  //   document.getElementById('search-job-form').reset();
+  // }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -144,16 +147,33 @@ export default function EditModal(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-
+  // console.log('props.values:', props.values)
+  // console.log('props.jobs:', props.jobs)
   return (
     <div>
       <div className={props.editOverlay} />
       <div className={props.editModalStyle}>
-        <div className="row mt-3 mb-3 ms-3">
+        <div className="d-flex mt-3 mb-3 ms-5 me-5 justify-content-between">
           <h5>Edit Job</h5>
+          <button onClick={props.hideEditModal} type="button" className="btn pb-3">
+            <p>X</p>
+          </button>
         </div>
         <div className="row d-flex justify-content-center">
-          <form className="col-10 mb-2 mt-2">
+          <form className="col-10 mb-2 mt-2" onSubmit={handleSubmit}>
+            <div className="mb-2 mt-2">
+              <label htmlFor="jobSelect" >Job</label>
+              <select value={year.year} onChange={getJob} name="" id="jobSelect" className='form-select fw-light' required>
+                <option value="">Select a job to edit</option>
+                {
+                  props.jobs.map(event => {
+                    return (
+                      <option id={event.jobId} key={event.jobId}>{event.jobNumber}</option>
+                    );
+                  })
+                }
+              </select>
+            </div>
             <div className="mb-2 mt-2">
               <label htmlFor="yearSelect" >Year</label>
               <select value={year.year} onChange={props.handleYearIdChange} name="" id="editYear" className='form-select fw-light' required>
@@ -293,28 +313,28 @@ export default function EditModal(props) {
               </div>
             </div>
             <div className="modal-footer">
-              <button onClick={props.hideEditModal} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button onClick={props.hideEditModal} type="button" className="btn btn-secondary">Close</button>
               <button type="submit" className="btn btn-primary">Save</button>
             </div>
           </form>
         </div>
       </div>
 
-      <button
+      {/* <button
        onClick={getJob}
        type="button" className="edit-job-btn bg-transparent m-0 p-1" data-bs-toggle="modal" data-bs-target="#editModal">
         <i className="fa-solid fa-pen-to-square edit-icon" id={props.id} />
-      </button>
-      <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      </button> */}
+      {/* <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title text-center">Edit Job</h5>
               <button onClick={closeModal} type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
-            <div className="modal-body">
-              <form id="edit-job-form" onSubmit={handleSubmit} >
-                {/* <div className="mb-2 mt-2">
+            <div className="modal-body"> */}
+      {/* <form id="edit-job-form" onSubmit={handleSubmit} > */}
+      {/* <div className="mb-2 mt-2">
                   <label htmlFor="yearSelect" >Year</label>
                   <select value={year.year} onChange={props.handleYearIdChange} name="" id="editYear" className='form-select fw-light' required>
                     {
@@ -326,7 +346,7 @@ export default function EditModal(props) {
                     }
                   </select>
                 </div> */}
-                {/* <div className="mb-2 mt-2">
+      {/* <div className="mb-2 mt-2">
                   <label htmlFor="editWeek" >Week</label>
                   <select value={week.week} onChange={props.handleWeekIdChange} name="" id="editWeek" className='form-select fw-light' required>
                     {
@@ -338,7 +358,7 @@ export default function EditModal(props) {
                     }
                   </select>
                 </div> */}
-                {/* <div className="mb-2 mt-2">
+      {/* <div className="mb-2 mt-2">
                   <label htmlFor="companyNameInput" >Distributor</label>
                   <select onChange={props.handleDistributorIdChange} name="" id="editDistributor" className="form-select fw-light" required>
                     <option>Distributor</option>
@@ -351,7 +371,7 @@ export default function EditModal(props) {
                     }
                   </select>
                 </div> */}
-                {/* <div className="mb-2 mt-2">
+      {/* <div className="mb-2 mt-2">
                   <label htmlFor="jobNumberInput" >Job Number</label>
                   <input value={props.values.jobNumber} onChange={props.handleJobNumberChange} type="text" className="form-control" id="editJobNumber" required />
                 </div>
@@ -363,7 +383,7 @@ export default function EditModal(props) {
                   <label htmlFor="paperWeightInput">Paper Weight</label>
                   <input value={props.values.paperWeight} onChange={props.handlePaperWeightChange} type="text" className="form-control" id="editPaperWeight" required />
                 </div> */}
-                {/* <div className="d-flex mb-3 mt-3 justify-content-between">
+      {/* <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="shippingStatusSelect">Shipping Status</label>
                     <select value={props.values.shippingStatus} onChange={props.handleShippingStatusChange} name="" id="editShippingStatus" className="form-select fw-light" required>
@@ -394,7 +414,7 @@ export default function EditModal(props) {
                     </select>
                   </div>
                 </div> */}
-                {/* <div className="d-flex mb-3 mt-3 justify-content-between">
+      {/* <div className="d-flex mb-3 mt-3 justify-content-between">
                   <div className="col-3">
                     <label htmlFor="distributorCopies">Distributor Copies</label>
                     <input value={props.values.distributorCopies} onChange={props.handleDistributorCopiesChange} type="text" id="editDistributorCopies" className="form-control" required />
@@ -408,7 +428,7 @@ export default function EditModal(props) {
                     <input value={props.values.officeCopies} onChange={props.handleOfficeCopiesChange} type="text" id="editOfficeCopies" className="form-control" required />
                   </div>
                 </div> */}
-                {/* <div className="mb-2 mt-2">
+      {/* <div className="mb-2 mt-2">
                   <label htmlFor="instructions">Instructions</label>
                   <textarea value={props.values.instructions} onChange={props.handleInstructionsChange} name="" id="editInstructions" className="form-control" required />
                 </div>
@@ -456,11 +476,11 @@ export default function EditModal(props) {
                   <button onClick={closeModal} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="submit" className="btn btn-primary">Save</button>
                 </div> */}
-              </form>
-            </div>
+      {/* </form> */}
+      {/* </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

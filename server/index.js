@@ -246,7 +246,7 @@ app.get('/api/cancelled-job-list/:yearId/:weekId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// GET all job info about one job 👇🏼
+// GET all job info about one job byb jobId 👇🏼
 app.get('/api/jobs/:jobId', (req, res, next) => {
   const jobId = Number(req.params.jobId);
   if (!jobId) {
@@ -293,6 +293,59 @@ app.get('/api/jobs/:jobId', (req, res, next) => {
     .then(result => {
       if (!result.rows[0]) {
         throw new ClientError(404, `cannot find show with jobId ${jobId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+// GET all info about one job by searching for jobNumber 👇🏼
+app.get('/api/job-number', (req, res, next) => {
+  const { jobNumber } = req.body;
+  if (!jobNumber) {
+    throw new ClientError(400, 'jobNumber must be a string');
+  }
+  const sql = `
+   select to_char("shipDate",'yyyy-MM-dd') as "shipDate",
+          to_char("dueDate", 'yyyy-MM-dd') as "dueDate",
+          to_char("inHomeDate", 'yyyy-MM-dd') as "inHomeDate",
+          "jobId",
+          "yearId" as "yearId",
+          "weekId" as "weekId",
+          "companyId",
+          "distributorId",
+          "jobNumber",
+          "paperSize",
+          "paperWeight",
+          "instructions",
+          "headline",
+          "storeCopies",
+          "distributorCopies",
+          "officeCopies",
+          "orderStatus",
+          "paymentStatus",
+          "shippingStatus",
+          "companyName",
+          "distributorName",
+          "companyAddresses"."address" as "companyAddress",
+          "companyAddresses"."city" as "companyCity",
+          "companyAddresses"."state" as "companyState",
+          "companyAddresses"."zip" as "companyZip",
+          "distributorAddresses"."address" as "distributorAddress",
+          "distributorAddresses"."city" as "distributorCity",
+          "distributorAddresses"."state" as "distributorState",
+          "distributorAddresses"."zip" as "distributorZip"
+   from "jobs"
+   join "companies" using ("companyId")
+   join "distributors" using ("distributorId")
+   join "companyAddresses" using ("companyAddressId")
+   join "distributorAddresses" using ("distributorAddressId")
+   where "jobNumber" = $1`;
+  const params = [jobNumber];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        throw new ClientError(404, `cannot find show with jobNumber ${jobNumber}`);
       }
       res.json(result.rows[0]);
     })
