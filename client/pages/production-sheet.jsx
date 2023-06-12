@@ -32,6 +32,7 @@ export default function ProductionSheet(props) {
     companyCity: '',
     companyState: '',
     companyZip: '',
+    distributorName: '',
     distributorId: '',
     jobNumber: '',
     paperSize: '',
@@ -109,6 +110,8 @@ export default function ProductionSheet(props) {
     event.preventDefault();
     setEditOverlay('overlay d-none');
     setEditModalStyle('position-absolute edit-modal-wrapper col-10 bg-white rounded d-none');
+    closeModal();
+
   };
 
   //* ** HandleChange functions for year and week 👇🏼 ***
@@ -410,6 +413,7 @@ export default function ProductionSheet(props) {
       companyCity: '',
       companyState: '',
       companyZip: '',
+      distributorName: '',
       distributorId: '',
       jobNumber: '',
       paperSize: '',

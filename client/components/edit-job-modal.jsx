@@ -9,11 +9,12 @@ export default function EditModal(props) {
   });
 
   function getJob(event) {
-    const jobId = Number(event.target.id);
+    // const jobId = Number(event.target.id);
+    const jobNumber = event.target.value;
     // props.jobs.forEach((event, index) => {
     //   event.jobNumber === jobNumber ?
     // })
-    fetch(`/api/jobs/${jobId}`)
+    fetch(`/api/job-number/${jobNumber}`)
       .then(response => response.json())
       .then(job => {
         props.setValues({
@@ -26,6 +27,7 @@ export default function EditModal(props) {
           companyCity: job.companyCity,
           companyState: job.companyState,
           companyZip: job.companyZip,
+          distributorName: job.distributorName,
           distributorId: job.distributorId,
           jobNumber: job.jobNumber,
           paperSize: job.paperSize,
@@ -68,6 +70,7 @@ export default function EditModal(props) {
   //     companyCity: '',
   //     companyState: '',
   //     companyZip: '',
+  //     distributorName: '',
   //     distributorId: '',
   //     jobNumber: '',
   //     paperSize: '',
@@ -129,6 +132,7 @@ export default function EditModal(props) {
       companyCity: '',
       companyState: '',
       companyZip: '',
+      distributorName: '',
       distributorId: '',
       jobNumber: '',
       paperSize: '',
@@ -148,6 +152,7 @@ export default function EditModal(props) {
     document.getElementById('search-job-form').reset();
   }
   // console.log('props.values:', props.values)
+  // console.log('props.weekAndYear:', props.weekAndYear)
   // console.log('props.jobs:', props.jobs)
   return (
     <div>
@@ -163,7 +168,7 @@ export default function EditModal(props) {
           <form className="col-10 mb-2 mt-2" onSubmit={handleSubmit}>
             <div className="mb-2 mt-2">
               <label htmlFor="jobSelect" >Job</label>
-              <select value={year.year} onChange={getJob} name="" id="jobSelect" className='form-select fw-light' required>
+              <select value={props.values.jobNumber} onChange={getJob} name="" id="jobSelect" className='form-select fw-light' required>
                 <option value="">Select a job to edit</option>
                 {
                   props.jobs.map(event => {
@@ -178,9 +183,9 @@ export default function EditModal(props) {
               <label htmlFor="yearSelect" >Year</label>
               <select value={year.year} onChange={props.handleYearIdChange} name="" id="editYear" className='form-select fw-light' required>
                 {
-                  props.yearsList.map(event => {
+                  props.yearsList.map((event, index) => {
                     return (
-                      <option id={event.yearId} key={event.yearId}>{event.year}</option>
+                      <option id={event.yearId} key={index}>{event.year}</option>
                     );
                   })
                 }
@@ -200,7 +205,7 @@ export default function EditModal(props) {
             </div>
             <div className="mb-2 mt-2">
               <label htmlFor="companyNameInput" >Distributor</label>
-              <select onChange={props.handleDistributorIdChange} name="" id="editDistributor" className="form-select fw-light" required>
+              <select value={props.values.distributorName} onChange={props.handleDistributorIdChange} name="" id="editDistributor" className="form-select fw-light" required>
                 <option>Distributor</option>
                 {
                   props.distributors.map(event => {

@@ -41,6 +41,7 @@ export default function NewJobModal(props) {
       companyCity: '',
       companyState: '',
       companyZip: '',
+      distributorName: '',
       distributorId: '',
       jobNumber: '',
       paperSize: '',

@@ -300,8 +300,8 @@ app.get('/api/jobs/:jobId', (req, res, next) => {
 });
 
 // GET all info about one job by searching for jobNumber 👇🏼
-app.get('/api/job-number', (req, res, next) => {
-  const { jobNumber } = req.body;
+app.get('/api/job-number/:jobNumber', (req, res, next) => {
+  const jobNumber = req.params.jobNumber;
   if (!jobNumber) {
     throw new ClientError(400, 'jobNumber must be a string');
   }
