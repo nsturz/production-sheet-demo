@@ -111,7 +111,6 @@ export default function ProductionSheet(props) {
     setEditOverlay('overlay d-none');
     setEditModalStyle('position-absolute edit-modal-wrapper col-10 bg-white rounded d-none');
     closeModal();
-
   };
 
   //* ** HandleChange functions for year and week 👇🏼 ***
