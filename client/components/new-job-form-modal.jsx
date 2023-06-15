@@ -58,10 +58,11 @@ export default function NewJobModal(props) {
       inHomeDate: '',
       headline: ''
     }));
-    props.setNewJobModalOverlay('overlay d-none');
+    props.setNewJobOverlay('overlay d-none');
     props.setNewJobModalStyle('position-absolute new-job-modal-wrapper col-10 bg-white rounded d-none');
   }
 
+  // console.log('props.values:', props.values)
   return (
     <div>
       <div className={props.newJobOverlay} />
@@ -215,7 +216,7 @@ export default function NewJobModal(props) {
               </div>
             </div>
             <div className="modal-footer">
-              <button onClick={props.hideNewJobModal} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button onClick={props.hideNewJobModal} type="button" className="btn btn-secondary">Close</button>
               <button type="submit" className="btn btn-primary">Save</button>
             </div>
           </form>
