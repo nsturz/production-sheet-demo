@@ -83,8 +83,10 @@ export default function ProductionSheet(props) {
   // *** Modal state and functions for delete job, add job, and edit job*** 👇🏼
   const [overlay, setOverlay] = useState('overlay d-none');
   const [editOverlay, setEditOverlay] = useState('overlay d-none');
+  const [newJobOverlay, setNewJobOverlay] = useState('overlay d-none');
   const [deleteModalStyle, setDeleteModalStyle] = useState('position-fixed delete-modal-wrapper col-10 col-lg-8 d-none');
   const [editModalStyle, setEditModalStyle] = useState('position-absolute edit-modal-wrapper col-10 bg-white rounded d-none');
+  const [newJobModalStyle, setNewJobModalStyle] = useState('position-absolute new-job-modal-wrapper col-10 bg-white rounded d-none');
 
   const showDeleteModal = event => {
     event.preventDefault();
@@ -113,6 +115,18 @@ export default function ProductionSheet(props) {
     closeModal();
   };
 
+  const showNewJobModal = event => {
+    event.preventDefault();
+    setNewJobOverlay('overlay');
+    setNewJobModalStyle('position-absolute new-job-modal-wrapper col-10 bg-white rounded');
+  };
+
+  const hideNewJobModal = event => {
+    event.preventDefault();
+    setNewJobOverlay('overlay d-none');
+    setNewJobModalStyle('position-absolute new-job-modal-wrapper col-10 bg-white rounded d-none');
+    closeModal();
+  };
   //* ** HandleChange functions for year and week 👇🏼 ***
   const handleYearChange = event => {
     event.persist();
@@ -527,19 +541,9 @@ export default function ProductionSheet(props) {
           </div>
         </div>
         <div className="mt-3  d-flex flex-row justify-space-between">
-          <NewJobModal
-            onSubmit={addJob} job={job} values={values} setValues={setValues} yearsList={yearsList} weeksList={weeksList} distributors={distributors}
-            closeModal={closeModal} handleYearIdChange={handleYearIdChange}
-            handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
-            handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
-            handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
-            handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
-            handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
-            handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
-            handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
-            handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
-            handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
-            handleStateChange={handleStateChange} handleZipChange={handleZipChange} />
+          <button className="new-job-btn bg-transparent" onClick={showNewJobModal}>
+            <i className="fa-solid fa-plus text-primary" />
+          </button>
           {
              (typeof weekAndYear.year === 'number' &&
               typeof weekAndYear.week === 'number' &&
@@ -659,6 +663,21 @@ export default function ProductionSheet(props) {
                 </ul>
                 : <div className="col-12"><p className="text-center">Nothing to display yet.</p></div>
         }
+        <NewJobModal
+          onSubmit={addJob} job={job} values={values} setValues={setValues} yearsList={yearsList} weeksList={weeksList} distributors={distributors}
+          closeModal={closeModal} handleYearIdChange={handleYearIdChange}
+          handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
+          handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
+          handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
+          handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
+          handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
+          handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
+          handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
+          handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
+          handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
+          handleStateChange={handleStateChange} handleZipChange={handleZipChange} newJobOverlay={newJobOverlay} setNewJobOverlay={setNewJobOverlay}
+          newJobModalStyle={newJobModalStyle} setNewJobModalStyle={setNewJobModalStyle} hideNewJobModal={hideNewJobModal} />
+
         <EditModal onSubmit={editJob}values={values} jobs={props.jobs} distributors={distributors}
           setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
           handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
