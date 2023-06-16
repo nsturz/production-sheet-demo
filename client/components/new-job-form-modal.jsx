@@ -61,8 +61,6 @@ export default function NewJobModal(props) {
     props.setNewJobOverlay('overlay d-none');
     props.setNewJobModalStyle('position-absolute new-job-modal-wrapper col-10 bg-white rounded d-none');
   }
-
-  // console.log('props.values:', props.values)
   return (
     <div>
       <div className={props.newJobOverlay} />

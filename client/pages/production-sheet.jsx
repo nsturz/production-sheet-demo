@@ -561,8 +561,12 @@ export default function ProductionSheet(props) {
           // ternary operator renders message when nothing matches the search results 👇🏼
             : props.jobs[0] === undefined
               ? <div className="col-12"><p className="text-center">That search does not match any criteria.</p></div>
-              // this is rendered when we successfully have search results 👇🏼
-              : props.jobs.length !== 0 && typeof weekAndYear.yearId === 'number' && typeof weekAndYear.weekId === 'number'
+              // this is rendered when we successfully have search results, and it has to meet all the criteria:  👇🏼
+              // - there have to actually be jobs available to view
+              // - a year and a week have to be selected aka a search has to have been performed
+              // - there can't have been an error received from the server, otherwise it renders an empty job
+              : props.jobs.length !== 0 && typeof weekAndYear.yearId === 'number' && typeof weekAndYear.weekId === 'number' &&
+                props.jobs[0].error !== `cannot find jobs with yearId ${weekAndYear.yearId} and weekId ${weekAndYear.weekId}`
                 ? <ul id="job-list">
                   {
                   props.jobs.map(event => {

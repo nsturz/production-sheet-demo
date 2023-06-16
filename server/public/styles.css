@@ -16,7 +16,8 @@ body {
   transform: translate(-50%, -50%);
 }
 
-.edit-modal-wrapper {
+.edit-modal-wrapper,
+.new-job-modal-wrapper {
   left: 8%;
   top: 30%;
 }

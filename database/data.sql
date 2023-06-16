@@ -2,7 +2,11 @@ insert into "years" ("year")
 values      ('2023');
 
 insert into "weeks" ("week", "yearId")
-values      ('1', 1);
+values      ('1', 1),
+            ('2', 1),
+            ('3', 1),
+            ('4', 1),
+            ('5', 1);
 
 insert into "companyAddresses" ("address", "city", "state", "zip")
 values       ('2125 International Blvd.', 'Clarksville', 'TN', 37040);
