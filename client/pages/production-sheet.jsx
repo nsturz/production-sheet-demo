@@ -477,6 +477,9 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
+
+  // console.log('props.jobs:', props.jobs)
+  // console.log('values:', values)
   // FINISH 🏁
   return (
     <div>

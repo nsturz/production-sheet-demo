@@ -504,6 +504,11 @@ app.post('/api/new-job', (req, res) => {
           db.query(insertJobSql, insertJobParams)
             .then(result => {
               const [newJob] = result.rows;
+              newJob.companyName = newCompany.companyName;
+              newJob.companyAddress = companyAddress;
+              newJob.companyCity = companyCity;
+              newJob.companyState = companyState;
+              newJob.companyZip = companyZip;
               res.status(201).json(newJob);
             })
             .catch(err => {
