@@ -34,6 +34,7 @@ export default function ProductionSheet(props) {
     companyZip: '',
     distributorName: '',
     distributorId: '',
+    distributorAddressId: '',
     jobNumber: '',
     paperSize: '',
     paperWeight: '',
@@ -207,7 +208,8 @@ export default function ProductionSheet(props) {
       if (event.target.value === distributors[i].distributorName) {
         setValues(values => ({
           ...values,
-          distributorId: distributors[i].distributorId
+          distributorId: distributors[i].distributorId,
+          distributorAddressId: distributors[i].distributorAddressId
         }));
       }
     }
@@ -428,6 +430,7 @@ export default function ProductionSheet(props) {
       companyZip: '',
       distributorName: '',
       distributorId: '',
+      distributorAddressId: '',
       jobNumber: '',
       paperSize: '',
       paperWeight: '',
@@ -477,9 +480,6 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-
-  // console.log('props.jobs:', props.jobs)
-  // console.log('values:', values)
   // FINISH 🏁
   return (
     <div>

@@ -97,6 +97,7 @@ export default function EditModal(props) {
       companyZip: '',
       distributorName: '',
       distributorId: '',
+      distributorAddressId: '',
       jobNumber: '',
       paperSize: '',
       paperWeight: '',
