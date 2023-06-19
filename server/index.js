@@ -524,21 +524,35 @@ app.post('/api/new-job', (req, res) => {
                   db.query(insertJobSql, insertJobParams)
                     .then(result => {
                       const [newJob] = result.rows;
-                      newJob.companyName = newCompany.companyName;
-                      newJob.companyAddress = companyAddress;
-                      newJob.companyCity = companyCity;
-                      newJob.companyState = companyState;
-                      newJob.companyZip = companyZip;
-                      newJob.distributorName = distributorNameInfo.distributorName;
-                      newJob.distributorAddress = distributorAddressInfo.address;
-                      newJob.distributorCity = distributorAddressInfo.city;
-                      newJob.distributorState = distributorAddressInfo.state;
-                      newJob.distributorZip = distributorAddressInfo.zip;
-                      res.status(201).json(newJob);
-                    })
-                    .catch(err => {
-                      console.error(err);
-                      res.status(500).json({ error: 'sad day. error. ' });
+                      const getDateSql = `
+                        select to_char("shipDate",'MM-dd-yyyy') as "shipDate",
+                                to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
+                                to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate"
+                        from "jobs"
+                        where "jobId" = $1`;
+                      const getDateParams = [newJob.jobId];
+                      db.query(getDateSql, getDateParams)
+                        .then(getDateResult => {
+                          const [dateInfo] = getDateResult.rows;
+                          newJob.companyName = newCompany.companyName;
+                          newJob.companyAddress = companyAddress;
+                          newJob.companyCity = companyCity;
+                          newJob.companyState = companyState;
+                          newJob.companyZip = companyZip;
+                          newJob.distributorName = distributorNameInfo.distributorName;
+                          newJob.distributorAddress = distributorAddressInfo.address;
+                          newJob.distributorCity = distributorAddressInfo.city;
+                          newJob.distributorState = distributorAddressInfo.state;
+                          newJob.distributorZip = distributorAddressInfo.zip;
+                          newJob.shipDate = dateInfo.shipDate;
+                          newJob.dueDate = dateInfo.dueDate;
+                          newJob.inHomeDate = dateInfo.inHomeDate;
+                          res.status(201).json(newJob);
+                        })
+                        .catch(err => {
+                          console.error(err);
+                          res.status(500).json({ error: 'sad day. error. ' });
+                        });
                     });
                 });
             });
