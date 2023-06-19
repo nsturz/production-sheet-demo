@@ -139,9 +139,9 @@ app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
 
   }
   const sql = `
-   select to_char("shipDate",'yyyy-MM-dd') as "shipDate",
-          to_char("dueDate", 'yyyy-MM-dd') as "dueDate",
-          to_char("inHomeDate", 'yyyy-MM-dd') as "inHomeDate",
+   select to_char("shipDate",'MM-dd-yyyy') as "shipDate",
+          to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
+          to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate",
           "jobId",
           "yearId",
           "weekId",
