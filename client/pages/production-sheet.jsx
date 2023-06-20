@@ -366,6 +366,17 @@ export default function ProductionSheet(props) {
         props.setJobs(newJobList);
       })
       .catch(console.error);
+
+    const params = {
+      yearId: weekAndYear.yearId,
+      weekId: weekAndYear.weekId
+    };
+    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+      .then(res => res.json())
+      .then(totalCopies => {
+        setTotalCopies(totalCopies);
+      })
+      .catch(console.error);
   }
 
   function editJob(editedJob) {
@@ -385,6 +396,18 @@ export default function ProductionSheet(props) {
         } props.setJobs(newJobList);
       })
       .catch(console.error);
+
+    const params = {
+      yearId: weekAndYear.yearId,
+      weekId: weekAndYear.weekId
+    };
+    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+      .then(res => res.json())
+      .then(totalCopies => {
+        setTotalCopies(totalCopies);
+      })
+      .catch(console.error);
+
   }
 
   function cancelJob(selectedJob) {
@@ -404,6 +427,7 @@ export default function ProductionSheet(props) {
           }
         });
       });
+
     const params = {
       yearId: weekAndYear.yearId,
       weekId: weekAndYear.weekId
@@ -480,7 +504,6 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-
   // FINISH 🏁
   return (
     <div>
@@ -518,7 +541,7 @@ export default function ProductionSheet(props) {
         <div className="d-flex flex-row flex-wrap">
           <div className="col-12 p-0">
             <form id="search-job-form" className="d-flex" onSubmit={handleSubmit}>
-              <select className="form-select fw-light m-1" aria-label="Default select example" onChange={handleYearChange}>
+              <select className="form-select fw-light m-1" aria-label="Default select example" onChange={handleYearChange} required>
                 <option>Select a year.</option>
                 {
                   yearsList.map(event => {
@@ -528,7 +551,7 @@ export default function ProductionSheet(props) {
                   })
                 }
               </select>
-              <select className=" form-select fw-light m-1" aria-label="Default select example" onChange={handleWeekChange}>
+              <select className=" form-select fw-light m-1" aria-label="Default select example" onChange={handleWeekChange} required>
                 <option>Select a week.</option>
                 {
                   weeksList.map(event => {
