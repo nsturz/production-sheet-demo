@@ -209,7 +209,8 @@ export default function ProductionSheet(props) {
         setValues(values => ({
           ...values,
           distributorId: distributors[i].distributorId,
-          distributorAddressId: distributors[i].distributorAddressId
+          distributorAddressId: distributors[i].distributorAddressId,
+          distributorName: distributors[i].distributorName
         }));
       }
     }
@@ -358,23 +359,16 @@ export default function ProductionSheet(props) {
     })
       .then(response => response.json())
       .then(newJob => {
+        const jobTotalCopies = newJob.totalCopies;
+        const currentTotalCopies = Number(totalCopies);
+        const newTotalCopies = jobTotalCopies + currentTotalCopies;
         const jobList = [...props.jobs];
         if (jobList.length === 0) {
           return;
         }
         const newJobList = jobList.concat(newJob);
         props.setJobs(newJobList);
-      })
-      .catch(console.error);
-
-    const params = {
-      yearId: weekAndYear.yearId,
-      weekId: weekAndYear.weekId
-    };
-    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
-      .then(res => res.json())
-      .then(totalCopies => {
-        setTotalCopies(totalCopies);
+        setTotalCopies(newTotalCopies);
       })
       .catch(console.error);
   }
@@ -506,6 +500,8 @@ export default function ProductionSheet(props) {
   }
 
   // console.log('values:', values)
+  // console.log('totalCopies:', totalCopies)
+  // console.log('props.jobs:', props.jobs)
   // FINISH 🏁
   return (
     <div>

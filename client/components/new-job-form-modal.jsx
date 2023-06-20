@@ -103,7 +103,7 @@ export default function NewJobModal(props) {
             </div>
             <div className="mb-2 mt-2">
               <label htmlFor="companyNameInput" >Distributor</label>
-              <select name="" id="distributorSelect" className="form-select fw-light" onChange={props.handleDistributorIdChange} required>
+              <select name="" id="distributorSelect" value={props.values.distributorName}className="form-select fw-light" onChange={props.handleDistributorIdChange} required>
                 <option>Select a distributor.</option>
                 {
                   props.distributors.map(event => {
