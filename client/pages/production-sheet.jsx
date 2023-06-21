@@ -359,16 +359,23 @@ export default function ProductionSheet(props) {
     })
       .then(response => response.json())
       .then(newJob => {
-        const jobTotalCopies = newJob.totalCopies;
-        const currentTotalCopies = Number(totalCopies);
-        const newTotalCopies = jobTotalCopies + currentTotalCopies;
         const jobList = [...props.jobs];
         if (jobList.length === 0) {
           return;
         }
         const newJobList = jobList.concat(newJob);
         props.setJobs(newJobList);
-        setTotalCopies(newTotalCopies);
+      })
+      .then(() => {
+        const params = {
+          yearId: weekAndYear.yearId,
+          weekId: weekAndYear.weekId
+        };
+        fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+          .then(res => res.json())
+          .then(totalCopies => {
+            setTotalCopies(totalCopies);
+          });
       })
       .catch(console.error);
   }
@@ -388,6 +395,17 @@ export default function ProductionSheet(props) {
             newJobList.splice(i, 1, editedJob);
           }
         } props.setJobs(newJobList);
+      })
+      .then(() => {
+        const params = {
+          yearId: weekAndYear.yearId,
+          weekId: weekAndYear.weekId
+        };
+        fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+          .then(res => res.json())
+          .then(totalCopies => {
+            setTotalCopies(totalCopies);
+          });
       })
       .catch(console.error);
 
@@ -420,16 +438,17 @@ export default function ProductionSheet(props) {
             props.setJobs(newJobList);
           }
         });
-      });
-
-    const params = {
-      yearId: weekAndYear.yearId,
-      weekId: weekAndYear.weekId
-    };
-    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
-      .then(res => res.json())
-      .then(totalCopies => {
-        setTotalCopies(totalCopies);
+      })
+      .then(() => {
+        const params = {
+          yearId: weekAndYear.yearId,
+          weekId: weekAndYear.weekId
+        };
+        fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+          .then(res => res.json())
+          .then(totalCopies => {
+            setTotalCopies(totalCopies);
+          });
       })
       .catch(console.error);
   }
