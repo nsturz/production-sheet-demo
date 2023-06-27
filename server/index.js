@@ -314,6 +314,7 @@ app.get('/api/job-number/:jobNumber', (req, res, next) => {
           "weekId" as "weekId",
           "companyId",
           "distributorId",
+          "distributorAddressId",
           "jobNumber",
           "paperSize",
           "paperWeight",
@@ -509,9 +510,9 @@ app.post('/api/new-job', (req, res) => {
             .then(companyAddressResult => {
               const [newCompanyAddress] = companyAddressResult.rows;
               const insertCompanySql = `
-          insert into "companies" ("companyName", "companyAddressId")
-          values      ($1, $2)
-          returning *`;
+                insert into "companies" ("companyName", "companyAddressId")
+                values      ($1, $2)
+                returning *`;
               const insertCompanyParams = [companyName, newCompanyAddress.companyAddressId];
               db.query(insertCompanySql, insertCompanyParams)
                 .then(result => {
@@ -597,6 +598,7 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
     companyState,
     companyZip,
     companyName,
+    distributorAddressId,
     distributorId,
     jobNumber,
     paperSize,
@@ -621,16 +623,35 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
     res.status(400).json({ error: 'Make sure you have entered all required fields' });
     return;
   }
-  const updateCompanySql = `
+  const getDistributorAddressSql = `
+    select "address",
+           "city",
+           "state",
+           "zip"
+    from "distributorAddresses"
+    where "distributorAddressId" = $1`;
+  const getDistributorAddressParams = [distributorAddressId];
+  db.query(getDistributorAddressSql, getDistributorAddressParams)
+    .then(distributorAddressResult => {
+      const [distributorAddressInfo] = distributorAddressResult.rows;
+      const getDistributorNameSql = `
+        select "distributorName"
+        from "distributors"
+        where "distributorId" = $1`;
+      const getDistributorNameParams = [distributorId];
+      db.query(getDistributorNameSql, getDistributorNameParams)
+        .then(distributorNameResult => {
+          const [distributorNameInfo] = distributorNameResult.rows;
+          const updateCompanySql = `
           UPDATE "companies"
           set    "companyName" = $1
           where  "companyId" = $2
           returning *`;
-  const updateCompanyParams = [companyName, companyId];
-  db.query(updateCompanySql, updateCompanyParams)
-    .then(result => {
-      const [updatedCompany] = result.rows;
-      const updateCompanyAddressSql = `
+          const updateCompanyParams = [companyName, companyId];
+          db.query(updateCompanySql, updateCompanyParams)
+            .then(result => {
+              const [updatedCompany] = result.rows;
+              const updateCompanyAddressSql = `
           UPDATE "companyAddresses"
           set    "address" = $1,
                  "city" = $2,
@@ -638,12 +659,12 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
                  "zip" = $4
           where  "companyAddressId" = $5
           returning *`;
-      const updateCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip, updatedCompany.companyAddressId];
-      db.query(updateCompanyAddressSql, updateCompanyAddressParams)
-        .then(() => {
-          const updateJobSql = `
-            UPDATE "jobs"
-            set     "yearId" = $1,
+              const updateCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip, updatedCompany.companyAddressId];
+              db.query(updateCompanyAddressSql, updateCompanyAddressParams)
+                .then(() => {
+                  const updateJobSql = `
+                UPDATE "jobs"
+                set     "yearId" = $1,
                     "weekId" = $2,
                     "companyId" = $3,
                     "distributorId" = $4,
@@ -662,17 +683,29 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
                     "orderStatus" = $17,
                     "shippingStatus" = $18,
                     "paymentStatus" = $19
-            where "jobId" = $20
-            returning *`;
-          const updateJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus, jobId];
-          db.query(updateJobSql, updateJobParams)
-            .then(result => {
-              const [updatedJob] = result.rows;
-              res.status(201).json(updatedJob);
-            })
-            .catch(err => {
-              console.error(err);
-              res.status(500).json({ error: 'sad day. error. ' });
+                where "jobId" = $20
+                returning *`;
+                  const updateJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus, jobId];
+                  db.query(updateJobSql, updateJobParams)
+                    .then(result => {
+                      const [updatedJob] = result.rows;
+                      updatedJob.companyName = companyName;
+                      updatedJob.companyAddress = companyAddress;
+                      updatedJob.companyCity = companyCity;
+                      updatedJob.companyState = companyState;
+                      updatedJob.companyZip = companyZip;
+                      updatedJob.distributorName = distributorNameInfo.distributorName;
+                      updatedJob.distributorAddress = distributorAddressInfo.address;
+                      updatedJob.distributorCity = distributorAddressInfo.city;
+                      updatedJob.distributorState = distributorAddressInfo.state;
+                      updatedJob.distributorZip = distributorAddressInfo.zip;
+                      res.status(201).json(updatedJob);
+                    })
+                    .catch(err => {
+                      console.error(err);
+                      res.status(500).json({ error: 'sad day. error. ' });
+                    });
+                });
             });
         });
     });

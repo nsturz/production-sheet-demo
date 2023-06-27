@@ -388,11 +388,12 @@ export default function ProductionSheet(props) {
       },
       body: JSON.stringify(editedJob)
     })
-      .then(() => {
+      .then(response => response.json())
+      .then(editedJobResponse => {
         const newJobList = [...props.jobs];
         for (let i = 0; i < newJobList.length; i++) {
           if (newJobList[i].jobId === editedJob.jobId) {
-            newJobList.splice(i, 1, editedJob);
+            newJobList.splice(i, 1, editedJobResponse);
           }
         } props.setJobs(newJobList);
       })
@@ -634,8 +635,8 @@ export default function ProductionSheet(props) {
                           </div>
                         </div>
                         <div className="d-flex flex-row">
-                          <div className="col-12 box-shadow">
-                            <div id="job-details-header-1" className="d-flex job-details-header p-1">
+                          <div className="col-12 box-shadow rounded">
+                            <div id="job-details-header-1" className="d-flex job-details-header p-1 rounded">
                               <p className="col fw-bold ">Company Name</p>
                               <p className=" col fw-bold">Paper Size</p>
                               <p className=" col fw-bold">Paper Weight</p>
@@ -692,7 +693,7 @@ export default function ProductionSheet(props) {
                               <p className="m-1 col">{event.companyZip}</p>
                               <p className="m-1 col fw-bold" />
                             </div>
-                            <div id="job-details-3 " className="d-flex job-details p-1">
+                            <div id="job-details-3 " className="d-flex job-details p-1 rounded">
                               <p className="m-1 col ">Color Ad</p>
                               <p className="m-1 col">N/A</p>
                               <p className="m-1 col">N/A</p>
