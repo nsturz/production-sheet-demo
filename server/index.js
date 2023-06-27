@@ -663,47 +663,61 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
               db.query(updateCompanyAddressSql, updateCompanyAddressParams)
                 .then(() => {
                   const updateJobSql = `
-                UPDATE "jobs"
-                set     "yearId" = $1,
-                    "weekId" = $2,
-                    "companyId" = $3,
-                    "distributorId" = $4,
-                    "jobNumber" = $5,
-                    "paperSize" = $6,
-                    "paperWeight" = $7,
-                    "shipDate" = $8,
-                    "dueDate" = $9,
-                    "inHomeDate" = $10,
-                    "instructions" = $11,
-                    "headline" = $12,
-                    "storeCopies" = $13,
-                    "distributorCopies" = $14,
-                    "officeCopies" = $15,
-                    "totalCopies" = $16,
-                    "orderStatus" = $17,
-                    "shippingStatus" = $18,
-                    "paymentStatus" = $19
-                where "jobId" = $20
-                returning *`;
+                  UPDATE "jobs"
+                  set    "yearId" = $1,
+                        "weekId" = $2,
+                        "companyId" = $3,
+                        "distributorId" = $4,
+                        "jobNumber" = $5,
+                        "paperSize" = $6,
+                        "paperWeight" = $7,
+                        "shipDate" = $8,
+                        "dueDate" = $9,
+                        "inHomeDate" = $10,
+                        "instructions" = $11,
+                        "headline" = $12,
+                        "storeCopies" = $13,
+                        "distributorCopies" = $14,
+                        "officeCopies" = $15,
+                        "totalCopies" = $16,
+                        "orderStatus" = $17,
+                        "shippingStatus" = $18,
+                        "paymentStatus" = $19
+                  where "jobId" = $20
+                  returning *`;
                   const updateJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus, jobId];
                   db.query(updateJobSql, updateJobParams)
                     .then(result => {
                       const [updatedJob] = result.rows;
-                      updatedJob.companyName = companyName;
-                      updatedJob.companyAddress = companyAddress;
-                      updatedJob.companyCity = companyCity;
-                      updatedJob.companyState = companyState;
-                      updatedJob.companyZip = companyZip;
-                      updatedJob.distributorName = distributorNameInfo.distributorName;
-                      updatedJob.distributorAddress = distributorAddressInfo.address;
-                      updatedJob.distributorCity = distributorAddressInfo.city;
-                      updatedJob.distributorState = distributorAddressInfo.state;
-                      updatedJob.distributorZip = distributorAddressInfo.zip;
-                      res.status(201).json(updatedJob);
-                    })
-                    .catch(err => {
-                      console.error(err);
-                      res.status(500).json({ error: 'sad day. error. ' });
+                      const getDateSql = `
+                        select to_char("shipDate",'MM-dd-yyyy') as "shipDate",
+                                to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
+                                to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate"
+                        from "jobs"
+                        where "jobId" = $1`;
+                      const getDateParams = [updatedJob.jobId];
+                      db.query(getDateSql, getDateParams)
+                        .then(getDateResult => {
+                          const [dateInfo] = getDateResult.rows;
+                          updatedJob.companyName = companyName;
+                          updatedJob.companyAddress = companyAddress;
+                          updatedJob.companyCity = companyCity;
+                          updatedJob.companyState = companyState;
+                          updatedJob.companyZip = companyZip;
+                          updatedJob.distributorName = distributorNameInfo.distributorName;
+                          updatedJob.distributorAddress = distributorAddressInfo.address;
+                          updatedJob.distributorCity = distributorAddressInfo.city;
+                          updatedJob.distributorState = distributorAddressInfo.state;
+                          updatedJob.distributorZip = distributorAddressInfo.zip;
+                          updatedJob.shipDate = dateInfo.shipDate;
+                          updatedJob.dueDate = dateInfo.dueDate;
+                          updatedJob.inHomeDate = dateInfo.inHomeDate;
+                          res.status(201).json(updatedJob);
+                        })
+                        .catch(err => {
+                          console.error(err);
+                          res.status(500).json({ error: 'sad day. error. ' });
+                        });
                     });
                 });
             });
