@@ -518,10 +518,6 @@ export default function ProductionSheet(props) {
     });
     document.getElementById('search-job-form').reset();
   }
-
-  // console.log('values:', values)
-  // console.log('totalCopies:', totalCopies)
-  // console.log('props.jobs:', props.jobs)
   // FINISH 🏁
   return (
     <div>
