@@ -34,6 +34,7 @@ export default function ProductionSheet(props) {
     companyZip: '',
     distributorName: '',
     distributorId: '',
+    distributorAddressId: '',
     jobNumber: '',
     paperSize: '',
     paperWeight: '',
@@ -207,7 +208,9 @@ export default function ProductionSheet(props) {
       if (event.target.value === distributors[i].distributorName) {
         setValues(values => ({
           ...values,
-          distributorId: distributors[i].distributorId
+          distributorId: distributors[i].distributorId,
+          distributorAddressId: distributors[i].distributorAddressId,
+          distributorName: distributors[i].distributorName
         }));
       }
     }
@@ -363,6 +366,17 @@ export default function ProductionSheet(props) {
         const newJobList = jobList.concat(newJob);
         props.setJobs(newJobList);
       })
+      .then(() => {
+        const params = {
+          yearId: weekAndYear.yearId,
+          weekId: weekAndYear.weekId
+        };
+        fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+          .then(res => res.json())
+          .then(totalCopies => {
+            setTotalCopies(totalCopies);
+          });
+      })
       .catch(console.error);
   }
 
@@ -374,15 +388,39 @@ export default function ProductionSheet(props) {
       },
       body: JSON.stringify(editedJob)
     })
-      .then(() => {
+      .then(response => response.json())
+      .then(editedJobResponse => {
         const newJobList = [...props.jobs];
         for (let i = 0; i < newJobList.length; i++) {
           if (newJobList[i].jobId === editedJob.jobId) {
-            newJobList.splice(i, 1, editedJob);
+            newJobList.splice(i, 1, editedJobResponse);
           }
         } props.setJobs(newJobList);
       })
+      .then(() => {
+        const params = {
+          yearId: weekAndYear.yearId,
+          weekId: weekAndYear.weekId
+        };
+        fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+          .then(res => res.json())
+          .then(totalCopies => {
+            setTotalCopies(totalCopies);
+          });
+      })
       .catch(console.error);
+
+    const params = {
+      yearId: weekAndYear.yearId,
+      weekId: weekAndYear.weekId
+    };
+    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+      .then(res => res.json())
+      .then(totalCopies => {
+        setTotalCopies(totalCopies);
+      })
+      .catch(console.error);
+
   }
 
   function cancelJob(selectedJob) {
@@ -401,15 +439,17 @@ export default function ProductionSheet(props) {
             props.setJobs(newJobList);
           }
         });
-      });
-    const params = {
-      yearId: weekAndYear.yearId,
-      weekId: weekAndYear.weekId
-    };
-    fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
-      .then(res => res.json())
-      .then(totalCopies => {
-        setTotalCopies(totalCopies);
+      })
+      .then(() => {
+        const params = {
+          yearId: weekAndYear.yearId,
+          weekId: weekAndYear.weekId
+        };
+        fetch(`/api/total-copies/${params.yearId}/${params.weekId}`)
+          .then(res => res.json())
+          .then(totalCopies => {
+            setTotalCopies(totalCopies);
+          });
       })
       .catch(console.error);
   }
@@ -428,6 +468,7 @@ export default function ProductionSheet(props) {
       companyZip: '',
       distributorName: '',
       distributorId: '',
+      distributorAddressId: '',
       jobNumber: '',
       paperSize: '',
       paperWeight: '',
@@ -514,7 +555,7 @@ export default function ProductionSheet(props) {
         <div className="d-flex flex-row flex-wrap">
           <div className="col-12 p-0">
             <form id="search-job-form" className="d-flex" onSubmit={handleSubmit}>
-              <select className="form-select fw-light m-1" aria-label="Default select example" onChange={handleYearChange}>
+              <select className="form-select fw-light m-1" aria-label="Default select example" onChange={handleYearChange} required>
                 <option>Select a year.</option>
                 {
                   yearsList.map(event => {
@@ -524,7 +565,7 @@ export default function ProductionSheet(props) {
                   })
                 }
               </select>
-              <select className=" form-select fw-light m-1" aria-label="Default select example" onChange={handleWeekChange}>
+              <select className=" form-select fw-light m-1" aria-label="Default select example" onChange={handleWeekChange} required>
                 <option>Select a week.</option>
                 {
                   weeksList.map(event => {
@@ -590,8 +631,8 @@ export default function ProductionSheet(props) {
                           </div>
                         </div>
                         <div className="d-flex flex-row">
-                          <div className="col-12 box-shadow">
-                            <div id="job-details-header-1" className="d-flex job-details-header p-1">
+                          <div className="col-12 box-shadow rounded">
+                            <div id="job-details-header-1" className="d-flex job-details-header p-1 rounded">
                               <p className="col fw-bold ">Company Name</p>
                               <p className=" col fw-bold">Paper Size</p>
                               <p className=" col fw-bold">Paper Weight</p>
@@ -648,7 +689,7 @@ export default function ProductionSheet(props) {
                               <p className="m-1 col">{event.companyZip}</p>
                               <p className="m-1 col fw-bold" />
                             </div>
-                            <div id="job-details-3 " className="d-flex job-details p-1">
+                            <div id="job-details-3 " className="d-flex job-details p-1 rounded">
                               <p className="m-1 col ">Color Ad</p>
                               <p className="m-1 col">N/A</p>
                               <p className="m-1 col">N/A</p>

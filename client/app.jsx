@@ -9,9 +9,14 @@ export default function App() {
     fetch(`/api/job-list/${params.yearId}/${params.weekId}`)
       .then(res => res.json())
       .then(jobList => {
-        const jobArray = [...jobs];
-        const newJobArray = jobArray.concat(jobList);
-        setJobs(newJobArray);
+        let jobArray = [...jobs];
+        if (jobs.length !== 0) {
+          jobArray = [];
+          const newJobArray1 = jobArray.concat(jobList);
+          setJobs(newJobArray1);
+        } const newJobArray2 = jobArray.concat(jobList);
+        setJobs(newJobArray2);
+
       });
   }
 
