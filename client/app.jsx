@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-// import AppContext from "./lib/app-context";
+import jwtDecode from 'jwt-decode';
+import AppContext from './lib/app-context';
 import ProductionSheet from './pages/production-sheet';
 import LoginPage from './pages/login-page';
 import parseRoute from './lib/parse-route';
@@ -8,12 +9,29 @@ export default function App() {
   const [jobs, setJobs] = useState([]);
   const [cancelledJobs, setCancelledJobs] = useState([]);
   const [route, setRoute] = useState(parseRoute(window.location.hash));
+  const [user, setUser] = useState(null);
+  const [isAuthorizing, setIsAuthorizing] = useState(true);
 
   useEffect(() => {
     window.addEventListener('hashchange', event => {
       setRoute(parseRoute(window.location.hash));
     });
+    const token = window.localStorage.getItem('production-sheet-jwt');
+    const user = token ? jwtDecode(token) : null;
+    setUser(user);
+    setIsAuthorizing(false);
   }, []);
+
+  function handleSignIn(result) {
+    const { user, token } = result;
+    window.localStorage.setItem('react-context-jwt', token);
+    setUser(user);
+  }
+
+  function handleSignOut() {
+    window.localStorage.removeItem('react-context-jwt');
+    setUser(null);
+  }
 
   function searchJobs(params) {
     fetch(`/api/job-list/${params.yearId}/${params.weekId}`)
@@ -31,19 +49,23 @@ export default function App() {
   }
 
   function renderPage() {
-    if (route.path === 'login') {
-      return (<LoginPage />);
+    if (route.path === '') {
+      return (
+        <ProductionSheet onSubmit={searchJobs} jobs={jobs} setJobs={setJobs}
+          cancelledJobs={cancelledJobs} setCancelledJobs={setCancelledJobs} />
+      );
     }
-    return (
-      <ProductionSheet onSubmit={searchJobs} jobs={jobs} setJobs={setJobs}
-        cancelledJobs={cancelledJobs} setCancelledJobs={setCancelledJobs} />
-    );
+    if (route.path === 'sign-in' || route.path === 'sign-up') {
+      return <LoginPage />;
+    }
   }
-
+  if (isAuthorizing) return null;
+  const contextValue = { user, route, handleSignIn, handleSignOut };
   return (
-    renderPage()
-    // <ProductionSheet onSubmit={searchJobs} jobs={jobs} setJobs={setJobs}
-    // cancelledJobs={cancelledJobs} setCancelledJobs={setCancelledJobs}/>
-
+    <AppContext.Provider value={contextValue}>
+      {renderPage()}
+      {/* <ProductionSheet onSubmit={searchJobs} jobs={jobs} setJobs={setJobs}
+    cancelledJobs={cancelledJobs} setCancelledJobs={setCancelledJobs}/> */}
+    </AppContext.Provider>
   );
 }
