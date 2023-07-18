@@ -13,7 +13,7 @@ export default function App() {
   const [isAuthorizing, setIsAuthorizing] = useState(true);
 
   useEffect(() => {
-    window.addEventListener('hashchange', event => {
+    window.addEventListener('hashchange', () => {
       setRoute(parseRoute(window.location.hash));
     });
     const token = window.localStorage.getItem('production-sheet-jwt');
@@ -59,13 +59,12 @@ export default function App() {
       return <Auth />;
     }
   }
+
   if (isAuthorizing) return null;
   const contextValue = { user, route, handleSignIn, handleSignOut };
   return (
     <AppContext.Provider value={contextValue}>
       {renderPage()}
-      {/* <ProductionSheet onSubmit={searchJobs} jobs={jobs} setJobs={setJobs}
-    cancelledJobs={cancelledJobs} setCancelledJobs={setCancelledJobs}/> */}
     </AppContext.Provider>
   );
 }

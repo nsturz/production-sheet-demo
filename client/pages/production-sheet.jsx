@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import NavBar from '../components/navbar';
 import NewJobModal from '../components/new-job-form-modal';
 import EditModal from '../components/edit-job-modal';
 import CancelJobModal from '../components/cancel-job-modal';
-// import AppContext from '../lib/app-context';
+import AppContext from '../lib/app-context';
+import Redirect from '../components/redirect';
 
 export default function ProductionSheet(props) {
   // this grabs all the years from the database and creates an array in state👇🏼
@@ -520,6 +521,9 @@ export default function ProductionSheet(props) {
     document.getElementById('search-job-form').reset();
   }
   // FINISH 🏁
+
+  const { user } = useContext(AppContext);
+  if (!user) return <Redirect to="sign-in" />;
   return (
     <div>
       <div>
