@@ -17,14 +17,12 @@ export default function NavBar(props) {
                 <img src="/images/colorad.png" alt="" />
               </a>
             </li>
-            <li className="nav-item">
-              {user !== null &&
-                <button className="btn btn-dark" onClick={handleSignOut}>
-                  Sign out
-                </button>
-              }
-            </li>
           </ul>
+          {user !== null &&
+            <button className="btn btn-dark bg-transparent border-0 mt-3" onClick={handleSignOut}>
+              Sign out
+            </button>
+          }
         </div>
       </div>
     </nav>
