@@ -1,15 +1,7 @@
 import React
-// , { useState }
   from 'react';
 
 export default function EditModal(props) {
-  // const [year, setYear] = useState({
-  //   year: ''
-  // });
-  // const [week, setWeek] = useState({
-  //   week: ''
-  // });
-
   function getJob(event) {
     const jobNumber = event.target.value;
     fetch(`/api/job-number/${jobNumber}`)
@@ -44,16 +36,6 @@ export default function EditModal(props) {
           headline: job.headline
         });
       });
-    // fetch(`/api/year/${props.weekAndYear.yearId}`)
-    //   .then(response => response.json())
-    //   .then(year => {
-    //     setYear(year);
-    //   });
-    // fetch(`/api/week/${props.weekAndYear.weekId}`)
-    //   .then(response => response.json())
-    //   .then(week => {
-    //     setWeek(week);
-    //   });
   }
 
   function handleSubmit(event) {

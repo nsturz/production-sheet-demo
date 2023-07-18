@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AppContext from '../lib/app-context';
 
 export default function NavBar(props) {
+  const { user, handleSignOut } = useContext(AppContext);
+
   return (
     <nav className="navbar navbar-expand-lg">
+      <button className="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon text-white" />
+      </button>
       <div className="container-fluid">
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon" />
-        </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
@@ -15,6 +18,11 @@ export default function NavBar(props) {
               </a>
             </li>
           </ul>
+          {user !== null &&
+            <button className="btn btn-dark bg-transparent border-0 mt-3" onClick={handleSignOut}>
+              Sign out
+            </button>
+          }
         </div>
       </div>
     </nav>
