@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import AppContext from './lib/app-context';
 import ProductionSheet from './pages/production-sheet';
-import LoginPage from './pages/login-page';
+import Auth from './pages/auth';
 import parseRoute from './lib/parse-route';
 
 export default function App() {
@@ -56,7 +56,7 @@ export default function App() {
       );
     }
     if (route.path === 'sign-in' || route.path === 'sign-up') {
-      return <LoginPage />;
+      return <Auth />;
     }
   }
   if (isAuthorizing) return null;
