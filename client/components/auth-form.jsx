@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 
 export default function AuthForm(props) {
-  // const [ username, setUsername ] = useState('');
-  // const [ password, setPassword ] = useState('');
   const [state, setState] = useState({
     username: '',
     password: ''
   });
-  // function handleChange(event) {
-  //   const { name, value } = event.target;
-  //   setState({ [name]: value });
-  // }
 
   const handleUsernameChange = event => {
     event.persist();

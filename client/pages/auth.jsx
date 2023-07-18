@@ -4,6 +4,7 @@ import AppContext from '../lib/app-context';
 import Redirect from '../components/redirect';
 
 export default function Auth() {
+
   const { user, route, handleSignIn } = useContext(AppContext);
 
   if (user) return <Redirect to="" />;
