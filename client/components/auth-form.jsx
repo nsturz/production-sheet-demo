@@ -6,6 +6,8 @@ export default function AuthForm(props) {
     password: ''
   });
 
+  const [validationMessage, setValidationMessage] = useState('text-danger d-none');
+
   const handleUsernameChange = event => {
     event.persist();
     setState({
@@ -36,16 +38,18 @@ export default function AuthForm(props) {
       .then(result => {
         if (result.user && result.token) {
           props.onSignIn(result);
-        }
+        } setValidationMessage('text-danger');
       });
   }
-
   return (
     <form onSubmit={handleSubmit} action="" className="d-flex justify-content-center mb-3 mt-3">
       <div className="col-lg-10">
         <div>
-          <input type="text" className="form-control mb-3 mt-3" placeholder="Username" onChange={handleUsernameChange} />
-          <input id="password" type="password" className="form-control mb-3 mt-3" placeholder="Password" onChange={handlePasswordChange} />
+          <input type="text" className="form-control mb-3 mt-3" placeholder="Username" onChange={handleUsernameChange} required />
+          <input id="password" type="password" className="form-control mb-3 mt-3" placeholder="Password" onChange={handlePasswordChange} required />
+        </div>
+        <div className="d-flex justify-content-center">
+          <p className={validationMessage}>Invalid Login</p>
         </div>
         <div className="d-flex justify-content-center">
           <button type="submit" className="btn login-btn">Submit</button>
