@@ -18,6 +18,9 @@ export default function NavBar(props) {
               </a>
             </li>
           </ul>
+          <div className="ms-3 me-3 mt-3">
+            <a href="" className="new-user-link">New User</a>
+          </div>
           {user !== null &&
             <button className="btn btn-dark bg-transparent border-0 mt-3" onClick={handleSignOut}>
               Sign out

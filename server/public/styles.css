@@ -59,6 +59,10 @@ li {
   background-color: #212529;
 }
 
+.new-user-link {
+  color: white;
+}
+
 .new-job-btn,
 .edit-job-btn {
   border: none;
