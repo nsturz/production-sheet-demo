@@ -4,10 +4,6 @@ import NavBar from '../components/navbar';
 
 export default function SignUp() {
 
-  // const { user, route, handleSignIn } = useContext(AppContext);
-
-  // if (user) return <Redirect to="" />;
-
   return (
     <div>
       <NavBar />
