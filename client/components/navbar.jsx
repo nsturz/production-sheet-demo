@@ -4,6 +4,7 @@ import AppContext from '../lib/app-context';
 export default function NavBar(props) {
   const { user, handleSignOut } = useContext(AppContext);
 
+  // console.log('user:', user.username)
   return (
     <nav className="navbar navbar-expand-lg">
       <button className="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,9 +19,12 @@ export default function NavBar(props) {
               </a>
             </li>
           </ul>
-          <div className="ms-3 me-3 mt-3">
-            <a href="" className="new-user-link">New User</a>
-          </div>
+          {
+            user.username === 'anonymous' &&
+            <div className="ms-3 me-3 mt-3">
+              <a href="#sign-up" className="new-user-link">New User</a>
+            </div>
+          }
           {user !== null &&
             <button className="btn btn-dark bg-transparent border-0 mt-3" onClick={handleSignOut}>
               Sign out
