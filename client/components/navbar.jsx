@@ -4,7 +4,6 @@ import AppContext from '../lib/app-context';
 export default function NavBar(props) {
   const { user, handleSignOut } = useContext(AppContext);
 
-  // console.log('user:', user.username)
   return (
     <nav className="navbar navbar-expand-lg">
       <button className="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
