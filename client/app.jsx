@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import AppContext from './lib/app-context';
 import ProductionSheet from './pages/production-sheet';
 import Auth from './pages/auth';
+import SignUp from './pages/sign-up';
 import parseRoute from './lib/parse-route';
 
 export default function App() {
@@ -55,8 +56,11 @@ export default function App() {
           cancelledJobs={cancelledJobs} setCancelledJobs={setCancelledJobs} />
       );
     }
-    if (route.path === 'sign-in' || route.path === 'sign-up') {
+    if (route.path === 'sign-in') {
       return <Auth />;
+    }
+    if (route.path === 'sign-up') {
+      return <SignUp />;
     }
   }
 

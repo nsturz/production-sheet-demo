@@ -18,6 +18,17 @@ export default function NavBar(props) {
               </a>
             </li>
           </ul>
+          {
+            user.username === 'anonymous' &&
+            <div className="dropdown show">
+              <a className="btn btn-secondary dropdown-toggle mt-3" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Admin
+              </a>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a href="#sign-up" className="new-user-link ms-2">New User</a>
+              </div>
+            </div>
+          }
           {user !== null &&
             <button className="btn btn-dark bg-transparent border-0 mt-3" onClick={handleSignOut}>
               Sign out
