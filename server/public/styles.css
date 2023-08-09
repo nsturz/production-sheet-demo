@@ -11,6 +11,7 @@ body {
 }
 
 .delete-modal-wrapper,
+.error-modal-wrapper,
 .new-user-modal-wrapper {
   left: 50%;
   top: 50%;
@@ -29,6 +30,10 @@ body {
 
 .fa-check {
   font-size: 100px;
+}
+
+.fa-x {
+  font-size: 60px;
 }
 
 i {
