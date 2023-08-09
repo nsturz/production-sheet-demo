@@ -65,9 +65,10 @@ export default function SignUp() {
         if (result.error) {
           setErrorModalOverlay('overlay');
           setErrorModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8');
+        } else {
+          setOverlay('overlay');
+          setNewUserWrapper('position-fixed new-user-modal-wrapper col-10 col-lg-8');
         }
-        setOverlay('overlay');
-        setNewUserWrapper('position-fixed new-user-modal-wrapper col-10 col-lg-8');
       });
     setState({
       username: '',
