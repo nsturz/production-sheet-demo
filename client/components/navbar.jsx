@@ -21,8 +21,13 @@ export default function NavBar(props) {
           </ul>
           {
             user.username === 'anonymous' &&
-            <div className="ms-3 me-3 mt-3">
-              <a href="#sign-up" className="new-user-link">New User</a>
+            <div className="dropdown show">
+              <a className="btn btn-secondary dropdown-toggle mt-3" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Admin
+              </a>
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a href="#sign-up" className="new-user-link ms-2">New User</a>
+              </div>
             </div>
           }
           {user !== null &&
