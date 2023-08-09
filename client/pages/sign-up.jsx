@@ -41,6 +41,10 @@ export default function SignUp() {
 
   function addUser(event) {
     event.preventDefault();
+    if (state.password !== referencePassword && state.password.length !== 0 &&
+      referencePassword.length !== 0) {
+      return window.alert('passwords do not match');
+    }
     const req = {
       method: 'POST',
       headers: {
