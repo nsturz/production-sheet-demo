@@ -73,6 +73,21 @@ app.post('/api/auth/sign-in', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET all users from the database 👇🏼
+app.get('/api/all-users', (req, res, next) => {
+  const sql = `
+  select "userId",
+         "username",
+         to_char("joinedAt",'MM-dd-yyyy') as "dateJoined"
+  from "users"
+  order by "userId"`;
+  db.query(sql)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 // DELETE a user from the database👇🏼
 app.delete('/api/delete-user/:userId', (req, res, next) => {
   const userId = Number(req.params.userId);
