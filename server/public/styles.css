@@ -101,11 +101,11 @@ ul {
   list-style-type: none;
 }
 
-@media screen and (max-width: 991px) {
+/* @media screen and (max-width: 991px) {
   .user-info {
     font-size: 12px;
   }
-}
+} */
 
 @media screen and (max-width: 768px) {
   h4 {
@@ -124,7 +124,7 @@ ul {
     justify-content: center;
   }
 
-  .remove-user-btn {
-    margin-top: 0.5rem;
+  .user-info {
+    font-size: 12px;
   }
 }
