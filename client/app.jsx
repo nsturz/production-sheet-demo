@@ -59,15 +59,21 @@ export default function App() {
       });
   }
 
-  // function removeUser(selectedUser){
-  //   fetch(`/api/delete-user/${selectedUser}`)
-  //   .then(res => res.json())
-  //   .then(usersList => {
-  //     let usersArray = [...users];
-  //     const newUsersArray = usersArray.concat(usersList);
-  //     setUsers(newUsersArray);
-  //   })
-  // };
+  function removeUser(selectedUser) {
+    fetch(`/api/delete-user/${selectedUser.userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(selectedUser)
+    })
+      .then(res => res.json())
+      .then(usersList => {
+        const usersArray = [...users];
+        const newUsersArray = usersArray.concat(usersList);
+        setUsers(newUsersArray);
+      });
+  }
 
   function renderPage() {
     if (route.path === '') {
@@ -83,7 +89,7 @@ export default function App() {
       return <SignUp />;
     }
     if (route.path === 'users') {
-      return <Users users={users} />;
+      return <Users users={users} onSubmit={removeUser} />;
     }
   }
 
