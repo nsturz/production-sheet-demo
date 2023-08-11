@@ -13,6 +13,7 @@ export default function App() {
   const [route, setRoute] = useState(parseRoute(window.location.hash));
   const [user, setUser] = useState(null);
   const [isAuthorizing, setIsAuthorizing] = useState(true);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     window.addEventListener('hashchange', () => {
@@ -22,6 +23,14 @@ export default function App() {
     const user = token ? jwtDecode(token) : null;
     setUser(user);
     setIsAuthorizing(false);
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/all-users')
+      .then(res => res.json())
+      .then(users => {
+        setUsers(users);
+      });
   }, []);
 
   function handleSignIn(result) {
@@ -50,6 +59,16 @@ export default function App() {
       });
   }
 
+  // function removeUser(selectedUser){
+  //   fetch(`/api/delete-user/${selectedUser}`)
+  //   .then(res => res.json())
+  //   .then(usersList => {
+  //     let usersArray = [...users];
+  //     const newUsersArray = usersArray.concat(usersList);
+  //     setUsers(newUsersArray);
+  //   })
+  // };
+
   function renderPage() {
     if (route.path === '') {
       return (
@@ -64,7 +83,7 @@ export default function App() {
       return <SignUp />;
     }
     if (route.path === 'users') {
-      return <Users />;
+      return <Users users={users} />;
     }
   }
 

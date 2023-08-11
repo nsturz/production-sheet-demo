@@ -1,17 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import NavBar from '../components/navbar';
 
-export default function Users() {
-  const [users, setUsers] = useState([]);
+export default function Users(props) {
 
-  useEffect(() => {
-    fetch('/api/all-users')
-      .then(res => res.json())
-      .then(users => {
-        setUsers(users);
-      });
-  }, []);
+  const [overlay, setOverlay] = useState('overlay d-none');
+  const [removeUserModalWrapper, setRemoveUserModalWrapper] = useState('position-fixed remove-user-modal-wrapper col-10 col-lg-8 d-none');
 
+  function showRemoveUserModal() {
+    setOverlay('overlay');
+    setRemoveUserModalWrapper('position-fixed remove-user-modal-wrapper col-10 col-lg-8');
+  }
+
+  function closeRemoveUserModal() {
+    setOverlay('overlay d-none');
+    setRemoveUserModalWrapper('position-fixed remove-user-modal-wrapper col-10 col-lg-8 d-none');
+  }
+  // function handleSubmit (event){
+  //   event.preventDefault();
+
+  // }
+  // console.log('props.users:', props.users)
   return (
     <div>
       <NavBar />
@@ -22,7 +30,7 @@ export default function Users() {
         <div className="d-flex justify-content-center">
           <ul className="col-lg-12 col rounded box-shadow pt-3 pb-2 ps-2 pe-2">
             {
-              users.map(event => {
+              props.users.map(event => {
                 return (
                   <li className="d-flex justify-content-between p-3 mt-4 mb-4"
                     key={event.userId}
@@ -45,7 +53,11 @@ export default function Users() {
                     </div>
                     <div className="col">
                       <div className="d-flex justify-content-end">
-                        <button className="remove-user-btn btn btn-sm btn-danger mt-2">Remove</button>
+                        <button id={event.userId}
+                          className="remove-user-btn btn btn-sm btn-danger mt-2"
+                          onClick={showRemoveUserModal}>
+                          Remove
+                        </button>
                       </div>
                     </div>
                   </li>
@@ -53,6 +65,24 @@ export default function Users() {
               })
             }
           </ul>
+        </div>
+        <div className={overlay} />
+        <div className={removeUserModalWrapper}>
+          <div className="rounded bg-white mb-2 mt-2 p-3">
+            <div className='d-flex justify-content-center'>
+              <div>
+                <div>
+                  <h5 className='text-center mt-5'>Remove User?</h5>
+                  <p>This action cannot be undone</p>
+                </div>
+                <div className="row d-flex flex-nowrap justify-content-center">
+                  <button onClick={closeRemoveUserModal}
+                    type='button' className="btn btn-secondary mt-5 ms-3 me-3 mb-5 col-5">Close</button>
+                  <button className="btn btn-danger mt-5 ms-3 me-3 mb-5 col-5 ">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
