@@ -85,8 +85,12 @@ export default function App() {
       .then(res => res.json())
       .then(usersList => {
         const usersArray = [...users];
-        const newUsersArray = usersArray.concat(usersList);
-        setUsers(newUsersArray);
+        usersArray.forEach((event, index) => {
+          if (usersArray[index].userId === selectedUser.userId) {
+            usersArray.splice(index, 1);
+            setUsers(usersArray);
+          }
+        });
       });
   }
 
