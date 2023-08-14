@@ -81,6 +81,7 @@ export default function SignUp() {
     setReferencePassword('');
   }
 
+  if (user === null) return <Redirect to="" />;
   if (user.username !== 'anonymous') return <Redirect to="" />;
   return (
     <div>

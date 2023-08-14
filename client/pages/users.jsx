@@ -14,6 +14,8 @@ export default function Users(props) {
       userId: ''
     });
   }
+
+  if (user === null) return <Redirect to="" />;
   if (user.username !== 'anonymous') return <Redirect to="" />;
 
   return (
