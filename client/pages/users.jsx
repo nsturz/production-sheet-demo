@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import NavBar from '../components/navbar';
 import RemoveUserModal from '../components/remove-user-modal';
+import AppContext from '../lib/app-context';
+import Redirect from '../components/redirect';
 
 export default function Users(props) {
+  const { user } = useContext(AppContext);
 
   function closeRemoveUserModal() {
     props.setRemoveUserOverlay('overlay d-none');
@@ -11,6 +14,7 @@ export default function Users(props) {
       userId: ''
     });
   }
+  if (user.username !== 'anonymous') return <Redirect to="" />;
 
   return (
     <div>
