@@ -15,6 +15,21 @@ export default function App() {
   const [isAuthorizing, setIsAuthorizing] = useState(true);
   const [users, setUsers] = useState([]);
 
+  const [removeUserOverlay, setRemoveUserOverlay] = useState('overlay d-none');
+  const [removeUserModalWrapper, setRemoveUserModalWrapper] = useState('position-fixed remove-user-modal-wrapper col-10 col-lg-8 d-none');
+  const [selectedUser, setSelectedUser] = useState({
+    userId: ''
+  });
+
+  const showRemoveUserModal = event => {
+    event.preventDefault();
+    setRemoveUserOverlay('overlay');
+    setRemoveUserModalWrapper('position-fixed remove-user-modal-wrapper col-10 col-lg-8');
+    setSelectedUser({
+      userId: Number(event.target.id)
+    });
+  };
+
   useEffect(() => {
     window.addEventListener('hashchange', () => {
       setRoute(parseRoute(window.location.hash));
@@ -89,7 +104,17 @@ export default function App() {
       return <SignUp />;
     }
     if (route.path === 'users') {
-      return <Users users={users} onSubmit={removeUser} />;
+      return <Users
+                removeUser={removeUser}
+                users={users}
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser}
+                onSubmit={removeUser}
+                removeUserOverlay={removeUserOverlay}
+                removeUserModalWrapper={removeUserModalWrapper}
+                setRemoveUserModalWrapper={setRemoveUserModalWrapper}
+                setRemoveUserOverlay={setRemoveUserOverlay}
+      showRemoveUserModal={showRemoveUserModal}/>;
     }
   }
 

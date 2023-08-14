@@ -1,43 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NavBar from '../components/navbar';
+import RemoveUserModal from '../components/remove-user-modal';
 
 export default function Users(props) {
 
-  const [overlay, setOverlay] = useState('overlay d-none');
-  const [removeUserModalWrapper, setRemoveUserModalWrapper] = useState('position-fixed remove-user-modal-wrapper col-10 col-lg-8 d-none');
-  const [selectedUser, setSelectedUser] = useState({
-    userId: ''
-  });
-
-  // console.log('selectedUser:', selectedUser)
-
-  function showRemoveUserModal(event) {
-    event.preventDefault();
-    setSelectedUser({
-      userId: Number(event.target.id)
-    });
-    setOverlay('overlay');
-    setRemoveUserModalWrapper('position-fixed remove-user-modal-wrapper col-10 col-lg-8');
-  }
-
   function closeRemoveUserModal() {
-    setOverlay('overlay d-none');
-    setRemoveUserModalWrapper('position-fixed remove-user-modal-wrapper col-10 col-lg-8 d-none');
-    setSelectedUser({
-      userId: ''
-    });
-  }
-  function handleSubmit(event) {
-    event.preventDefault();
-    props.onSubmit(selectedUser);
-    setOverlay('overlay d-none');
-    setRemoveUserModalWrapper('position-fixed remove-user-modal-wrapper col-10 col-lg-8 d-none');
-    setSelectedUser({
+    props.setRemoveUserOverlay('overlay d-none');
+    props.setRemoveUserModalWrapper('position-fixed remove-user-modal-wrapper col-10 col-lg-8 d-none');
+    props.setSelectedUser({
       userId: ''
     });
   }
 
-  // console.log('props.users:', props.users)
   return (
     <div>
       <NavBar />
@@ -73,7 +47,7 @@ export default function Users(props) {
                       <div className="d-flex justify-content-end">
                         <button id={event.userId}
                           className="remove-user-btn btn btn-sm btn-danger mt-2"
-                          onClick={showRemoveUserModal}>
+                          onClick={props.showRemoveUserModal}>
                           Remove
                         </button>
                       </div>
@@ -84,25 +58,15 @@ export default function Users(props) {
             }
           </ul>
         </div>
-        <div className={overlay} />
-        <div className={removeUserModalWrapper}>
-          <div className="rounded bg-white mb-2 mt-2 p-3">
-            <div className='d-flex justify-content-center'>
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <h5 className='text-center mt-5'>Remove User?</h5>
-                  <p className="text-center">This action cannot be undone</p>
-                </div>
-                <div className="row d-flex flex-nowrap justify-content-center">
-                  <button onClick={closeRemoveUserModal}
-                    type='button' className="btn btn-secondary mt-5 ms-3 me-3 mb-5 col-5">Close</button>
-                  <button type="submit"
-                    className="btn btn-danger mt-5 ms-3 me-3 mb-5 col-5 ">Confirm</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+        <RemoveUserModal
+          onSubmit={props.removeUser}
+          removeUserOverlay={props.removeUserOverlay}
+          setRemoveUserOverlay={props.setRemoveUserOverlay}
+          removeUserModalWrapper={props.removeUserModalWrapper}
+          setRemoveUserModalWrapper={props.setRemoveUserModalWrapper}
+          closeRemoveUserModal={closeRemoveUserModal}
+          selectedUser={props.selectedUser}
+          setSelectedUser={props.setSelectedUser} />
       </div>
     </div>
   );
