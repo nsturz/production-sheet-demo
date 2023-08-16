@@ -235,6 +235,7 @@ app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
           to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
           to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate",
           "jobId",
+          "isCancelled",
           "yearId",
           "weekId",
           "companyId",
@@ -266,7 +267,7 @@ app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
    join "distributors" using ("distributorId")
    join "companyAddresses" using ("companyAddressId")
    join "distributorAddresses" using ("distributorAddressId")
-   where "yearId" = $1 AND "weekId" = $2 AND "isCancelled" = false
+   where "yearId" = $1 AND "weekId" = $2
    order by "jobId" asc`;
   const params = [yearId, weekId];
   db.query(sql, params)
