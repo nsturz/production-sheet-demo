@@ -12,7 +12,8 @@ body {
 
 .delete-modal-wrapper,
 .error-modal-wrapper,
-.new-user-modal-wrapper {
+.new-user-modal-wrapper,
+.remove-user-modal-wrapper {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -101,6 +102,12 @@ ul {
   list-style-type: none;
 }
 
+/* @media screen and (max-width: 991px) {
+  .user-info {
+    font-size: 12px;
+  }
+} */
+
 @media screen and (max-width: 768px) {
   h4 {
     font-size: 16px;
@@ -116,5 +123,9 @@ ul {
 
   .main-title-wrapper {
     justify-content: center;
+  }
+
+  .user-info {
+    font-size: 12px;
   }
 }

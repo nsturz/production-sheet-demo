@@ -4,6 +4,7 @@ import AppContext from './lib/app-context';
 import ProductionSheet from './pages/production-sheet';
 import Auth from './pages/auth';
 import SignUp from './pages/sign-up';
+import Users from './pages/users';
 import parseRoute from './lib/parse-route';
 
 export default function App() {
@@ -12,6 +13,22 @@ export default function App() {
   const [route, setRoute] = useState(parseRoute(window.location.hash));
   const [user, setUser] = useState(null);
   const [isAuthorizing, setIsAuthorizing] = useState(true);
+  const [users, setUsers] = useState([]);
+
+  const [removeUserOverlay, setRemoveUserOverlay] = useState('overlay d-none');
+  const [removeUserModalWrapper, setRemoveUserModalWrapper] = useState('position-fixed remove-user-modal-wrapper col-10 col-lg-8 d-none');
+  const [selectedUser, setSelectedUser] = useState({
+    userId: ''
+  });
+
+  const showRemoveUserModal = event => {
+    event.preventDefault();
+    setRemoveUserOverlay('overlay');
+    setRemoveUserModalWrapper('position-fixed remove-user-modal-wrapper col-10 col-lg-8');
+    setSelectedUser({
+      userId: Number(event.target.id)
+    });
+  };
 
   useEffect(() => {
     window.addEventListener('hashchange', () => {
@@ -21,6 +38,14 @@ export default function App() {
     const user = token ? jwtDecode(token) : null;
     setUser(user);
     setIsAuthorizing(false);
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/all-users')
+      .then(res => res.json())
+      .then(users => {
+        setUsers(users);
+      });
   }, []);
 
   function handleSignIn(result) {
@@ -49,6 +74,26 @@ export default function App() {
       });
   }
 
+  function removeUser(selectedUser) {
+    fetch(`/api/delete-user/${selectedUser.userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(selectedUser)
+    })
+      .then(res => res.json())
+      .then(usersList => {
+        const usersArray = [...users];
+        usersArray.forEach((event, index) => {
+          if (usersArray[index].userId === selectedUser.userId) {
+            usersArray.splice(index, 1);
+            setUsers(usersArray);
+          }
+        });
+      });
+  }
+
   function renderPage() {
     if (route.path === '') {
       return (
@@ -61,6 +106,19 @@ export default function App() {
     }
     if (route.path === 'sign-up') {
       return <SignUp />;
+    }
+    if (route.path === 'users') {
+      return <Users
+                removeUser={removeUser}
+                users={users}
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser}
+                onSubmit={removeUser}
+                removeUserOverlay={removeUserOverlay}
+                removeUserModalWrapper={removeUserModalWrapper}
+                setRemoveUserModalWrapper={setRemoveUserModalWrapper}
+                setRemoveUserOverlay={setRemoveUserOverlay}
+      showRemoveUserModal={showRemoveUserModal}/>;
     }
   }
 

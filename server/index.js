@@ -16,6 +16,7 @@ app.get('/api/hello', (req, res, next) => {
   res.json({ hello: 'world' });
 });
 
+// Add a new user to the database 👇🏼
 app.post('/api/auth/sign-up', (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -39,6 +40,7 @@ app.post('/api/auth/sign-up', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// Sign in 👇🏼
 app.post('/api/auth/sign-in', (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -67,6 +69,39 @@ app.post('/api/auth/sign-in', (req, res, next) => {
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);
           res.json({ token, user: payload });
         });
+    })
+    .catch(err => next(err));
+});
+
+// GET all users from the database 👇🏼
+app.get('/api/all-users', (req, res, next) => {
+  const sql = `
+  select "userId",
+         "username",
+         to_char("joinedAt",'MM-dd-yyyy') as "dateJoined"
+  from "users"
+  order by "userId"`;
+  db.query(sql)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+// DELETE a user from the database👇🏼
+app.delete('/api/delete-user/:userId', (req, res, next) => {
+  const userId = Number(req.params.userId);
+  if (!userId) {
+    throw new ClientError(400, 'userId must be included in body of request');
+  }
+  const sql = `
+  delete from "users"
+  where "userId" = $1
+  returning "username", "userId"`;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
     })
     .catch(err => next(err));
 });

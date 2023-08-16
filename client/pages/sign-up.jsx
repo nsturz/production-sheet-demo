@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import SignUpForm from '../components/sign-up-form';
 import NavBar from '../components/navbar';
+import AppContext from '../lib/app-context';
+import Redirect from '../components/redirect';
 
 export default function SignUp() {
+  const { user } = useContext(AppContext);
+
   const [state, setState] = useState({
     username: '',
     password: ''
@@ -77,6 +81,8 @@ export default function SignUp() {
     setReferencePassword('');
   }
 
+  if (user === null) return <Redirect to="" />;
+  if (user.username !== 'anonymous') return <Redirect to="" />;
   return (
     <div>
       <NavBar />
