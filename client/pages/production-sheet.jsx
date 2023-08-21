@@ -622,9 +622,10 @@ export default function ProductionSheet(props) {
                           <div className="col">
                             <div className="d-flex mt-1 mb-1">
                               <h4 id="order-number" className="job-status m-1">{event.jobNumber}</h4>
-                              <h4 id="order-status" className="job-status m-1 text-info">{event.orderStatus}</h4>
-                              <h4 id="payment-status " className="job-status m-1 text-success">{event.paymentStatus}</h4>
-                              <h4 id="shipping-status " className="job-status m-1">{event.shippingStatus}</h4>
+                              {event.isCancelled === false ? <h4 id="order-status" className="job-status m-1 text-info">{event.orderStatus}</h4> : <div/>}
+                              {event.isCancelled === false ? <h4 id="payment-status " className="job-status m-1 text-success">{event.paymentStatus}</h4> : <div />}
+                              {event.isCancelled === false ? <h4 id="shipping-status " className="job-status m-1">{event.shippingStatus}</h4> : <div/>}
+                              {event.isCancelled === true ? <h4 className="job-status m-1 text-danger">CANCELLED</h4> : <div/>}
                             </div>
                           </div>
                           <div className="col">
