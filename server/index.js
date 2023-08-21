@@ -235,6 +235,7 @@ app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
           to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
           to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate",
           "jobId",
+          "isCancelled",
           "yearId",
           "weekId",
           "companyId",
@@ -266,7 +267,7 @@ app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
    join "distributors" using ("distributorId")
    join "companyAddresses" using ("companyAddressId")
    join "distributorAddresses" using ("distributorAddressId")
-   where "yearId" = $1 AND "weekId" = $2 AND "isCancelled" = false
+   where "yearId" = $1 AND "weekId" = $2
    order by "jobId" asc`;
   const params = [yearId, weekId];
   db.query(sql, params)
@@ -667,11 +668,66 @@ app.patch('/api/cancel-job/:jobId', (req, res) => {
   const updateJobParams = [jobId];
   db.query(updateJobSql, updateJobParams)
     .then(result => {
-      res.status(201).json(result.rows);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'sad day. error. ' });
+      const [cancelledJob] = result.rows;
+      const getCompanyInfoSql = `
+      select "companyName",
+             "address" as "companyAddress",
+             "city" as "companyCity",
+             "state" as "companyState",
+             "zip" as "companyZip"
+      from "companies"
+      join "companyAddresses" using ("companyAddressId")
+      where "companyId" = $1 `;
+      const getCompanyInfoParams = [cancelledJob.companyId];
+      db.query(getCompanyInfoSql, getCompanyInfoParams)
+        .then(info => {
+          const [companyInfo] = info.rows;
+          const getDistributorInfoSql = `
+          select "distributorName",
+                 "address" as "distributorAddress",
+                 "city" as "distributorCity",
+                 "state" as "distributorState",
+                 "zip" as "distributorZip"
+          from "distributors"
+          join "distributorAddresses" using ("distributorAddressId")
+          where "distributorId" = $1`;
+          const getDistributorInfoParams = [cancelledJob.distributorId];
+          db.query(getDistributorInfoSql, getDistributorInfoParams)
+            .then(info => {
+              const [distributorInfo] = info.rows;
+              const getDatesSql = `
+                select to_char("shipDate",'MM-dd-yyyy') as "shipDate",
+                       to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
+                       to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate"
+                from "jobs"
+                where "jobId" = $1`;
+              const getDatesParams = [cancelledJob.jobId];
+              db.query(getDatesSql, getDatesParams)
+                .then(info => {
+                  const [datesInfo] = info.rows;
+                  cancelledJob.companyName = companyInfo.companyName;
+                  cancelledJob.companyAddress = companyInfo.companyAddress;
+                  cancelledJob.companyCity = companyInfo.companyCity;
+                  cancelledJob.companyState = companyInfo.companyState;
+                  cancelledJob.companyZip = companyInfo.companyZip;
+
+                  cancelledJob.distributorName = distributorInfo.distributorName;
+                  cancelledJob.distributorAddress = distributorInfo.distributorAddress;
+                  cancelledJob.distributorCity = distributorInfo.distributorCity;
+                  cancelledJob.distributorState = distributorInfo.distributorState;
+                  cancelledJob.distributorZip = distributorInfo.distributorZip;
+
+                  cancelledJob.shipDate = datesInfo.shipDate;
+                  cancelledJob.dueDate = datesInfo.dueDate;
+                  cancelledJob.inHomeDate = datesInfo.inHomeDate;
+                  res.status(201).json(cancelledJob);
+                })
+                .catch(err => {
+                  console.error(err);
+                  res.status(500).json({ error: 'sad day. error. ' });
+                });
+            });
+        });
     });
 });
 
