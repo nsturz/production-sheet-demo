@@ -695,22 +695,37 @@ app.patch('/api/cancel-job/:jobId', (req, res) => {
           db.query(getDistributorInfoSql, getDistributorInfoParams)
             .then(info => {
               const [distributorInfo] = info.rows;
-              cancelledJob.companyName = companyInfo.companyName;
-              cancelledJob.companyAddress = companyInfo.companyAddress;
-              cancelledJob.companyCity = companyInfo.companyCity;
-              cancelledJob.companyState = companyInfo.companyState;
-              cancelledJob.companyZip = companyInfo.companyZip;
+              const getDatesSql = `
+                select to_char("shipDate",'MM-dd-yyyy') as "shipDate",
+                       to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
+                       to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate"
+                from "jobs"
+                where "jobId" = $1`;
+              const getDatesParams = [cancelledJob.jobId];
+              db.query(getDatesSql, getDatesParams)
+                .then(info => {
+                  const [datesInfo] = info.rows;
+                  cancelledJob.companyName = companyInfo.companyName;
+                  cancelledJob.companyAddress = companyInfo.companyAddress;
+                  cancelledJob.companyCity = companyInfo.companyCity;
+                  cancelledJob.companyState = companyInfo.companyState;
+                  cancelledJob.companyZip = companyInfo.companyZip;
 
-              cancelledJob.distributorName = distributorInfo.distributorName;
-              cancelledJob.distributorAddress = distributorInfo.distributorAddress;
-              cancelledJob.distributorCity = distributorInfo.distributorCity;
-              cancelledJob.distributorState = distributorInfo.distributorState;
-              cancelledJob.distributorZip = distributorInfo.distributorZip;
-              res.status(201).json(cancelledJob);
-            })
-            .catch(err => {
-              console.error(err);
-              res.status(500).json({ error: 'sad day. error. ' });
+                  cancelledJob.distributorName = distributorInfo.distributorName;
+                  cancelledJob.distributorAddress = distributorInfo.distributorAddress;
+                  cancelledJob.distributorCity = distributorInfo.distributorCity;
+                  cancelledJob.distributorState = distributorInfo.distributorState;
+                  cancelledJob.distributorZip = distributorInfo.distributorZip;
+
+                  cancelledJob.shipDate = datesInfo.shipDate;
+                  cancelledJob.dueDate = datesInfo.dueDate;
+                  cancelledJob.inHomeDate = datesInfo.inHomeDate;
+                  res.status(201).json(cancelledJob);
+                })
+                .catch(err => {
+                  console.error(err);
+                  res.status(500).json({ error: 'sad day. error. ' });
+                });
             });
         });
     });
