@@ -63,6 +63,8 @@ export default function NewJobModal(props) {
     props.setNewJobOverlay('overlay d-none');
     props.setNewJobModalStyle('position-absolute new-job-modal-wrapper col-10 bg-white rounded d-none');
   }
+
+  // console.log('props.values:', props.values)
   return (
     <div>
       <div className={props.newJobOverlay} />
@@ -102,8 +104,8 @@ export default function NewJobModal(props) {
               </select>
             </div>
             <div className="mb-2 mt-2">
-              <label htmlFor="companyNameInput" >Distributor</label>
-              <select name="" id="distributorSelect" value={props.values.distributorName}className="form-select fw-light" onChange={props.handleDistributorIdChange} required>
+              <label htmlFor="distributorSelect" >Distributor</label>
+              <select name="" id="distributorSelect" value={props.values.distributorName} className="form-select fw-light" onChange={props.handleDistributorIdChange} required>
                 <option>Select a distributor.</option>
                 {
                   props.distributors.map(event => {
@@ -114,6 +116,21 @@ export default function NewJobModal(props) {
                 }
               </select>
             </div>
+            {/* <div className="mb-2 mt-2">
+              <label htmlFor="companySelect" >Company</label>
+              <select name="" id="companySelect" value={props.values.companyName} className="form-select fw-light" onChange={props.handleDistributorIdChange}
+                required>
+                <option>Select a distributor.</option>
+                {
+                  props.distributors.map(event => {
+                    return (
+                      <option id={event.distributorId} key={event.distributorId}>{event.distributorName}</option>
+                    );
+                  })
+                }
+              </select>
+              <input type="text" className="form-control" id="companyNameInput" value={props.values.companyName} onChange={props.handleCompanyNameChange} required />
+            </div> */}
             <div className="mb-2 mt-2">
               <label htmlFor="jobNumberInput" >Job Number</label>
               <input type="text" className="form-control" id="jobNumberInput" value={props.values.jobNumber} onChange={props.handleJobNumberChange} required />
