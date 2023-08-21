@@ -668,11 +668,34 @@ app.patch('/api/cancel-job/:jobId', (req, res) => {
   const updateJobParams = [jobId];
   db.query(updateJobSql, updateJobParams)
     .then(result => {
-      res.status(201).json(result.rows);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'sad day. error. ' });
+      const [cancelledJob] = result.rows;
+      // console.log('cancelledJob:', cancelledJob)
+      const getOtherJobInfoSql = `
+      select "companyName",
+             "address" as "companyAddress",
+             "city" as "companyCity",
+             "state" as "companyState",
+             "zip" as "companyZip"
+      from "companies"
+      join "companyAddresses" using ("companyAddressId")
+      where "companyId" = $1 `;
+      const getOtherJobInfoParams = [cancelledJob.companyId];
+      db.query(getOtherJobInfoSql, getOtherJobInfoParams)
+        .then(info => {
+          const [otherJobInfo] = info.rows;
+          // console.log('otherJobInfo:', otherJobInfo)
+          cancelledJob.companyName = otherJobInfo.companyName;
+          cancelledJob.companyAddress = otherJobInfo.companyAddress;
+          cancelledJob.companyCity = otherJobInfo.companyCity;
+          cancelledJob.companyState = otherJobInfo.companyState;
+          cancelledJob.companyZip = otherJobInfo.companyZip;
+          // console.log('cancelledJob:', cancelledJob)
+          res.status(201).json(cancelledJob);
+        })
+        .catch(err => {
+          console.error(err);
+          res.status(500).json({ error: 'sad day. error. ' });
+        });
     });
 });
 

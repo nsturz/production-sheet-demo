@@ -433,11 +433,13 @@ export default function ProductionSheet(props) {
       },
       body: JSON.stringify(selectedJob)
     })
-      .then(() => {
+      .then(res => res.json())
+      .then(cancelledJob => {
+        // console.log('response from server:', cancelledJob)
         const newJobList = [...props.jobs];
         newJobList.forEach((event, index) => {
           if (newJobList[index].jobId === selectedJob.jobId) {
-            newJobList.splice(index, 1);
+            newJobList.splice(index, 1, cancelledJob);
             props.setJobs(newJobList);
           }
         });
