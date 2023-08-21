@@ -435,7 +435,6 @@ export default function ProductionSheet(props) {
     })
       .then(res => res.json())
       .then(cancelledJob => {
-        // console.log('response from server:', cancelledJob)
         const newJobList = [...props.jobs];
         newJobList.forEach((event, index) => {
           if (newJobList[index].jobId === selectedJob.jobId) {
@@ -623,18 +622,22 @@ export default function ProductionSheet(props) {
                         <div className="d-flex flex-row">
                           <div className="col">
                             <div className="d-flex mt-1 mb-1">
-                              <h4 id="order-number" className="job-status m-1">{event.jobNumber}</h4>
-                              {event.isCancelled === false ? <h4 id="order-status" className="job-status m-1 text-info">{event.orderStatus}</h4> : <div/>}
-                              {event.isCancelled === false ? <h4 id="payment-status " className="job-status m-1 text-success">{event.paymentStatus}</h4> : <div />}
-                              {event.isCancelled === false ? <h4 id="shipping-status " className="job-status m-1">{event.shippingStatus}</h4> : <div/>}
-                              {event.isCancelled === true ? <h4 className="job-status m-1 text-danger">CANCELLED</h4> : <div/>}
+                              <h4 id="order-number" className="job-status ms-1 me-2 mt-1">{event.jobNumber}</h4>
+                              {event.isCancelled === false ? <h4 id="order-status" className="job-status text-info ms-1 me-2 mt-1">{event.orderStatus}</h4> : null}
+                              {event.isCancelled === false ? <h4 id="payment-status " className="job-status text-success ms-1 me-2 mt-1">{event.paymentStatus}</h4> : null}
+                              {event.isCancelled === false ? <h4 id="shipping-status " className="job-status ms-1 me-2 mt-1">{event.shippingStatus}</h4> : null}
+                              {event.isCancelled === true ? <h4 className="job-status text-danger ms-1 me-2 mt-1">CANCELLED</h4> : <div/>}
                             </div>
                           </div>
                           <div className="col">
                             <div className="d-flex justify-content-end">
-                              <button onClick={showDeleteModal} className="edit-job-btn bg-transparent m-0 p-1 " >
-                                <i className="fa-solid fa-trash edit-icon" id={event.jobId}/>
-                              </button>
+                              {
+                                event.isCancelled === false
+                                  ? <button onClick={showDeleteModal} className="edit-job-btn bg-transparent m-0 p-1 " >
+                                    <i className="fa-solid fa-trash edit-icon" id={event.jobId} />
+                                  </button>
+                                  : null
+                              }
                             </div>
                           </div>
                         </div>
