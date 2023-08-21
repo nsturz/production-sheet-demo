@@ -669,8 +669,7 @@ app.patch('/api/cancel-job/:jobId', (req, res) => {
   db.query(updateJobSql, updateJobParams)
     .then(result => {
       const [cancelledJob] = result.rows;
-      // console.log('cancelledJob:', cancelledJob)
-      const getOtherJobInfoSql = `
+      const getCompanyInfoSql = `
       select "companyName",
              "address" as "companyAddress",
              "city" as "companyCity",
@@ -679,22 +678,40 @@ app.patch('/api/cancel-job/:jobId', (req, res) => {
       from "companies"
       join "companyAddresses" using ("companyAddressId")
       where "companyId" = $1 `;
-      const getOtherJobInfoParams = [cancelledJob.companyId];
-      db.query(getOtherJobInfoSql, getOtherJobInfoParams)
+      const getCompanyInfoParams = [cancelledJob.companyId];
+      db.query(getCompanyInfoSql, getCompanyInfoParams)
         .then(info => {
-          const [otherJobInfo] = info.rows;
-          // console.log('otherJobInfo:', otherJobInfo)
-          cancelledJob.companyName = otherJobInfo.companyName;
-          cancelledJob.companyAddress = otherJobInfo.companyAddress;
-          cancelledJob.companyCity = otherJobInfo.companyCity;
-          cancelledJob.companyState = otherJobInfo.companyState;
-          cancelledJob.companyZip = otherJobInfo.companyZip;
-          // console.log('cancelledJob:', cancelledJob)
-          res.status(201).json(cancelledJob);
-        })
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({ error: 'sad day. error. ' });
+          const [companyInfo] = info.rows;
+          const getDistributorInfoSql = `
+          select "distributorName",
+                 "address" as "distributorAddress",
+                 "city" as "distributorCity",
+                 "state" as "distributorState",
+                 "zip" as "distributorZip"
+          from "distributors"
+          join "distributorAddresses" using ("distributorAddressId")
+          where "distributorId" = $1`;
+          const getDistributorInfoParams = [cancelledJob.distributorId];
+          db.query(getDistributorInfoSql, getDistributorInfoParams)
+            .then(info => {
+              const [distributorInfo] = info.rows;
+              cancelledJob.companyName = companyInfo.companyName;
+              cancelledJob.companyAddress = companyInfo.companyAddress;
+              cancelledJob.companyCity = companyInfo.companyCity;
+              cancelledJob.companyState = companyInfo.companyState;
+              cancelledJob.companyZip = companyInfo.companyZip;
+
+              cancelledJob.distributorName = distributorInfo.distributorName;
+              cancelledJob.distributorAddress = distributorInfo.distributorAddress;
+              cancelledJob.distributorCity = distributorInfo.distributorCity;
+              cancelledJob.distributorState = distributorInfo.distributorState;
+              cancelledJob.distributorZip = distributorInfo.distributorZip;
+              res.status(201).json(cancelledJob);
+            })
+            .catch(err => {
+              console.error(err);
+              res.status(500).json({ error: 'sad day. error. ' });
+            });
         });
     });
 });
