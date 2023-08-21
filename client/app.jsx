@@ -122,7 +122,6 @@ export default function App() {
     }
   }
 
-  // console.log('jobs:', jobs)
   if (isAuthorizing) return null;
   const contextValue = { user, route, handleSignIn, handleSignOut };
   return (
