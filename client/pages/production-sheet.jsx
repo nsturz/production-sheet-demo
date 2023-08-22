@@ -25,15 +25,12 @@ export default function ProductionSheet(props) {
   const [values, setValues] = useState({
     yearId: '',
     weekId: '',
-    companyId: '',
     jobId: '',
     year: '',
     week: '',
+    companyId: '',
     companyName: '',
-    companyAddress: '',
-    companyCity: '',
-    companyState: '',
-    companyZip: '',
+    companyAddressId: '',
     distributorName: '',
     distributorId: '',
     distributorAddressId: '',
@@ -60,6 +57,16 @@ export default function ProductionSheet(props) {
       .then(res => res.json())
       .then(distributors => {
         setDistributors(distributors);
+      });
+  }, []);
+
+  // FETCH method GETS all companies in database so they can be selected in the form 👇🏼
+  const [companies, setCompanies] = useState([]);
+  useEffect(() => {
+    fetch('/api/companies')
+      .then(res => res.json())
+      .then(companies => {
+        setCompanies(companies);
       });
   }, []);
 
@@ -217,12 +224,19 @@ export default function ProductionSheet(props) {
       }
     }
   };
-  const handleCompanyNameChange = event => {
+
+  const handleCompanyIdChange = event => {
     event.persist();
-    setValues(values => ({
-      ...values,
-      companyName: event.target.value
-    }));
+    for (let i = 0; i < companies.length; i++) {
+      if (event.target.value === companies[i].companyName) {
+        setValues(values => ({
+          ...values,
+          companyId: companies[i].companyId,
+          companyAddressId: companies[i].companyAddressId,
+          companyName: companies[i].companyName
+        }));
+      }
+    }
   };
   const handleJobNumberChange = event => {
     event.persist();
@@ -320,34 +334,6 @@ export default function ProductionSheet(props) {
     setValues(values => ({
       ...values,
       headline: event.target.value
-    }));
-  };
-  const handleCompanyAddressChange = event => {
-    event.persist();
-    setValues(values => ({
-      ...values,
-      companyAddress: event.target.value
-    }));
-  };
-  const handleCityChange = event => {
-    event.persist();
-    setValues(values => ({
-      ...values,
-      companyCity: event.target.value
-    }));
-  };
-  const handleStateChange = event => {
-    event.persist();
-    setValues(values => ({
-      ...values,
-      companyState: event.target.value
-    }));
-  };
-  const handleZipChange = event => {
-    event.persist();
-    setValues(values => ({
-      ...values,
-      companyZip: Number(event.target.value)
     }));
   };
 
@@ -522,8 +508,6 @@ export default function ProductionSheet(props) {
     document.getElementById('search-job-form').reset();
   }
   // FINISH 🏁
-
-  // console.log('props.jobs:', props.jobs)
   const { user } = useContext(AppContext);
   if (!user) return <Redirect to="sign-in" />;
   return (
@@ -721,32 +705,31 @@ export default function ProductionSheet(props) {
                 : <div className="col-12"><p className="text-center">Nothing to display yet.</p></div>
         }
         <NewJobModal
-          onSubmit={addJob} job={job} values={values} setValues={setValues} yearsList={yearsList} weeksList={weeksList} distributors={distributors}
+          onSubmit={addJob} job={job} values={values} setValues={setValues} yearsList={yearsList} weeksList={weeksList}
+          distributors={distributors} companies={companies}
           closeModal={closeModal} handleYearIdChange={handleYearIdChange}
-          handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
+          handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange} handleCompanyIdChange={handleCompanyIdChange}
           handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
           handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
           handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
           handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
           handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
           handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
-          handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
-          handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
-          handleStateChange={handleStateChange} handleZipChange={handleZipChange} newJobOverlay={newJobOverlay} setNewJobOverlay={setNewJobOverlay}
+          handleHeadlineChange={handleHeadlineChange}
+          newJobOverlay={newJobOverlay} setNewJobOverlay={setNewJobOverlay}
           newJobModalStyle={newJobModalStyle} setNewJobModalStyle={setNewJobModalStyle} hideNewJobModal={hideNewJobModal} />
 
-        <EditModal onSubmit={editJob}values={values} jobs={props.jobs} distributors={distributors}
+        <EditModal onSubmit={editJob}values={values} jobs={props.jobs} distributors={distributors} companies={companies}
           setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
-          handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange}
+          handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange} andleCompanyIdChange={handleCompanyIdChange}
           handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
           handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
           handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}
           handleDistributorCopiesChange={handleDistributorCopiesChange} handleStoreCopiesChange={handleStoreCopiesChange}
           handleOfficeCopiesChange={handleOfficeCopiesChange} handleInstructionsChange={handleInstructionsChange}
           handleShipDateChange={handleShipDateChange} handleDueDateChange={handleDueDateChange} handleInHomeDateChange={handleInHomeDateChange}
-          handleHeadlineChange={handleHeadlineChange} handleCompanyNameChange={handleCompanyNameChange}
-          handleCompanyAddressChange={handleCompanyAddressChange} handleCityChange={handleCityChange}
-          handleStateChange={handleStateChange} handleZipChange={handleZipChange} editModalStyle={editModalStyle} setEditModalStyle={setEditModalStyle}
+          handleHeadlineChange={handleHeadlineChange}
+          editModalStyle={editModalStyle} setEditModalStyle={setEditModalStyle}
           editOverlay={editOverlay} setEditOverlay={setEditOverlay} hideEditModal={hideEditModal} />
       </div>
     </div>

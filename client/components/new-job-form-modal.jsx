@@ -7,11 +7,8 @@ export default function NewJobModal(props) {
     const newJob = {
       yearId: props.values.yearId,
       weekId: props.values.weekId,
-      companyName: props.values.companyName,
-      companyAddress: props.values.companyAddress,
-      companyCity: props.values.companyCity,
-      companyState: props.values.companyState,
-      companyZip: props.values.companyZip,
+      companyId: props.values.companyId,
+      companyAddressId: props.values.companyAddressId,
       distributorId: props.values.distributorId,
       distributorAddressId: props.values.distributorAddressId,
       jobNumber: props.values.jobNumber,
@@ -38,10 +35,8 @@ export default function NewJobModal(props) {
       year: '',
       week: '',
       companyName: '',
-      companyAddress: '',
-      companyCity: '',
-      companyState: '',
-      companyZip: '',
+      companyId: '',
+      companyAddressId: '',
       distributorName: '',
       distributorId: '',
       distributorAddressId: '',
@@ -64,7 +59,6 @@ export default function NewJobModal(props) {
     props.setNewJobModalStyle('position-absolute new-job-modal-wrapper col-10 bg-white rounded d-none');
   }
 
-  // console.log('props.values:', props.values)
   return (
     <div>
       <div className={props.newJobOverlay} />
@@ -116,21 +110,20 @@ export default function NewJobModal(props) {
                 }
               </select>
             </div>
-            {/* <div className="mb-2 mt-2">
+            <div className="mb-2 mt-2">
               <label htmlFor="companySelect" >Company</label>
-              <select name="" id="companySelect" value={props.values.companyName} className="form-select fw-light" onChange={props.handleDistributorIdChange}
+              <select name="" id="companySelect" value={props.values.companyName} className="form-select fw-light" onChange={props.handleCompanyIdChange}
                 required>
-                <option>Select a distributor.</option>
+                <option>Select a company.</option>
                 {
-                  props.distributors.map(event => {
+                  props.companies.map(event => {
                     return (
-                      <option id={event.distributorId} key={event.distributorId}>{event.distributorName}</option>
+                      <option id={event.companyId} key={event.companyId}>{event.companyName}</option>
                     );
                   })
                 }
               </select>
-              <input type="text" className="form-control" id="companyNameInput" value={props.values.companyName} onChange={props.handleCompanyNameChange} required />
-            </div> */}
+            </div>
             <div className="mb-2 mt-2">
               <label htmlFor="jobNumberInput" >Job Number</label>
               <input type="text" className="form-control" id="jobNumberInput" value={props.values.jobNumber} onChange={props.handleJobNumberChange} required />
@@ -206,31 +199,9 @@ export default function NewJobModal(props) {
                 <input type="date" id="inHomeDate" className="form-control fw-light" value={props.values.inHomeDate} onChange={props.handleInHomeDateChange} required />
               </div>
             </div>
-            <div className="mb-2 mt-2">
+            <div className="mb-2 mt-2 mb-4">
               <label htmlFor="headline">Headline</label>
               <input type="text" id="headline" className="form-control" value={props.values.headline} onChange={props.handleHeadlineChange} required />
-            </div>
-            <div className="mb-2 mt-2">
-              <label htmlFor="companyNameInput" >Company Name</label>
-              <input type="text" className="form-control" id="companyNameInput" value={props.values.companyName} onChange={props.handleCompanyNameChange} required />
-            </div>
-            <div className="mb-2 mt-2">
-              <label htmlFor="address">Company Address</label>
-              <input type="text" id="address" className="form-control" value={props.values.companyAddress} onChange={props.handleCompanyAddressChange} required />
-            </div>
-            <div className="d-flex mb-3 mt-3 justify-content-between">
-              <div className="col-3">
-                <label htmlFor="city">City</label>
-                <input type="text" id="city" className="form-control" value={props.values.companyCity} onChange={props.handleCityChange} required />
-              </div>
-              <div className="col-3">
-                <label htmlFor="state">State</label>
-                <input type="text" id="state" className="form-control" value={props.values.companyState} onChange={props.handleStateChange} required />
-              </div>
-              <div className="col-3">
-                <label htmlFor="zip">Zip</label>
-                <input type="text" id="zip" className="form-control" value={props.values.companyZip} onChange={props.handleZipChange} required />
-              </div>
             </div>
             <div className="modal-footer">
               <button onClick={props.hideNewJobModal} type="button" className="btn btn-secondary">Close</button>

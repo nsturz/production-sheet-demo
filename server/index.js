@@ -420,6 +420,7 @@ app.get('/api/job-number/:jobNumber', (req, res, next) => {
           "yearId" as "yearId",
           "weekId" as "weekId",
           "companyId",
+          "companyAddressId",
           "distributorId",
           "distributorAddressId",
           "jobNumber",
@@ -667,7 +668,6 @@ app.post('/api/new-job', (req, res) => {
                       db.query(getDateSql, getDateParams)
                         .then(getDateResult => {
                           const [dateInfo] = getDateResult.rows;
-
                           newJob.companyName = companyNameInfo.companyName;
                           newJob.companyAddress = companyAddressInfo.address;
                           newJob.companyCity = companyAddressInfo.city;
@@ -781,11 +781,7 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
     yearId,
     weekId,
     companyId,
-    companyAddress,
-    companyCity,
-    companyState,
-    companyZip,
-    companyName,
+    companyAddressId,
     distributorAddressId,
     distributorId,
     jobNumber,
@@ -804,8 +800,8 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
     paymentStatus
   } = req.body;
   const totalCopies = Number(storeCopies) + Number(distributorCopies) + Number(officeCopies);
-  if (!yearId || !weekId || !companyName || !companyId || !companyAddress || !companyCity || !companyState ||
-    !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
+  if (!yearId || !weekId || !companyId || !companyAddressId ||
+    !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
     !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
     !orderStatus || !shippingStatus || !paymentStatus) {
     res.status(400).json({ error: 'Make sure you have entered all required fields' });
@@ -830,29 +826,29 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
       db.query(getDistributorNameSql, getDistributorNameParams)
         .then(distributorNameResult => {
           const [distributorNameInfo] = distributorNameResult.rows;
-          const updateCompanySql = `
-          UPDATE "companies"
-          set    "companyName" = $1
-          where  "companyId" = $2
-          returning *`;
-          const updateCompanyParams = [companyName, companyId];
-          db.query(updateCompanySql, updateCompanyParams)
-            .then(result => {
-              const [updatedCompany] = result.rows;
-              const updateCompanyAddressSql = `
-          UPDATE "companyAddresses"
-          set    "address" = $1,
-                 "city" = $2,
-                 "state" = $3,
-                 "zip" = $4
-          where  "companyAddressId" = $5
-          returning *`;
-              const updateCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip, updatedCompany.companyAddressId];
-              db.query(updateCompanyAddressSql, updateCompanyAddressParams)
-                .then(() => {
+
+          const getCompanyAddressSql = `
+            select "address",
+                   "city",
+                   "state",
+                   "zip"
+            from "companyAddresses"
+            where "companyAddressId" = $1`;
+          const getCompanyAddressParams = [companyAddressId];
+          db.query(getCompanyAddressSql, getCompanyAddressParams)
+            .then(companyAddressResult => {
+              const [companyAddressInfo] = companyAddressResult.rows;
+              const getCompanyNameSql = `
+              select "companyName"
+              from "companies"
+              where "companyId" = $1`;
+              const getCompanyNameParams = [companyId];
+              db.query(getCompanyNameSql, getCompanyNameParams)
+                .then(companyNameResult => {
+                  const [companyNameInfo] = companyNameResult.rows;
                   const updateJobSql = `
                   UPDATE "jobs"
-                  set    "yearId" = $1,
+                  set   "yearId" = $1,
                         "weekId" = $2,
                         "companyId" = $3,
                         "distributorId" = $4,
@@ -887,11 +883,11 @@ app.patch('/api/edit-job/:jobId', (req, res) => {
                       db.query(getDateSql, getDateParams)
                         .then(getDateResult => {
                           const [dateInfo] = getDateResult.rows;
-                          updatedJob.companyName = companyName;
-                          updatedJob.companyAddress = companyAddress;
-                          updatedJob.companyCity = companyCity;
-                          updatedJob.companyState = companyState;
-                          updatedJob.companyZip = companyZip;
+                          updatedJob.companyName = companyNameInfo.companyName;
+                          updatedJob.companyAddress = companyAddressInfo.address;
+                          updatedJob.companyCity = companyAddressInfo.city;
+                          updatedJob.companyState = companyAddressInfo.state;
+                          updatedJob.companyZip = companyAddressInfo.zip;
                           updatedJob.distributorName = distributorNameInfo.distributorName;
                           updatedJob.distributorAddress = distributorAddressInfo.address;
                           updatedJob.distributorCity = distributorAddressInfo.city;
