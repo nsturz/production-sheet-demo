@@ -721,7 +721,7 @@ export default function ProductionSheet(props) {
 
         <EditModal onSubmit={editJob}values={values} jobs={props.jobs} distributors={distributors} companies={companies}
           setValues={setValues} yearsList={yearsList} weeksList={weeksList} weekAndYear={weekAndYear} handleYearIdChange={handleYearIdChange}
-          handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange} andleCompanyIdChange={handleCompanyIdChange}
+          handleWeekIdChange={handleWeekIdChange} handleDistributorIdChange={handleDistributorIdChange} handleCompanyIdChange={handleCompanyIdChange}
           handleJobNumberChange={handleJobNumberChange} handlePaperSizeChange={handlePaperSizeChange}
           handlePaperWeightChange={handlePaperWeightChange} handleShippingStatusChange={handleShippingStatusChange}
           handlePaymentStatusChange={handlePaymentStatusChange} handleOrderStatusChange={handleOrderStatusChange}

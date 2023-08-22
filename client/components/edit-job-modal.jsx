@@ -105,7 +105,7 @@ export default function EditModal(props) {
             <div className="mb-2 mt-2">
               <label htmlFor="jobSelect" >Job</label>
               <select value={props.values.jobNumber} onChange={getJob} name="" id="jobSelect" className='form-select fw-light'>
-                <option value="">Select a job to edit</option>
+                <option>Select a job to edit</option>
                 {
                   props.jobs.map(event => {
                     return (
@@ -115,33 +115,6 @@ export default function EditModal(props) {
                 }
               </select>
             </div>
-
-            {/* 👇🏼 will keep year and week options out of the edit functionality for the time being 👇🏼 */}
-            {/* <div className="mb-2 mt-2">
-              <label htmlFor="yearSelect" >Year</label>
-              <select value={year.year} onChange={props.handleYearIdChange} name="" id="editYear" className='form-select fw-light' required>
-                {
-                  props.yearsList.map((event, index) => {
-                    return (
-                      <option id={event.yearId} key={index}>{event.year}</option>
-                    );
-                  })
-                }
-              </select>
-            </div>
-            <div className="mb-2 mt-2">
-              <label htmlFor="editWeek" >Week</label>
-              <select value={week.week} onChange={props.handleWeekIdChange} name="" id="editWeek" className='form-select fw-light' required>
-                {
-                  props.weeksList.map(event => {
-                    return (
-                      <option id={event.weekId} key={event.weekId}>{event.week}</option>
-                    );
-                  })
-                }
-              </select>
-            </div> */}
-
             <div className="mb-2 mt-2">
               <label htmlFor="editDistributor" >Distributor</label>
               <select value={props.values.distributorName} onChange={props.handleDistributorIdChange} name="" id="editDistributor" className="form-select fw-light" required>
