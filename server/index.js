@@ -558,11 +558,14 @@ app.post('/api/new-job', (req, res) => {
   const {
     yearId,
     weekId,
-    companyAddress,
-    companyCity,
-    companyState,
-    companyZip,
-    companyName,
+    // to be deleted 👇🏼
+    // companyAddress,
+    // companyCity,
+    // companyState,
+    // companyZip,
+    // companyName,
+    companyId,
+    companyAddressId,
     distributorId,
     distributorAddressId,
     jobNumber,
@@ -582,8 +585,9 @@ app.post('/api/new-job', (req, res) => {
   } = req.body;
   const totalCopies = Number(storeCopies) + Number(distributorCopies) + Number(officeCopies);
   const isCancelled = false;
-  if (!yearId || !weekId || !companyName || !companyAddress || !companyCity || !companyState ||
-    !companyZip || !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
+  if (!yearId || !weekId || !companyAddressId || !companyId ||
+    // || !companyName || !companyAddress || !companyCity || !companyState || !companyZip
+    !distributorId || !jobNumber || !paperSize || !paperWeight || !shipDate ||
     !dueDate || !inHomeDate || !instructions || !headline || !storeCopies || !distributorCopies || !officeCopies ||
     !orderStatus || !shippingStatus || !paymentStatus) {
     res.status(400).json({ error: 'Make sure you have entered all required fields' });
@@ -608,45 +612,67 @@ app.post('/api/new-job', (req, res) => {
       db.query(getDistributorNameSql, getDistributorNameParams)
         .then(distributorNameResult => {
           const [distributorNameInfo] = distributorNameResult.rows;
-          const insertCompanyAddressSql = `
-          insert into "companyAddresses" ("address", "city", "state", "zip")
-          values      ($1, $2, $3, $4)
-          returning *`;
-          const insertCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip];
-          db.query(insertCompanyAddressSql, insertCompanyAddressParams)
+
+          const getCompanyAddressSql = `
+            select "address",
+                   "city",
+                   "state",
+                   "zip"
+            from "companyAddresses"
+            where "companyAddressId" = $1 `;
+          const getCompanyAddressParams = [companyAddressId];
+          db.query(getCompanyAddressSql, getCompanyAddressParams)
             .then(companyAddressResult => {
-              const [newCompanyAddress] = companyAddressResult.rows;
-              const insertCompanySql = `
-                insert into "companies" ("companyName", "companyAddressId")
-                values      ($1, $2)
-                returning *`;
-              const insertCompanyParams = [companyName, newCompanyAddress.companyAddressId];
-              db.query(insertCompanySql, insertCompanyParams)
-                .then(result => {
-                  const [newCompany] = result.rows;
+              const [companyAddressInfo] = companyAddressResult.rows;
+              const getCompanyNameSql = `
+              select "companyName"
+              from "companies"
+              where "companyId" = $1`;
+              const getCompanyNameParams = [companyId];
+              db.query(getCompanyNameSql, getCompanyNameParams)
+                .then(companyNameResult => {
+                  const [companyNameInfo] = companyNameResult.rows;
+                  // to be deleted 👇🏼
+                  // const insertCompanyAddressSql = `
+                  // insert into "companyAddresses" ("address", "city", "state", "zip")
+                  // values      ($1, $2, $3, $4)
+                  // returning *`;
+                  // const insertCompanyAddressParams = [companyAddress, companyCity, companyState, companyZip];
+                  // db.query(insertCompanyAddressSql, insertCompanyAddressParams)
+                  // .then(companyAddressResult => {
+                  // const [newCompanyAddress] = companyAddressResult.rows;
+                  // const insertCompanySql = `
+                  // insert into "companies" ("companyName", "companyAddressId")
+                  // values      ($1, $2)
+                  // returning *`;
+                  // const insertCompanyParams = [companyName, newCompanyAddress.companyAddressId];
+                  // db.query(insertCompanySql, insertCompanyParams)
+                  //   .then(result => {
+                  //     const [newCompany] = result.rows;
                   const insertJobSql = `
                     insert into "jobs" ("yearId", "weekId", "companyId", "distributorId", "jobNumber", "paperSize", "paperWeight", "shipDate", "dueDate", "inHomeDate", "instructions", "headline", "storeCopies", "distributorCopies", "officeCopies","totalCopies", "orderStatus", "shippingStatus", "paymentStatus", "isCancelled")
                     values      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18, $19, $20)
                     returning *`;
-                  const insertJobParams = [yearId, weekId, newCompany.companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus, isCancelled];
+                  const insertJobParams = [yearId, weekId, companyId, distributorId, jobNumber, paperSize, paperWeight, shipDate, dueDate, inHomeDate, instructions, headline, storeCopies, distributorCopies, officeCopies, totalCopies, orderStatus, shippingStatus, paymentStatus, isCancelled];
                   db.query(insertJobSql, insertJobParams)
                     .then(result => {
                       const [newJob] = result.rows;
                       const getDateSql = `
-                        select to_char("shipDate",'MM-dd-yyyy') as "shipDate",
-                                to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
-                                to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate"
-                        from "jobs"
-                        where "jobId" = $1`;
+                    select to_char("shipDate",'MM-dd-yyyy') as "shipDate",
+                            to_char("dueDate", 'MM-dd-yyyy') as "dueDate",
+                            to_char("inHomeDate", 'MM-dd-yyyy') as "inHomeDate"
+                    from "jobs"
+                    where "jobId" = $1`;
                       const getDateParams = [newJob.jobId];
                       db.query(getDateSql, getDateParams)
                         .then(getDateResult => {
                           const [dateInfo] = getDateResult.rows;
-                          newJob.companyName = newCompany.companyName;
-                          newJob.companyAddress = companyAddress;
-                          newJob.companyCity = companyCity;
-                          newJob.companyState = companyState;
-                          newJob.companyZip = companyZip;
+
+                          newJob.companyName = companyNameInfo.companyName;
+                          newJob.companyAddress = companyAddressInfo.address;
+                          newJob.companyCity = companyAddressInfo.city;
+                          newJob.companyState = companyAddressInfo.state;
+                          newJob.companyZip = companyAddressInfo.zip;
                           newJob.distributorName = distributorNameInfo.distributorName;
                           newJob.distributorAddress = distributorAddressInfo.address;
                           newJob.distributorCity = distributorAddressInfo.city;

@@ -523,6 +523,7 @@ export default function ProductionSheet(props) {
   }
   // FINISH 🏁
 
+  // console.log('props.jobs:', props.jobs)
   const { user } = useContext(AppContext);
   if (!user) return <Redirect to="sign-in" />;
   return (
