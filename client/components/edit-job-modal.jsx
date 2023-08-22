@@ -11,12 +11,9 @@ export default function EditModal(props) {
           jobId: job.jobId,
           yearId: job.yearId,
           weekId: job.weekId,
-          companyId: job.companyId,
           companyName: job.companyName,
-          companyAddress: job.companyAddress,
-          companyCity: job.companyCity,
-          companyState: job.companyState,
-          companyZip: job.companyZip,
+          companyId: job.companyId,
+          companyAddressId: job.companyAddressId,
           distributorName: job.distributorName,
           distributorId: job.distributorId,
           distributorAddressId: job.distributorAddressId,
@@ -45,11 +42,7 @@ export default function EditModal(props) {
       yearId: props.values.yearId,
       weekId: props.values.weekId,
       companyId: props.values.companyId,
-      companyName: props.values.companyName,
-      companyAddress: props.values.companyAddress,
-      companyCity: props.values.companyCity,
-      companyState: props.values.companyState,
-      companyZip: props.values.companyZip,
+      companyAddressId: props.values.companyAddressId,
       distributorId: props.values.distributorId,
       distributorAddressId: props.values.distributorAddressId,
       jobNumber: props.values.jobNumber,
@@ -71,14 +64,11 @@ export default function EditModal(props) {
     props.setValues({
       yearId: '',
       weekId: '',
-      companyId: '',
       year: '',
       week: '',
+      companyId: '',
+      companyAddressId: '',
       companyName: '',
-      companyAddress: '',
-      companyCity: '',
-      companyState: '',
-      companyZip: '',
       distributorName: '',
       distributorId: '',
       distributorAddressId: '',
@@ -115,7 +105,7 @@ export default function EditModal(props) {
             <div className="mb-2 mt-2">
               <label htmlFor="jobSelect" >Job</label>
               <select value={props.values.jobNumber} onChange={getJob} name="" id="jobSelect" className='form-select fw-light'>
-                <option value="">Select a job to edit</option>
+                <option>Select a job to edit</option>
                 {
                   props.jobs.map(event => {
                     return (
@@ -125,41 +115,27 @@ export default function EditModal(props) {
                 }
               </select>
             </div>
-
-            {/* 👇🏼 will keep year and week options out of the edit functionality for the time being 👇🏼 */}
-            {/* <div className="mb-2 mt-2">
-              <label htmlFor="yearSelect" >Year</label>
-              <select value={year.year} onChange={props.handleYearIdChange} name="" id="editYear" className='form-select fw-light' required>
+            <div className="mb-2 mt-2">
+              <label htmlFor="editDistributor" >Distributor</label>
+              <select value={props.values.distributorName} onChange={props.handleDistributorIdChange} name="" id="editDistributor" className="form-select fw-light" required>
+                <option>Select a distributor.</option>
                 {
-                  props.yearsList.map((event, index) => {
+                  props.distributors.map(event => {
                     return (
-                      <option id={event.yearId} key={index}>{event.year}</option>
+                      <option id={event.distributorId} key={event.distributorId}>{event.distributorName}</option>
                     );
                   })
                 }
               </select>
             </div>
             <div className="mb-2 mt-2">
-              <label htmlFor="editWeek" >Week</label>
-              <select value={week.week} onChange={props.handleWeekIdChange} name="" id="editWeek" className='form-select fw-light' required>
+              <label htmlFor="editCompany" >Company</label>
+              <select value={props.values.companyName} onChange={props.handleCompanyIdChange} name="" id="editCompany" className="form-select fw-light" required>
+                <option>Select a company.</option>
                 {
-                  props.weeksList.map(event => {
+                  props.companies.map(event => {
                     return (
-                      <option id={event.weekId} key={event.weekId}>{event.week}</option>
-                    );
-                  })
-                }
-              </select>
-            </div> */}
-
-            <div className="mb-2 mt-2">
-              <label htmlFor="companyNameInput" >Distributor</label>
-              <select value={props.values.distributorName} onChange={props.handleDistributorIdChange} name="" id="editDistributor" className="form-select fw-light" required>
-                <option>Distributor</option>
-                {
-                  props.distributors.map(event => {
-                    return (
-                      <option id={event.distributorId} key={event.distributorId}>{event.distributorName}</option>
+                      <option id={event.companyId} key={event.companyId}>{event.companyName}</option>
                     );
                   })
                 }
@@ -240,31 +216,9 @@ export default function EditModal(props) {
                 <input value={props.values.inHomeDate} onChange={props.handleInHomeDateChange} type="date" id="editInHomeDate" className="form-control fw-light" required />
               </div>
             </div>
-            <div className="mb-2 mt-2">
+            <div className="mb-2 mt-2 mb-4">
               <label htmlFor="headline">Headline</label>
               <input value={props.values.headline} onChange={props.handleHeadlineChange} type="text" id="editHeadline" className="form-control" required />
-            </div>
-            <div className="mb-2 mt-2">
-              <label htmlFor="companyNameInput" >Company Name</label>
-              <input value={props.values.companyName} onChange={props.handleCompanyNameChange} type="text" className="form-control" id="editCompanyNameInput" required />
-            </div>
-            <div className="mb-2 mt-2">
-              <label htmlFor="address">Company Address</label>
-              <input value={props.values.companyAddress} onChange={props.handleCompanyAddressChange} type="text" id="editAddress" className="form-control" required />
-            </div>
-            <div className="d-flex mb-3 mt-3 justify-content-between">
-              <div className="col-3">
-                <label htmlFor="city">City</label>
-                <input value={props.values.companyCity} onChange={props.handleCityChange} type="text" id="editCity" className="form-control" required />
-              </div>
-              <div className="col-3">
-                <label htmlFor="state">State</label>
-                <input value={props.values.companyState} onChange={props.handleStateChange} type="text" id="editState" className="form-control" required />
-              </div>
-              <div className="col-3">
-                <label htmlFor="zip">Zip</label>
-                <input value={props.values.companyZip} onChange={props.handleZipChange} type="text" id="editZip" className="form-control" required />
-              </div>
             </div>
             <div className="modal-footer">
               <button onClick={props.hideEditModal} type="button" className="btn btn-secondary">Close</button>
