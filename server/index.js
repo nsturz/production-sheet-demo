@@ -220,6 +220,20 @@ app.get('/api/distributors', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET all companies (mainly used in new-job-modal.jsx) 👇🏼
+app.get('/api/companies', (req, res, next) => {
+  const sql = `
+  select "companyId",
+         "companyName",
+         "companyAddressId"
+  from companies`;
+  db.query(sql)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 // GET all job info about multiple jobs based on year id AND weekId👇🏼
 app.get('/api/job-list/:yearId/:weekId', (req, res, next) => {
   const yearId = Number(req.params.yearId);
