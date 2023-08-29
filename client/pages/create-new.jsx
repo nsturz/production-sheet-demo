@@ -4,7 +4,7 @@ import NavBar from '../components/navbar';
 import AppContext from '../lib/app-context';
 import Redirect from '../components/redirect';
 
-export default function SignUp() {
+export default function CreateNew() {
   const { user } = useContext(AppContext);
 
   const [state, setState] = useState({
@@ -17,6 +17,9 @@ export default function SignUp() {
   const [errorModalOverlay, setErrorModalOverlay] = useState('overlay d-none');
   const [newUserWrapper, setNewUserWrapper] = useState('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
   const [errorModalWrapper, setErrorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  const [signUpContainer, setSignUpContainer] = useState('col-10 pb-5 ms-4 d-none');
+  const [newUserPointer, setNewUserPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+
   const handleUsernameChange = event => {
     event.persist();
     setState({
@@ -40,6 +43,8 @@ export default function SignUp() {
 
   function closeNewUserModal() {
     document.getElementById('sign-up-form').reset();
+    setSignUpContainer('col-10 pb-5 ms-4 d-none');
+    setNewUserPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
     setOverlay('overlay d-none');
     setNewUserWrapper('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
   }
@@ -81,6 +86,22 @@ export default function SignUp() {
     setReferencePassword('');
   }
 
+  function showNewUserForm() {
+    setSignUpContainer('col-10 pb-5 ms-4');
+    setNewUserPointer('fa-solid fa-angle-down fa-xs mt-3 ms-2');
+  }
+
+  function hideNewUserForm() {
+    setSignUpContainer('col-10 pb-5 ms-4 d-none');
+    setNewUserPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+    setState({
+      username: '',
+      password: ''
+    });
+    setReferencePassword('');
+    document.getElementById('sign-up-form').reset();
+  }
+
   if (user === null) return <Redirect to="" />;
   if (user.username !== 'anonymous') return <Redirect to="" />;
   return (
@@ -88,13 +109,24 @@ export default function SignUp() {
       <NavBar />
       <div className="container">
         <div className="d-flex justify-content-center pt-5">
-          <div className="col-10 login-wrapper box-shadow rounded mt-5 pb-5 border">
-            <div className="d-flex justify-content-center mt-3 mb-3">
-              <h2 className="fw-bold">Create New User</h2>
+          <div className="col-10 box-shadow rounded">
+            <div className="d-flex">
+              <button className="create-new-btn"
+              onClick={
+                newUserPointer === 'fa-solid fa-angle-right fa-xs mt-3 ms-2'
+                  ? showNewUserForm
+                  : hideNewUserForm}>
+                <i className={newUserPointer} />
+              </button>
+              <p className="m-3">New User</p>
             </div>
-            <SignUpForm addUser={addUser} state={state} setState={setState} referencePassword={referencePassword}
-              setReferencePassword={setReferencePassword} handleUsernameChange={handleUsernameChange} handlePasswordChange={handlePasswordChange}
-              handleReferencePasswordChange={handleReferencePasswordChange}/>
+            <div>
+              <div className={signUpContainer}>
+                <SignUpForm addUser={addUser} state={state} setState={setState} referencePassword={referencePassword}
+                  setReferencePassword={setReferencePassword} handleUsernameChange={handleUsernameChange} handlePasswordChange={handlePasswordChange}
+                  handleReferencePasswordChange={handleReferencePasswordChange} hideNewUserForm={hideNewUserForm} />
+              </div>
+            </div>
           </div>
         </div>
         <div className={overlay} />

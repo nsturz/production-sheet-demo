@@ -3,7 +3,7 @@ import jwtDecode from 'jwt-decode';
 import AppContext from './lib/app-context';
 import ProductionSheet from './pages/production-sheet';
 import Auth from './pages/auth';
-import SignUp from './pages/sign-up';
+import CreateNew from './pages/create-new';
 import Users from './pages/users';
 import parseRoute from './lib/parse-route';
 
@@ -104,8 +104,8 @@ export default function App() {
     if (route.path === 'sign-in') {
       return <Auth />;
     }
-    if (route.path === 'sign-up') {
-      return <SignUp />;
+    if (route.path === 'create-new') {
+      return <CreateNew />;
     }
     if (route.path === 'users') {
       return <Users

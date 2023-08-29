@@ -10,6 +10,11 @@ body {
   box-shadow: 3px 3px 3px 3px #d8d8d8;
 }
 
+.create-new-btn {
+  background: transparent;
+  border: none;
+}
+
 .delete-modal-wrapper,
 .error-modal-wrapper,
 .new-user-modal-wrapper,
