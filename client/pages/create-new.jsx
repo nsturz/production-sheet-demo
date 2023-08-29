@@ -4,10 +4,12 @@ import NavBar from '../components/navbar';
 import AppContext from '../lib/app-context';
 import Redirect from '../components/redirect';
 import NewDistributorForm from '../components/new-distributor-form';
+import NewCompanyForm from '../components/new-company-form';
 
 export default function CreateNew() {
   const { user } = useContext(AppContext);
 
+  // Values in state for Form inputs: 👇🏼
   const [state, setState] = useState({
     username: '',
     password: ''
@@ -21,6 +23,14 @@ export default function CreateNew() {
     distributorName: ''
   });
 
+  const [company, setCompany] = useState({
+    companyAddress: '',
+    companyCity: '',
+    companyState: '',
+    companyZip: '',
+    companyName: ''
+  });
+
   const [referencePassword, setReferencePassword] = useState('');
   // Overlay states:  👇🏼
   const [overlay, setOverlay] = useState('overlay d-none');
@@ -30,11 +40,14 @@ export default function CreateNew() {
   const [newUserWrapper, setNewUserWrapper] = useState('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
   const [errorModalWrapper, setErrorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   const [distributorModalWrapper, setDistributorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  // Form Container states: 👇🏼
   const [signUpContainer, setSignUpContainer] = useState('col-10 pb-5 ms-4 d-none');
   const [distributorFormContainer, setDistributorFormContainer] = useState('col-10 pb-5 ms-4 d-none');
+  const [companyFormContainer, setCompanyFormContainer] = useState('col-10 pb-5 ms-4 d-none');
   // Pointer states:  👇🏼
   const [newUserPointer, setNewUserPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
   const [newDistributorPointer, setNewDistributorPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+  const [newCompanyPointer, setNewCompanyPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
 
   // handleChange functions for form inputs 👇🏼
   const handleUsernameChange = event => {
@@ -66,11 +79,27 @@ export default function CreateNew() {
     });
   };
 
+  const handleCompanyNameChange = event => {
+    event.persist();
+    setCompany({
+      ...company,
+      companyName: event.target.value
+    });
+  };
+
   const handleDistributorAddressChange = event => {
     event.persist();
     setDistributor({
       ...distributor,
       distributorAddress: event.target.value
+    });
+  };
+
+  const handleCompanyAddressChange = event => {
+    event.persist();
+    setCompany({
+      ...company,
+      CompanyAddress: event.target.value
     });
   };
 
@@ -82,6 +111,14 @@ export default function CreateNew() {
     });
   };
 
+  const handleCompanyCityChange = event => {
+    event.persist();
+    setCompany({
+      ...company,
+      companyCity: event.target.value
+    });
+  };
+
   const handleDistributorStateChange = event => {
     event.persist();
     setDistributor({
@@ -90,11 +127,27 @@ export default function CreateNew() {
     });
   };
 
+  const handleCompanyStateChange = event => {
+    event.persist();
+    setCompany({
+      ...company,
+      companyState: event.target.value
+    });
+  };
+
   const handleDistributorZipChange = event => {
     event.persist();
     setDistributor({
       ...distributor,
       distributorZip: Number(event.target.value)
+    });
+  };
+
+  const handleCompanyZipChange = event => {
+    event.persist();
+    setCompany({
+      ...company,
+      companyZip: Number(event.target.value)
     });
   };
 
@@ -188,6 +241,17 @@ export default function CreateNew() {
     setNewUserPointer('fa-solid fa-angle-down fa-xs mt-3 ms-2');
   }
 
+  function hideNewUserForm() {
+    setSignUpContainer('col-10 pb-5 ms-4 d-none');
+    setNewUserPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+    setState({
+      username: '',
+      password: ''
+    });
+    setReferencePassword('');
+    document.getElementById('sign-up-form').reset();
+  }
+
   function showDistributorForm() {
     setDistributorFormContainer('col-10 pb-5 ms-4');
     setNewDistributorPointer('fa-solid fa-angle-down fa-xs mt-3 ms-2');
@@ -204,15 +268,22 @@ export default function CreateNew() {
       distributorZip: ''
     });
   }
-  function hideNewUserForm() {
-    setSignUpContainer('col-10 pb-5 ms-4 d-none');
-    setNewUserPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
-    setState({
-      username: '',
-      password: ''
+
+  function showCompanyForm() {
+    setCompanyFormContainer('col-10 pb-5 ms-4');
+    setNewCompanyPointer('fa-solid fa-angle-down fa-xs mt-3 ms-2');
+  }
+
+  function hideCompanyForm() {
+    setCompanyFormContainer('col-10 pb-5 ms-4 d-none');
+    setNewCompanyPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+    setCompany({
+      companyAddress: '',
+      companyCity: '',
+      companyState: '',
+      companyZip: '',
+      companyName: ''
     });
-    setReferencePassword('');
-    document.getElementById('sign-up-form').reset();
   }
 
   if (user === null) return <Redirect to="" />;
@@ -235,9 +306,16 @@ export default function CreateNew() {
             </div>
             <div>
               <div className={signUpContainer}>
-                <SignUpForm addUser={addUser} state={state} setState={setState} referencePassword={referencePassword}
-                  setReferencePassword={setReferencePassword} handleUsernameChange={handleUsernameChange} handlePasswordChange={handlePasswordChange}
-                  handleReferencePasswordChange={handleReferencePasswordChange} hideNewUserForm={hideNewUserForm} />
+                <SignUpForm
+                  addUser={addUser}
+                  state={state}
+                  setState={setState}
+                  referencePassword={referencePassword}
+                  setReferencePassword={setReferencePassword}
+                  handleUsernameChange={handleUsernameChange}
+                  handlePasswordChange={handlePasswordChange}
+                  handleReferencePasswordChange={handleReferencePasswordChange}
+                  hideNewUserForm={hideNewUserForm} />
               </div>
             </div>
           </div>
@@ -263,7 +341,31 @@ export default function CreateNew() {
                 handleDistributorCityChange={handleDistributorCityChange}
                 handleDistributorStateChange={handleDistributorStateChange}
                 handleDistributorZipChange={handleDistributorZipChange}
-                closeNewDistributorModal={closeNewDistributorModal} />
+                hideDistributorForm={hideDistributorForm} />
+            </div>
+          </div>
+        </div>
+        <div className="new-company-wrapper d-flex justify-content-center pt-5">
+          <div className="col-10 box-shadow rounded">
+            <div className="d-flex">
+              <button
+                onClick={
+                  newCompanyPointer === 'fa-solid fa-angle-right fa-xs mt-3 ms-2'
+                    ? showCompanyForm
+                    : hideCompanyForm}
+                 className="create-new-btn">
+                <i className={newCompanyPointer} />
+              </button>
+              <p className="m-3">New Company</p>
+            </div>
+            <div className={companyFormContainer}>
+              <NewCompanyForm
+                handleCompanyNameChange={handleCompanyNameChange}
+                handleCompanyAddressChange={handleCompanyAddressChange}
+                handleCompanyCityChange={handleCompanyCityChange}
+                handleCompanyStateChange={handleCompanyStateChange}
+                handleCompanyZipChange={handleCompanyZipChange}
+                hideCompanyForm={hideCompanyForm}/>
             </div>
           </div>
         </div>

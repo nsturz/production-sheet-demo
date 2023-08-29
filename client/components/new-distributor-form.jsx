@@ -20,7 +20,7 @@ export default function NewDistributorForm(props) {
           </div>
         </div>
         <div>
-          <button onClick={props.closeNewDistributorModal}type="button" className="btn btn-secondary mt-2">Cancel</button>
+          <button onClick={props.hideDistributorForm}type="button" className="btn btn-secondary mt-2">Cancel</button>
           <button type="submit" className="btn login-btn ms-3 mt-2">Submit</button>
         </div>
       </div>
