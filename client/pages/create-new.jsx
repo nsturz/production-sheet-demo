@@ -3,6 +3,7 @@ import SignUpForm from '../components/sign-up-form';
 import NavBar from '../components/navbar';
 import AppContext from '../lib/app-context';
 import Redirect from '../components/redirect';
+import NewDistributorForm from '../components/new-distributor-form';
 
 export default function CreateNew() {
   const { user } = useContext(AppContext);
@@ -19,6 +20,7 @@ export default function CreateNew() {
   const [errorModalWrapper, setErrorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   const [signUpContainer, setSignUpContainer] = useState('col-10 pb-5 ms-4 d-none');
   const [newUserPointer, setNewUserPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+  // const [newDistributorPointer, setNewDistributorPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
 
   const handleUsernameChange = event => {
     event.persist();
@@ -108,7 +110,7 @@ export default function CreateNew() {
     <div>
       <NavBar />
       <div className="container">
-        <div className="d-flex justify-content-center pt-5">
+        <div className="new-user-wrapper d-flex justify-content-center pt-5">
           <div className="col-10 box-shadow rounded">
             <div className="d-flex">
               <button className="create-new-btn"
@@ -126,6 +128,19 @@ export default function CreateNew() {
                   setReferencePassword={setReferencePassword} handleUsernameChange={handleUsernameChange} handlePasswordChange={handlePasswordChange}
                   handleReferencePasswordChange={handleReferencePasswordChange} hideNewUserForm={hideNewUserForm} />
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="new-distributor-wrapper d-flex justify-content-center pt-5">
+          <div className="col-10 box-shadow rounded">
+            <div className="d-flex">
+              <button className="create-new-btn">
+                <i className='fa-solid fa-angle-right fa-xs mt-3 ms-2' />
+              </button>
+              <p className="m-3">New Distributor</p>
+            </div>
+            <div className="col-10 pb-5 ms-4">
+              <NewDistributorForm />
             </div>
           </div>
         </div>
