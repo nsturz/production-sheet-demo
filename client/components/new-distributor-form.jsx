@@ -1,21 +1,21 @@
 import React from 'react';
 
-export default function NewDistributorForm() {
+export default function NewDistributorForm(props) {
   return (
-    <form action="" id="new-distributor-form" className="d-flex justify-content-center ms-3">
+    <form onSubmit={props.addDistributor} action="" id="new-distributor-form" className="d-flex justify-content-center ms-3">
       <div className="col-12">
         <div>
-          <input type="text" className="form-control mb-3 mt-3" placeholder="Distributor Name"required />
-          <input type="text" className="form-control mb-3 mt-3" placeholder="Address" required />
+          <input type="text" className="form-control mb-3 mt-3" placeholder="Distributor Name"required onChange={props.handleDistributorNameChange} />
+          <input type="text" className="form-control mb-3 mt-3" placeholder="Address" required onChange={props.handleDistributorAddressChange} />
           <div className="d-flex mb-3 mt-3 justify-content-between">
             <div className="col-3">
-              <input type="text" id="distributorCity" className="form-control" placeholder="City" required />
+              <input type="text" id="distributorCity" className="form-control" placeholder="City" required onChange={props.handleDistributorCityChange}/>
             </div>
             <div className="col-3">
-              <input type="text" id="distributorState" className="form-control" placeholder="State" required />
+              <input type="text" id="distributorState" className="form-control" placeholder="State" required onChange={props.handleDistributorStateChange} />
             </div>
             <div className="col-3">
-              <input type="text" id="distributorZip" className="form-control" placeholder="Zip" required />
+              <input type="text" id="distributorZip" className="form-control" placeholder="Zip" onChange={props.handleDistributorZipChange} required />
             </div>
           </div>
         </div>

@@ -19,8 +19,18 @@ export default function CreateNew() {
   const [newUserWrapper, setNewUserWrapper] = useState('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
   const [errorModalWrapper, setErrorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   const [signUpContainer, setSignUpContainer] = useState('col-10 pb-5 ms-4 d-none');
+  const [distributorFormContainer, setDistributorFormContainer] = useState('col-10 pb-5 ms-4 d-none');
   const [newUserPointer, setNewUserPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
-  // const [newDistributorPointer, setNewDistributorPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+  const [newDistributorPointer, setNewDistributorPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+  const [distributor, setDistributor] = useState({
+    distributorAddress: '',
+    distributorCity: '',
+    distributorState: '',
+    distributorZip: '',
+    distributorName: ''
+  });
+
+  // handleChange functions for form inputs 👇🏼
 
   const handleUsernameChange = event => {
     event.persist();
@@ -42,6 +52,48 @@ export default function CreateNew() {
     event.persist();
     setReferencePassword(event.target.value);
   };
+
+  const handleDistributorNameChange = event => {
+    event.persist();
+    setDistributor({
+      ...distributor,
+      distributorName: event.target.value
+    });
+  };
+
+  const handleDistributorAddressChange = event => {
+    event.persist();
+    setDistributor({
+      ...distributor,
+      distributorAddress: event.target.value
+    });
+  };
+
+  const handleDistributorCityChange = event => {
+    event.persist();
+    setDistributor({
+      ...distributor,
+      distributorCity: event.target.value
+    });
+  };
+
+  const handleDistributorStateChange = event => {
+    event.persist();
+    setDistributor({
+      ...distributor,
+      distributorState: event.target.value
+    });
+  };
+
+  const handleDistributorZipChange = event => {
+    event.persist();
+    setDistributor({
+      ...distributor,
+      distributorZip: Number(event.target.value)
+    });
+  };
+
+  // functions to show and hide modals / forms 👇🏼
 
   function closeNewUserModal() {
     document.getElementById('sign-up-form').reset();
@@ -88,11 +140,48 @@ export default function CreateNew() {
     setReferencePassword('');
   }
 
+  // console.log('distirbutor:', distributor)
+  function addDistributor(event) {
+    event.preventDefault();
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(distributor)
+    };
+    fetch('/api/new-distributor', req)
+      .then(res => res.json());
+    setDistributor({
+      distributorName: '',
+      distributorAddress: '',
+      distributorCity: '',
+      distributorState: '',
+      distributorZip: ''
+    });
+  }
+
   function showNewUserForm() {
     setSignUpContainer('col-10 pb-5 ms-4');
     setNewUserPointer('fa-solid fa-angle-down fa-xs mt-3 ms-2');
   }
 
+  function showDistributorForm() {
+    setDistributorFormContainer('col-10 pb-5 ms-4');
+    setNewDistributorPointer('fa-solid fa-angle-down fa-xs mt-3 ms-2');
+  }
+
+  function hideDistributorForm() {
+    setDistributorFormContainer('col-10 pb-5 ms-4 d-none');
+    setNewDistributorPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+    setDistributor({
+      distributorName: '',
+      distributorAddress: '',
+      distributorCity: '',
+      distributorState: '',
+      distributorZip: ''
+    });
+  }
   function hideNewUserForm() {
     setSignUpContainer('col-10 pb-5 ms-4 d-none');
     setNewUserPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
@@ -114,7 +203,7 @@ export default function CreateNew() {
           <div className="col-10 box-shadow rounded">
             <div className="d-flex">
               <button className="create-new-btn"
-              onClick={
+               onClick={
                 newUserPointer === 'fa-solid fa-angle-right fa-xs mt-3 ms-2'
                   ? showNewUserForm
                   : hideNewUserForm}>
@@ -134,13 +223,24 @@ export default function CreateNew() {
         <div className="new-distributor-wrapper d-flex justify-content-center pt-5">
           <div className="col-10 box-shadow rounded">
             <div className="d-flex">
-              <button className="create-new-btn">
-                <i className='fa-solid fa-angle-right fa-xs mt-3 ms-2' />
+              <button className="create-new-btn"
+                onClick={
+                  newDistributorPointer === 'fa-solid fa-angle-right fa-xs mt-3 ms-2'
+                    ? showDistributorForm
+                    : hideDistributorForm
+                }>
+                <i className={newDistributorPointer} />
               </button>
               <p className="m-3">New Distributor</p>
             </div>
-            <div className="col-10 pb-5 ms-4">
-              <NewDistributorForm />
+            <div className={distributorFormContainer}>
+              <NewDistributorForm
+                addDistributor={addDistributor}
+                handleDistributorNameChange={handleDistributorNameChange}
+                handleDistributorAddressChange={handleDistributorAddressChange}
+                handleDistributorCityChange={handleDistributorCityChange}
+                handleDistributorStateChange={handleDistributorStateChange}
+                handleDistributorZipChange={handleDistributorZipChange}/>
             </div>
           </div>
         </div>
