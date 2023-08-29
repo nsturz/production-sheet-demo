@@ -5,6 +5,7 @@ import AppContext from '../lib/app-context';
 import Redirect from '../components/redirect';
 import NewDistributorForm from '../components/new-distributor-form';
 import NewCompanyForm from '../components/new-company-form';
+import NewYear from '../components/new-year-form';
 
 export default function CreateNew() {
   const { user } = useContext(AppContext);
@@ -31,25 +32,33 @@ export default function CreateNew() {
     companyName: ''
   });
 
+  const [year, setYear] = useState({
+    year: ''
+  });
+
   const [referencePassword, setReferencePassword] = useState('');
   // Overlay states:  👇🏼
   const [overlay, setOverlay] = useState('overlay d-none');
   const [errorModalOverlay, setErrorModalOverlay] = useState('overlay d-none');
   const [distributorModalOverlay, setDistributorModalOverlay] = useState('overlay d-none');
   const [companyModalOverlay, setCompanyModalOverlay] = useState('overlay d-none');
+  const [yearModalOverlay, setYearModalOverlay] = useState('overlay d-none');
   // Wrapper states: 👇🏼
   const [newUserWrapper, setNewUserWrapper] = useState('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
   const [errorModalWrapper, setErrorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   const [distributorModalWrapper, setDistributorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   const [companyModalWrapper, setCompanyModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  const [yearModalWrapper, setYearModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   // Form Container states: 👇🏼
   const [signUpContainer, setSignUpContainer] = useState('col-10 pb-5 ms-4 d-none');
   const [distributorFormContainer, setDistributorFormContainer] = useState('col-10 pb-5 ms-4 d-none');
   const [companyFormContainer, setCompanyFormContainer] = useState('col-10 pb-5 ms-4 d-none');
+  const [yearFormContainer, setYearFormContainer] = useState('col-10 pb-5 ms-4 d-none');
   // Pointer states:  👇🏼
   const [newUserPointer, setNewUserPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
   const [newDistributorPointer, setNewDistributorPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
   const [newCompanyPointer, setNewCompanyPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+  const [newYearPointer, setNewYearPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
 
   // handleChange functions for form inputs 👇🏼
   const handleUsernameChange = event => {
@@ -153,6 +162,13 @@ export default function CreateNew() {
     });
   };
 
+  const handleYearChange = event => {
+    event.persist();
+    setYear({
+      year: Number(event.target.value)
+    });
+  };
+
   // functions to show and hide modals / forms 👇🏼
   function closeNewUserModal() {
     document.getElementById('sign-up-form').reset();
@@ -176,6 +192,15 @@ export default function CreateNew() {
     setNewCompanyPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
     setCompanyModalOverlay('overlay d-none');
     setCompanyModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  }
+
+  function closeNewYearModal() {
+    document.getElementById('new-year-form').reset();
+    setYearFormContainer('col-10 pb-5 ms-4 d-none');
+    setNewYearPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+    setYearModalOverlay('overlay d-none');
+    setYearModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+
   }
 
   function closeErrorModal() {
@@ -274,6 +299,31 @@ export default function CreateNew() {
       });
   }
 
+  function addYear(event) {
+    event.preventDefault();
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(year)
+    };
+    fetch('/api/new-year', req)
+      .then(res => res.json())
+      .then(result => {
+        if (result.error) {
+          setErrorModalOverlay('overlay');
+          setErrorModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8');
+        } else {
+          setYearModalOverlay('overlay');
+          setYearModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8');
+        }
+        setYear({
+          year: ''
+        });
+      });
+  }
+
   // Functions to show / hide forms 👇🏼
   function showNewUserForm() {
     setSignUpContainer('col-10 pb-5 ms-4');
@@ -305,6 +355,18 @@ export default function CreateNew() {
       distributorCity: '',
       distributorState: '',
       distributorZip: ''
+    });
+  }
+
+  function showYearForm() {
+    setYearFormContainer('col-10 pb-5 ms-4');
+    setNewYearPointer('fa-solid fa-angle-down fa-xs mt-3 ms-2');
+  }
+  function hideYearForm() {
+    setYearFormContainer('col-10 pb-5 ms-4 d-none');
+    setNewYearPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+    setYear({
+      year: ''
     });
   }
 
@@ -409,6 +471,27 @@ export default function CreateNew() {
             </div>
           </div>
         </div>
+        <div className="new-year-wrapper d-flex justify-content-center pt-5">
+          <div className="col-10 box-shadow rounded">
+            <div className="d-flex">
+              <button
+                onClick={
+                  newYearPointer === 'fa-solid fa-angle-right fa-xs mt-3 ms-2'
+                    ? showYearForm
+                    : hideYearForm
+                }className="create-new-btn">
+                <i className={newYearPointer} />
+              </button>
+              <p className="m-3">New Year</p>
+            </div>
+            <div className={yearFormContainer}>
+              <NewYear
+                addYear={addYear}
+                handleYearChange={handleYearChange}
+                hideYearForm={hideYearForm} />
+            </div>
+          </div>
+        </div>
         <div className={overlay} />
         <div className={newUserWrapper}>
           <div className="rounded bg-white mb-2 mt-2 p-3">
@@ -463,13 +546,30 @@ export default function CreateNew() {
             </div>
           </div>
         </div>
+        <div className={yearModalOverlay} />
+        <div className={yearModalWrapper}>
+          <div className="rounded bg-white mb-2 mt-2 p-3">
+            <div className='d-flex justify-content-center' id="cancel-job-form">
+              <div>
+                <div className="d-flex">
+                  <h5 className='text-center mt-5'>New Year Created</h5>
+                </div>
+                <div className="d-flex justify-content-center mt-2">
+                  <i className="fa-solid fa-check text-success" />
+                </div>
+                <div className="row d-flex flex-nowrap justify-content-center">
+                  <button onClick={closeNewYearModal} type='button' className="btn done-btn mt-5 ms-3 me-3 mb-5 col-5">Done</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className={errorModalOverlay} />
         <div className={errorModalWrapper}>
           <div className="rounded bg-white mb-2 mt-2 p-3">
             <div className='d-flex justify-content-center'>
               <div>
                 <div>
-                  {/* <h5 className='text-center mt-5'>Not Created</h5> */}
                   <p>An unexpected error occured. Please try again.</p>
                 </div>
                 <div className="d-flex justify-content-center mt-2">
