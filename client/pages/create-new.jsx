@@ -13,15 +13,6 @@ export default function CreateNew() {
     password: ''
   });
 
-  const [referencePassword, setReferencePassword] = useState('');
-  const [overlay, setOverlay] = useState('overlay d-none');
-  const [errorModalOverlay, setErrorModalOverlay] = useState('overlay d-none');
-  const [newUserWrapper, setNewUserWrapper] = useState('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
-  const [errorModalWrapper, setErrorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
-  const [signUpContainer, setSignUpContainer] = useState('col-10 pb-5 ms-4 d-none');
-  const [distributorFormContainer, setDistributorFormContainer] = useState('col-10 pb-5 ms-4 d-none');
-  const [newUserPointer, setNewUserPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
-  const [newDistributorPointer, setNewDistributorPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
   const [distributor, setDistributor] = useState({
     distributorAddress: '',
     distributorCity: '',
@@ -30,8 +21,22 @@ export default function CreateNew() {
     distributorName: ''
   });
 
-  // handleChange functions for form inputs 👇🏼
+  const [referencePassword, setReferencePassword] = useState('');
+  // Overlay states:  👇🏼
+  const [overlay, setOverlay] = useState('overlay d-none');
+  const [errorModalOverlay, setErrorModalOverlay] = useState('overlay d-none');
+  const [distributorModalOverlay, setDistributorModalOverlay] = useState('overlay d-none');
+  // Wrapper states: 👇🏼
+  const [newUserWrapper, setNewUserWrapper] = useState('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
+  const [errorModalWrapper, setErrorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  const [distributorModalWrapper, setDistributorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  const [signUpContainer, setSignUpContainer] = useState('col-10 pb-5 ms-4 d-none');
+  const [distributorFormContainer, setDistributorFormContainer] = useState('col-10 pb-5 ms-4 d-none');
+  // Pointer states:  👇🏼
+  const [newUserPointer, setNewUserPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+  const [newDistributorPointer, setNewDistributorPointer] = useState('fa-solid fa-angle-right fa-xs mt-3 ms-2');
 
+  // handleChange functions for form inputs 👇🏼
   const handleUsernameChange = event => {
     event.persist();
     setState({
@@ -94,7 +99,6 @@ export default function CreateNew() {
   };
 
   // functions to show and hide modals / forms 👇🏼
-
   function closeNewUserModal() {
     document.getElementById('sign-up-form').reset();
     setSignUpContainer('col-10 pb-5 ms-4 d-none');
@@ -103,12 +107,21 @@ export default function CreateNew() {
     setNewUserWrapper('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
   }
 
+  function closeNewDistributorModal() {
+    document.getElementById('new-distributor-form').reset();
+    setDistributorFormContainer('col-10 pb-5 ms-4 d-none');
+    setNewDistributorPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+    setDistributorModalOverlay('overlay d-none');
+    setDistributorModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  }
+
   function closeErrorModal() {
     document.getElementById('sign-up-form').reset();
     setErrorModalOverlay('overlay d-none');
     setErrorModalWrapper('osition-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   }
 
+  // functions to make FETCH requests 👇🏼
   function addUser(event) {
     event.preventDefault();
     if (state.password !== referencePassword && state.password.length !== 0 &&
@@ -140,7 +153,6 @@ export default function CreateNew() {
     setReferencePassword('');
   }
 
-  // console.log('distirbutor:', distributor)
   function addDistributor(event) {
     event.preventDefault();
     const req = {
@@ -151,7 +163,16 @@ export default function CreateNew() {
       body: JSON.stringify(distributor)
     };
     fetch('/api/new-distributor', req)
-      .then(res => res.json());
+      .then(res => res.json())
+      .then(result => {
+        if (result.error) {
+          setErrorModalOverlay('overlay');
+          setErrorModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8');
+        } else {
+          setDistributorModalOverlay('overlay');
+          setDistributorModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8');
+        }
+      });
     setDistributor({
       distributorName: '',
       distributorAddress: '',
@@ -161,6 +182,7 @@ export default function CreateNew() {
     });
   }
 
+  // Functions to show / hide forms 👇🏼
   function showNewUserForm() {
     setSignUpContainer('col-10 pb-5 ms-4');
     setNewUserPointer('fa-solid fa-angle-down fa-xs mt-3 ms-2');
@@ -240,7 +262,8 @@ export default function CreateNew() {
                 handleDistributorAddressChange={handleDistributorAddressChange}
                 handleDistributorCityChange={handleDistributorCityChange}
                 handleDistributorStateChange={handleDistributorStateChange}
-                handleDistributorZipChange={handleDistributorZipChange}/>
+                handleDistributorZipChange={handleDistributorZipChange}
+                closeNewDistributorModal={closeNewDistributorModal} />
             </div>
           </div>
         </div>
@@ -268,7 +291,7 @@ export default function CreateNew() {
             <div className='d-flex justify-content-center'>
               <div>
                 <div>
-                  <h5 className='text-center mt-5'>User Not Created</h5>
+                  {/* <h5 className='text-center mt-5'>Not Created</h5> */}
                   <p>An unexpected error occured. Please try again.</p>
                 </div>
                 <div className="d-flex justify-content-center mt-2">
@@ -277,6 +300,24 @@ export default function CreateNew() {
                 <div className="row d-flex flex-nowrap justify-content-center">
                   <button onClick={closeErrorModal}
                   type='button' className="btn btn-secondary mt-5 ms-3 me-3 mb-5 col-5">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={distributorModalOverlay} />
+        <div className={distributorModalWrapper}>
+          <div className="rounded bg-white mb-2 mt-2 p-3">
+            <div className='d-flex justify-content-center' id="cancel-job-form">
+              <div>
+                <div className="d-flex">
+                  <h5 className='text-center mt-5'>New Distributor Created</h5>
+                </div>
+                <div className="d-flex justify-content-center mt-2">
+                  <i className="fa-solid fa-check text-success" />
+                </div>
+                <div className="row d-flex flex-nowrap justify-content-center">
+                  <button onClick={closeNewDistributorModal}type='button' className="btn done-btn mt-5 ms-3 me-3 mb-5 col-5">Done</button>
                 </div>
               </div>
             </div>
