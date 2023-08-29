@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function NewCompanyForm(props) {
   return (
-    <form action="" id="new-company-form" className="d-flex justify-content-center ms-3">
+    <form onSubmit={props.addCompany}action="" id="new-company-form" className="d-flex justify-content-center ms-3">
       <div className="col-12">
         <div>
           <input type="text" className="form-control mb-3 mt-3" placeholder="Company Name" onChange={props.handleCompanyNameChange} required />

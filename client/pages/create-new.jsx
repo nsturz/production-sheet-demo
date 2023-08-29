@@ -36,10 +36,12 @@ export default function CreateNew() {
   const [overlay, setOverlay] = useState('overlay d-none');
   const [errorModalOverlay, setErrorModalOverlay] = useState('overlay d-none');
   const [distributorModalOverlay, setDistributorModalOverlay] = useState('overlay d-none');
+  const [companyModalOverlay, setCompanyModalOverlay] = useState('overlay d-none');
   // Wrapper states: 👇🏼
   const [newUserWrapper, setNewUserWrapper] = useState('position-fixed new-user-modal-wrapper col-10 col-lg-8 d-none');
   const [errorModalWrapper, setErrorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   const [distributorModalWrapper, setDistributorModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  const [companyModalWrapper, setCompanyModalWrapper] = useState('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   // Form Container states: 👇🏼
   const [signUpContainer, setSignUpContainer] = useState('col-10 pb-5 ms-4 d-none');
   const [distributorFormContainer, setDistributorFormContainer] = useState('col-10 pb-5 ms-4 d-none');
@@ -168,6 +170,14 @@ export default function CreateNew() {
     setDistributorModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
   }
 
+  function closeNewCompanyModal() {
+    document.getElementById('new-company-form').reset();
+    setCompanyFormContainer('col-10 pb-5 ms-4 d-none');
+    setNewCompanyPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
+    setCompanyModalOverlay('overlay d-none');
+    setCompanyModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8 d-none');
+  }
+
   function closeErrorModal() {
     document.getElementById('sign-up-form').reset();
     setErrorModalOverlay('overlay d-none');
@@ -233,6 +243,35 @@ export default function CreateNew() {
       distributorState: '',
       distributorZip: ''
     });
+  }
+
+  function addCompany(event) {
+    event.preventDefault();
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(company)
+    };
+    fetch('/api/new-company', req)
+      .then(res => res.json())
+      .then(result => {
+        if (result.error) {
+          setErrorModalOverlay('overlay');
+          setErrorModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8');
+        } else {
+          setCompanyModalOverlay('overlay');
+          setCompanyModalWrapper('position-fixed error-modal-wrapper col-10 col-lg-8');
+        }
+        setCompany({
+          companyName: '',
+          companyAddress: '',
+          companyCity: '',
+          companyState: '',
+          companyZip: ''
+        });
+      });
   }
 
   // Functions to show / hide forms 👇🏼
@@ -360,6 +399,7 @@ export default function CreateNew() {
             </div>
             <div className={companyFormContainer}>
               <NewCompanyForm
+                addCompany={addCompany}
                 handleCompanyNameChange={handleCompanyNameChange}
                 handleCompanyAddressChange={handleCompanyAddressChange}
                 handleCompanyCityChange={handleCompanyCityChange}
@@ -387,6 +427,42 @@ export default function CreateNew() {
             </div>
           </div>
         </div>
+        <div className={distributorModalOverlay} />
+        <div className={distributorModalWrapper}>
+          <div className="rounded bg-white mb-2 mt-2 p-3">
+            <div className='d-flex justify-content-center' id="cancel-job-form">
+              <div>
+                <div className="d-flex">
+                  <h5 className='text-center mt-5'>New Distributor Created</h5>
+                </div>
+                <div className="d-flex justify-content-center mt-2">
+                  <i className="fa-solid fa-check text-success" />
+                </div>
+                <div className="row d-flex flex-nowrap justify-content-center">
+                  <button onClick={closeNewDistributorModal}type='button' className="btn done-btn mt-5 ms-3 me-3 mb-5 col-5">Done</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={companyModalOverlay} />
+        <div className={companyModalWrapper}>
+          <div className="rounded bg-white mb-2 mt-2 p-3">
+            <div className='d-flex justify-content-center' id="cancel-job-form">
+              <div>
+                <div className="d-flex">
+                  <h5 className='text-center mt-5'>New Company Created</h5>
+                </div>
+                <div className="d-flex justify-content-center mt-2">
+                  <i className="fa-solid fa-check text-success" />
+                </div>
+                <div className="row d-flex flex-nowrap justify-content-center">
+                  <button onClick={closeNewCompanyModal} type='button' className="btn done-btn mt-5 ms-3 me-3 mb-5 col-5">Done</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className={errorModalOverlay} />
         <div className={errorModalWrapper}>
           <div className="rounded bg-white mb-2 mt-2 p-3">
@@ -401,25 +477,7 @@ export default function CreateNew() {
                 </div>
                 <div className="row d-flex flex-nowrap justify-content-center">
                   <button onClick={closeErrorModal}
-                  type='button' className="btn btn-secondary mt-5 ms-3 me-3 mb-5 col-5">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={distributorModalOverlay} />
-        <div className={distributorModalWrapper}>
-          <div className="rounded bg-white mb-2 mt-2 p-3">
-            <div className='d-flex justify-content-center' id="cancel-job-form">
-              <div>
-                <div className="d-flex">
-                  <h5 className='text-center mt-5'>New Distributor Created</h5>
-                </div>
-                <div className="d-flex justify-content-center mt-2">
-                  <i className="fa-solid fa-check text-success" />
-                </div>
-                <div className="row d-flex flex-nowrap justify-content-center">
-                  <button onClick={closeNewDistributorModal}type='button' className="btn done-btn mt-5 ms-3 me-3 mb-5 col-5">Done</button>
+                    type='button' className="btn btn-secondary mt-5 ms-3 me-3 mb-5 col-5">Close</button>
                 </div>
               </div>
             </div>
