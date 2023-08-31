@@ -110,7 +110,7 @@ export default function CreateNew() {
     event.persist();
     setCompany({
       ...company,
-      CompanyAddress: event.target.value
+      companyAddress: event.target.value
     });
   };
 
@@ -393,8 +393,9 @@ export default function CreateNew() {
     <div>
       <NavBar />
       <div className="container">
+        <h4 className="mt-4">Create New</h4>
         <div className="new-user-wrapper d-flex justify-content-center pt-5">
-          <div className="col-10 box-shadow rounded">
+          <div className="col-12 box-shadow rounded">
             <div className="d-flex">
               <button className="create-new-btn"
                onClick={
@@ -422,7 +423,7 @@ export default function CreateNew() {
           </div>
         </div>
         <div className="new-distributor-wrapper d-flex justify-content-center pt-5">
-          <div className="col-10 box-shadow rounded">
+          <div className="col-12 box-shadow rounded">
             <div className="d-flex">
               <button className="create-new-btn"
                 onClick={
@@ -437,6 +438,7 @@ export default function CreateNew() {
             <div className={distributorFormContainer}>
               <NewDistributorForm
                 addDistributor={addDistributor}
+                distributor={distributor}
                 handleDistributorNameChange={handleDistributorNameChange}
                 handleDistributorAddressChange={handleDistributorAddressChange}
                 handleDistributorCityChange={handleDistributorCityChange}
@@ -447,7 +449,7 @@ export default function CreateNew() {
           </div>
         </div>
         <div className="new-company-wrapper d-flex justify-content-center pt-5">
-          <div className="col-10 box-shadow rounded">
+          <div className="col-12 box-shadow rounded">
             <div className="d-flex">
               <button
                 onClick={
@@ -462,6 +464,7 @@ export default function CreateNew() {
             <div className={companyFormContainer}>
               <NewCompanyForm
                 addCompany={addCompany}
+                company={company}
                 handleCompanyNameChange={handleCompanyNameChange}
                 handleCompanyAddressChange={handleCompanyAddressChange}
                 handleCompanyCityChange={handleCompanyCityChange}
@@ -472,7 +475,7 @@ export default function CreateNew() {
           </div>
         </div>
         <div className="new-year-wrapper d-flex justify-content-center pt-5">
-          <div className="col-10 box-shadow rounded">
+          <div className="col-12 box-shadow rounded">
             <div className="d-flex">
               <button
                 onClick={
@@ -570,7 +573,7 @@ export default function CreateNew() {
             <div className='d-flex justify-content-center'>
               <div>
                 <div>
-                  <p>An unexpected error occured. Please try again.</p>
+                  <p className="text-center">An unexpected error occured. Please try again.</p>
                 </div>
                 <div className="d-flex justify-content-center mt-2">
                   <i className="fa-solid fa-x text-danger" />

@@ -462,8 +462,12 @@ app.get('/api/job-number/:jobNumber', (req, res, next) => {
 });
 
 // POST a new YEAR and its corresponding WEEKS to the database 👇🏼
-app.post('/api/new-year', (req, res) => {
+app.post('/api/new-year', (req, res, next) => {
   const { year } = req.body;
+  if (!year) {
+    throw new ClientError(400, 'Make sure you have entered the required fields.');
+  }
+
   const yearSql = `
   insert into "years" ("year")
   values      ($1)
@@ -483,7 +487,8 @@ app.post('/api/new-year', (req, res) => {
         db.query(weekSql, weekParams);
       }
       res.status(201).json({ success: `Year ${year} created with ${week} weeks` });
-    });
+    })
+    .catch(err => next(err));
 });
 
 // POST new Company information 👇🏼
@@ -495,6 +500,12 @@ app.post('/api/new-company', (req, res) => {
     companyZip,
     companyName
   } = req.body;
+  if (!companyAddress || !companyCity || !companyState || !companyZip || !companyName) {
+    throw new ClientError(400, 'Make sure you have filled out all the required fields.');
+  } else if (companyZip === isNaN) {
+    throw new ClientError(400, 'Make sure zip code is a number.');
+  }
+
   const insertCompanyAddressSql = `
   insert into "companyAddresses" ("address", "city", "state", "zip")
   values      ($1, $2, $3, $4)
@@ -529,6 +540,10 @@ app.post('/api/new-distributor', (req, res) => {
     distributorZip,
     distributorName
   } = req.body;
+
+  if (!distributorAddress || !distributorCity || !distributorState || !distributorZip || distributorName) {
+    throw new ClientError(400, 'Make sure you have entered all the required fields.');
+  }
   const insertDistributorAddressSql = `
     insert into "distributorAddresses" ("address", "city", "state", "zip")
     values      ($1, $2, $3, $4)
