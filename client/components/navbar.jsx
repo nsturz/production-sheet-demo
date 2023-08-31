@@ -25,7 +25,7 @@ export default function NavBar(props) {
                 Admin
               </a>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a href="#sign-up" className="dropdown-item new-user-link">New User</a>
+                <a href="#create-new" className="dropdown-item new-user-link">Create New</a>
                 <a href="#users" className="dropdown-item new-user-link">Users</a>
               </div>
             </div>

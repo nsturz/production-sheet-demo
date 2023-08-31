@@ -17,7 +17,6 @@ export default function Users(props) {
 
   if (user === null) return <Redirect to="" />;
   if (user.username !== 'anonymous') return <Redirect to="" />;
-
   return (
     <div>
       <NavBar />
@@ -28,37 +27,70 @@ export default function Users(props) {
         <div className="d-flex justify-content-center">
           <ul className="col-lg-12 col rounded box-shadow pt-3 pb-2 ps-2 pe-2">
             {
-              props.users.map(event => {
+              props.users.map((event, index) => {
                 return (
-                  <li className="d-flex justify-content-between p-3 mt-4 mb-4"
+                  // this logic will place a "disabled" attribute on the remove button of
+                  // admins. Must be "hard-coded" in. 👇🏼
+                  props.users[index].username === 'anonymous'
+                    ? <li className="d-flex justify-content-between p-3 mt-4 mb-4"
+                      key={event.userId}
+                      id={event.userId}>
+                      <div className="col-lg-8 m-2" >
+                        <div className="d-flex flex-wrap">
+                          <div className="col-7">
+                            <div className="d-flex">
+                              <p className="user-info me-2">Username:</p>
+                              <p className="user-info font-italic">{event.username}</p>
+                            </div>
+                          </div>
+                          <div className="col-lg-4">
+                            <div className="d-flex">
+                              <p className="user-info me-2">Date added:</p>
+                              <p className="user-info text-primary">{event.dateJoined}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col">
+                        <div className="d-flex justify-content-end">
+                          <button id={event.userId}
+                          className="remove-user-btn btn btn-sm btn-danger mt-2"
+                          onClick={props.showRemoveUserModal}
+                          disabled>
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                    : <li className="d-flex justify-content-between p-3 mt-4 mb-4"
                     key={event.userId}
                     id={event.userId}>
-                    <div className="col-lg-8 m-2" >
-                      <div className="d-flex flex-wrap">
-                        <div className="col-7">
-                          <div className="d-flex">
-                            <p className="user-info me-2">Username:</p>
-                            <p className="user-info font-italic">{event.username}</p>
+                      <div className="col-lg-8 m-2" >
+                        <div className="d-flex flex-wrap">
+                          <div className="col-7">
+                            <div className="d-flex">
+                              <p className="user-info me-2">Username:</p>
+                              <p className="user-info font-italic">{event.username}</p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="col-lg-4">
-                          <div className="d-flex">
-                            <p className="user-info me-2">Date added:</p>
-                            <p className="user-info text-primary">{event.dateJoined}</p>
+                          <div className="col-lg-4">
+                            <div className="d-flex">
+                              <p className="user-info me-2">Date added:</p>
+                              <p className="user-info text-primary">{event.dateJoined}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col">
-                      <div className="d-flex justify-content-end">
-                        <button id={event.userId}
+                      <div className="col">
+                        <div className="d-flex justify-content-end">
+                          <button id={event.userId}
                           className="remove-user-btn btn btn-sm btn-danger mt-2"
                           onClick={props.showRemoveUserModal}>
-                          Remove
-                        </button>
+                            Remove
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </li>
+                    </li>
                 );
               })
             }
