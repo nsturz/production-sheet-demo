@@ -13,7 +13,8 @@ export default function CreateNew() {
   // Values in state for Form inputs: 👇🏼
   const [state, setState] = useState({
     username: '',
-    password: ''
+    password: '',
+    isAdmin: false
   });
 
   const [distributor, setDistributor] = useState({
@@ -74,6 +75,22 @@ export default function CreateNew() {
     setState({
       ...state,
       password: event.target.value
+    });
+  };
+
+  const handleIsAdminChange = event => {
+    event.persist();
+    setState({
+      ...state,
+      isAdmin: true
+    });
+  };
+
+  const handleIsNotAdminChange = event => {
+    event.persist();
+    setState({
+      ...state,
+      isAdmin: false
     });
   };
 
@@ -236,7 +253,8 @@ export default function CreateNew() {
       });
     setState({
       username: '',
-      password: ''
+      password: '',
+      isAdmin: false
     });
     setReferencePassword('');
   }
@@ -335,7 +353,8 @@ export default function CreateNew() {
     setNewUserPointer('fa-solid fa-angle-right fa-xs mt-3 ms-2');
     setState({
       username: '',
-      password: ''
+      password: '',
+      isAdmin: false
     });
     setReferencePassword('');
     document.getElementById('sign-up-form').reset();
@@ -388,7 +407,7 @@ export default function CreateNew() {
   }
 
   if (user === null) return <Redirect to="" />;
-  if (user.username !== 'anonymous') return <Redirect to="" />;
+  if (user.isAdmin !== true) return <Redirect to="" />;
   return (
     <div>
       <NavBar />
@@ -416,6 +435,8 @@ export default function CreateNew() {
                   setReferencePassword={setReferencePassword}
                   handleUsernameChange={handleUsernameChange}
                   handlePasswordChange={handlePasswordChange}
+                  handleIsAdminChange={handleIsAdminChange}
+                  handleIsNotAdminChange={handleIsNotAdminChange}
                   handleReferencePasswordChange={handleReferencePasswordChange}
                   hideNewUserForm={hideNewUserForm} />
               </div>

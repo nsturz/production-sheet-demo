@@ -18,7 +18,7 @@ app.get('/api/hello', (req, res, next) => {
 
 // Add a new user to the database 👇🏼
 app.post('/api/auth/sign-up', (req, res, next) => {
-  const { username, password } = req.body;
+  const { username, password, isAdmin } = req.body;
   if (!username || !password) {
     throw new ClientError(400, 'username and password are required fields');
   }
@@ -26,11 +26,11 @@ app.post('/api/auth/sign-up', (req, res, next) => {
     .hash(password)
     .then(hashedPassword => {
       const sql = `
-        insert into "users" ("username", "hashedPassword")
-        values ($1, $2)
-        returning "userId", "username", "joinedAt"
+        insert into "users" ("username", "hashedPassword", "isAdmin")
+        values ($1, $2, $3)
+        returning "userId", "username", "joinedAt", "isAdmin"
       `;
-      const params = [username, hashedPassword];
+      const params = [username, hashedPassword, isAdmin];
       return db.query(sql, params);
     })
     .then(result => {
@@ -48,7 +48,8 @@ app.post('/api/auth/sign-in', (req, res, next) => {
   }
   const sql = `
     select  "userId" ,
-            "hashedPassword"
+            "hashedPassword",
+            "isAdmin"
     from "users"
     where "username" = $1`;
   const params = [username];
@@ -58,14 +59,14 @@ app.post('/api/auth/sign-in', (req, res, next) => {
       if (!user) {
         throw new ClientError(401, 'invalid login');
       }
-      const { userId, hashedPassword } = user;
+      const { userId, hashedPassword, isAdmin } = user;
       return argon2
         .verify(hashedPassword, password)
         .then(isMatching => {
           if (!isMatching) {
             throw new ClientError(401, 'invalid login');
           }
-          const payload = { userId, username };
+          const payload = { userId, username, isAdmin };
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);
           res.json({ token, user: payload });
         });
@@ -78,7 +79,8 @@ app.get('/api/all-users', (req, res, next) => {
   const sql = `
   select "userId",
          "username",
-         to_char("joinedAt",'MM-dd-yyyy') as "dateJoined"
+         to_char("joinedAt",'MM-dd-yyyy') as "dateJoined",
+         "isAdmin"
   from "users"
   order by "userId"`;
   db.query(sql)

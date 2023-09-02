@@ -19,7 +19,7 @@ export default function NavBar(props) {
             </li>
           </ul>
           {
-            user.username === 'anonymous' &&
+            user.isAdmin === true &&
             <div className="dropdown show">
               <a className="btn btn-secondary dropdown-toggle mt-3" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Admin
