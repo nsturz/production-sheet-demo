@@ -11,6 +11,7 @@ create schema "public";
 	"username" TEXT NOT NULL UNIQUE,
 	"hashedPassword" TEXT NOT NULL,
 	"joinedAt" timestamptz NOT NULL default now(),
+	"isAdmin" BOOLEAN NOT NULL,
 	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE

@@ -18,19 +18,19 @@ app.get('/api/hello', (req, res, next) => {
 
 // Add a new user to the database 👇🏼
 app.post('/api/auth/sign-up', (req, res, next) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { username, password, isAdmin } = req.body;
+  if (!username || !password || !isAdmin) {
     throw new ClientError(400, 'username and password are required fields');
   }
   argon2
     .hash(password)
     .then(hashedPassword => {
       const sql = `
-        insert into "users" ("username", "hashedPassword")
-        values ($1, $2)
-        returning "userId", "username", "joinedAt"
+        insert into "users" ("username", "hashedPassword", "isAdmin")
+        values ($1, $2, $3)
+        returning "userId", "username", "joinedAt", "isAdmin"
       `;
-      const params = [username, hashedPassword];
+      const params = [username, hashedPassword, isAdmin];
       return db.query(sql, params);
     })
     .then(result => {
