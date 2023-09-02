@@ -9,6 +9,13 @@ export default function SignUpForm(props) {
           <input type="text" className="form-control mb-3 mt-3" placeholder="Username" onChange={props.handleUsernameChange} required />
           <input type="password" className="form-control mb-3 mt-3" placeholder="Password" onChange={props.handleReferencePasswordChange} required />
           <input id="password" type="password" className="form-control mb-3 mt-3" placeholder="Confirm Password" onChange={props.handlePasswordChange} required />
+          <input type="checkbox" id="admin-privileges" className="m-2"
+                 onChange={
+                   props.state.isAdmin === false
+                     ? props.handleIsAdminChange
+                     : props.handleIsNotAdminChange
+                 } />
+          <label htmlFor="admin-privileges" className="m-2">Check box to give this user admin privileges.</label>
         </div>
         {
           (props.referencePassword !== props.state.password && props.referencePassword.length !== 0 &&

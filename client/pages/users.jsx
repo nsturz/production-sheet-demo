@@ -16,7 +16,7 @@ export default function Users(props) {
   }
 
   if (user === null) return <Redirect to="" />;
-  if (user.username !== 'anonymous') return <Redirect to="" />;
+  if (user.isAdmin !== true) return <Redirect to="" />;
   return (
     <div>
       <NavBar />
@@ -30,8 +30,8 @@ export default function Users(props) {
               props.users.map((event, index) => {
                 return (
                   // this logic will place a "disabled" attribute on the remove button of
-                  // admins. Must be "hard-coded" in. 👇🏼
-                  props.users[index].username === 'anonymous'
+                  // admins. It checks for the "isAdmin" value.
+                  props.users[index].isAdmin === true
                     ? <li className="d-flex justify-content-between p-3 mt-4 mb-4"
                       key={event.userId}
                       id={event.userId}>

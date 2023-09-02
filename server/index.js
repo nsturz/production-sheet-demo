@@ -19,7 +19,7 @@ app.get('/api/hello', (req, res, next) => {
 // Add a new user to the database 👇🏼
 app.post('/api/auth/sign-up', (req, res, next) => {
   const { username, password, isAdmin } = req.body;
-  if (!username || !password || !isAdmin) {
+  if (!username || !password) {
     throw new ClientError(400, 'username and password are required fields');
   }
   argon2
@@ -79,7 +79,8 @@ app.get('/api/all-users', (req, res, next) => {
   const sql = `
   select "userId",
          "username",
-         to_char("joinedAt",'MM-dd-yyyy') as "dateJoined"
+         to_char("joinedAt",'MM-dd-yyyy') as "dateJoined",
+         "isAdmin"
   from "users"
   order by "userId"`;
   db.query(sql)
