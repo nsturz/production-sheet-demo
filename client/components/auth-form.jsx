@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 export default function AuthForm(props) {
   const [state, setState] = useState({
-    username: '',
-    password: ''
+    username: 'anonymous',
+    password: 'password1'
   });
 
   const [validationMessage, setValidationMessage] = useState('text-danger d-none');
@@ -45,8 +45,8 @@ export default function AuthForm(props) {
     <form onSubmit={handleSubmit} action="" className="d-flex justify-content-center mb-3 mt-3">
       <div className="col-lg-10 col">
         <div className="p-3">
-          <input type="text" className="form-control mb-3 mt-3" placeholder="Username" onChange={handleUsernameChange} required />
-          <input id="password" type="password" className="form-control mb-3 mt-3" placeholder="Password" onChange={handlePasswordChange} required />
+          <input value={state.username} type="text" className="form-control mb-3 mt-3" placeholder="Username" onChange={handleUsernameChange} />
+          <input value={state.password} id="password" type="password" className="form-control mb-3 mt-3" placeholder="Password" onChange={handlePasswordChange} />
         </div>
         <div className="d-flex justify-content-center">
           <p className={validationMessage}>Invalid Login</p>
