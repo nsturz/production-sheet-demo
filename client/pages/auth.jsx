@@ -9,9 +9,9 @@ export default function Auth() {
 
   if (user) return <Redirect to="" />;
   return (
-    <div className="container">
+    <div className="container border">
       <div className="d-flex justify-content-center pt-5">
-        <div className="col-8 login-wrapper box-shadow rounded mt-5 pb-5 border">
+        <div className="col-lg-8 col login-wrapper box-shadow rounded mt-5 pb-5 border">
           <div className="d-flex justify-content-center mt-3 mb-3">
             <img src="/images/colorad.png" alt="" />
           </div>
