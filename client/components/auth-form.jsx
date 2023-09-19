@@ -43,8 +43,8 @@ export default function AuthForm(props) {
   }
   return (
     <form onSubmit={handleSubmit} action="" className="d-flex justify-content-center mb-3 mt-3">
-      <div className="col-lg-10">
-        <div>
+      <div className="col-lg-10 col">
+        <div className="p-3">
           <input type="text" className="form-control mb-3 mt-3" placeholder="Username" onChange={handleUsernameChange} required />
           <input id="password" type="password" className="form-control mb-3 mt-3" placeholder="Password" onChange={handlePasswordChange} required />
         </div>
